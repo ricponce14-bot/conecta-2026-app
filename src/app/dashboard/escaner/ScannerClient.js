@@ -60,28 +60,35 @@ export default function EscanerPage() {
     };
 
     useEffect(() => {
-        let scanner = null;
+        let qrScanner = null;
 
-        if (typeof window !== 'undefined' && !scannerRef.current) {
-            import('html5-qrcode').then(({ Html5QrcodeScanner }) => {
-                scanner = new Html5QrcodeScanner(
-                    "qr-reader",
-                    { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 },
-                    false
-                );
-                scannerRef.current = scanner;
-                // We use a small hack to ensure the latest callback is used if needed, 
-                // but since we use isScanningRef, the first closure is fine
-                scanner.render(onScanSuccess, onScanFailure);
-            }).catch(err => {
-                console.error("Failed to load scanner:", err);
-                setError("Error al iniciar la cámara: " + (err.message || err));
+        if (typeof window !== 'undefined') {
+            import('html5-qrcode').then(({ Html5Qrcode }) => {
+                qrScanner = new Html5Qrcode("qr-reader");
+                scannerRef.current = qrScanner;
+
+                const config = { fps: 15, qrbox: { width: 250, height: 250 } };
+
+                qrScanner.start(
+                    { facingMode: "environment" },
+                    config,
+                    onScanSuccess,
+                    onScanFailure
+                ).catch(err => {
+                    console.error("Failed to start scanner:", err);
+                    setError("No se pudo acceder a la cámara trasera. Asegúrate de dar permisos.");
+                });
             });
         }
 
         return () => {
             if (scannerRef.current) {
-                scannerRef.current.clear().catch(e => console.error("Clear error", e));
+                // Check if it's currently scanning before stopping
+                if (scannerRef.current.isScanning) {
+                    scannerRef.current.stop().then(() => {
+                        scannerRef.current.clear();
+                    }).catch(e => console.error("Stop error", e));
+                }
                 scannerRef.current = null;
             }
         };
@@ -91,6 +98,9 @@ export default function EscanerPage() {
         setScanResult(null);
         setError(null);
         setIsScanning(true);
+        // If we use Html5Qrcode, we don't need to restart the instance if it's still running,
+        // but if we stopped it, we might need to. 
+        // For simplicity, we keep it running but ignored via isScanningRef.
     };
 
     return (
