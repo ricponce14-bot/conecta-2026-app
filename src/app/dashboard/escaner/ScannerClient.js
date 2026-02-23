@@ -75,6 +75,7 @@ export default function EscanerPage() {
                 scanner.render(onScanSuccess, onScanFailure);
             }).catch(err => {
                 console.error("Failed to load scanner:", err);
+                setError("Error al iniciar la cámara: " + (err.message || err));
             });
         }
 
@@ -108,6 +109,13 @@ export default function EscanerPage() {
                 {/* Scanner Container */}
                 <div style={{ display: scanResult ? 'none' : 'block' }}>
                     <div id="qr-reader" style={{ width: '100%', border: 'none', borderRadius: 'var(--radius-lg)', overflow: 'hidden', background: 'rgba(0,0,0,0.2)' }}></div>
+
+                    {!scannerRef.current && !error && (
+                        <div style={{ textAlign: 'center', padding: 'var(--space-xl)', color: 'var(--text-tertiary)' }}>
+                            Iniciando cámara...
+                        </div>
+                    )}
+
                     {error && (
                         <div style={{
                             marginTop: 'var(--space-md)',

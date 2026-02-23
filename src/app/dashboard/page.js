@@ -8,6 +8,7 @@ import Link from 'next/link';
 export default function DashboardPage() {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [fetchError, setFetchError] = useState(null);
 
     const [editing, setEditing] = useState(false);
     const [editData, setEditData] = useState({});
@@ -16,8 +17,13 @@ export default function DashboardPage() {
     useEffect(() => {
         async function fetchProfile() {
             try {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (!user) return;
+                setFetchError(null);
+                const { data: { user }, error: authError } = await supabase.auth.getUser();
+                if (authError) throw authError;
+                if (!user) {
+                    setFetchError("No se encontró sesión activa.");
+                    return;
+                }
 
                 let { data, error } = await supabase
                     .from('profiles')
@@ -26,6 +32,7 @@ export default function DashboardPage() {
                     .single();
 
                 if (error && error.code === 'PGRST116') {
+                    // Profile doesn't exist, try to create it
                     const metadata = user.user_metadata || {};
                     const newProfile = {
                         id: user.id,
@@ -51,7 +58,8 @@ export default function DashboardPage() {
                 setProfile(data);
                 setEditData(data);
             } catch (err) {
-                console.error("Error fetching/syncing profile:", err.message);
+                console.error("Error fetching/syncing profile:", err);
+                setFetchError(err.message || "Error desconocido al sincronizar.");
             } finally {
                 setLoading(false);
             }
@@ -102,9 +110,14 @@ export default function DashboardPage() {
         return (
             <div style={{ textAlign: 'center', padding: 'var(--space-2xl)', background: 'rgba(239, 68, 68, 0.05)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
                 <h2 style={{ color: '#fca5a5', marginBottom: 'var(--space-md)' }}>Perfil no sincronizado</h2>
-                <p style={{ color: 'var(--text-tertiary)', maxWidth: '400px', margin: '0 auto 2rem' }}>
+                <p style={{ color: 'var(--text-tertiary)', maxWidth: '400px', margin: '0 auto 1.5rem' }}>
                     No pudimos cargar la información de tu cuenta corporativa.
                 </p>
+                {fetchError && (
+                    <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', fontSize: '0.85rem', color: '#fca5a5', fontFamily: 'monospace' }}>
+                        Error: {fetchError}
+                    </div>
+                )}
                 <button onClick={() => window.location.reload()} className="btn btn-outline" style={{ marginRight: '1rem' }}>Reintentar</button>
                 <Link href="/login" className="btn btn-primary" onClick={async () => await supabase.auth.signOut()}>Reautenticar</Link>
             </div>
