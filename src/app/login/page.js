@@ -134,6 +134,11 @@ export default function LoginPage() {
                                     style={{ width: '100%' }}
                                     placeholder="••••••••"
                                 />
+                                <div style={{ textAlign: 'right', marginTop: '8px' }}>
+                                    <Link href="/forgot-password" style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', textDecoration: 'none' }}>
+                                        ¿Olvidaste tu contraseña?
+                                    </Link>
+                                </div>
                             </div>
 
                             <button
