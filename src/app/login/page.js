@@ -20,11 +20,11 @@ export default function LoginPage() {
         const checkUser = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user && !justLoggedIn) {
-                router.push('/dashboard');
+                window.location.href = '/dashboard';
             }
         };
         checkUser();
-    }, [router, justLoggedIn]);
+    }, [justLoggedIn]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -41,8 +41,9 @@ export default function LoginPage() {
 
             // Show welcome state before redirect
             setJustLoggedIn(true);
-            router.push('/dashboard');
-            router.refresh();
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 1500);
 
         } catch (err) {
             setError(err.message || 'Error al iniciar sesión. Verifica tus credenciales.');
