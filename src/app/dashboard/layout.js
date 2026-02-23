@@ -46,9 +46,8 @@ export default function DashboardLayout({ children }) {
                 height: '100vh'
             }}>
                 <div style={{ marginBottom: 'var(--space-2xl)' }}>
-                    <Link href="/" className="navbar-logo" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-                        <Image src="/conectacorto.png" alt="Logo" width={40} height={40} />
-                        <span style={{ fontSize: '1.2rem', fontWeight: '800', color: 'white' }}>CONECTA <span style={{ color: 'var(--neon-blue)' }}>2026</span></span>
+                    <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                        <Image src="/conectacorto.png" alt="Logo" width={120} height={40} style={{ objectFit: 'contain' }} />
                     </Link>
                 </div>
 
