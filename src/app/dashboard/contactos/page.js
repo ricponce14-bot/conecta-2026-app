@@ -104,71 +104,104 @@ export default function MisContactosPage() {
                     <Link href="/dashboard/escaner" className="btn btn-primary">Abrir Escáner</Link>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(450px, 1fr))', gap: 'var(--space-lg)' }}>
-                    {leads.map((lead) => (
-                        <div key={lead.connection_id} className="glass-card" style={{
-                            padding: 'var(--space-lg)',
-                            display: 'flex',
-                            gap: 'var(--space-lg)',
-                            alignItems: 'center',
-                            border: '1px solid rgba(255,255,255,0.05)',
-                            transition: 'transform 0.2s ease',
-                            cursor: 'default'
-                        }}>
-                            {/* Photo / Avatar */}
-                            <div style={{
-                                width: 60, height: 60,
-                                borderRadius: 'var(--radius-md)',
-                                background: 'rgba(37, 99, 235, 0.1)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                border: '1px solid rgba(37, 99, 235, 0.2)',
-                                flexShrink: 0
+                <>
+                    <div className="leads-grid">
+                        {leads.map((lead) => (
+                            <div key={lead.connection_id} className="glass-card lead-card" style={{
+                                padding: 'var(--space-lg)',
+                                display: 'flex',
+                                gap: 'var(--space-lg)',
+                                alignItems: 'center',
+                                border: '1px solid rgba(255,255,255,0.05)',
+                                transition: 'transform 0.2s ease',
+                                cursor: 'default'
                             }}>
-                                {lead.photo_url ? (
-                                    <img src={lead.photo_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-md)' }} />
-                                ) : (
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--neon-blue)" strokeWidth="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                )}
-                            </div>
+                                {/* Photo / Avatar */}
+                                <div style={{
+                                    width: 60, height: 60,
+                                    borderRadius: 'var(--radius-md)',
+                                    background: 'rgba(37, 99, 235, 0.1)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    border: '1px solid rgba(37, 99, 235, 0.2)',
+                                    flexShrink: 0
+                                }}>
+                                    {lead.photo_url ? (
+                                        <img src={lead.photo_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-md)' }} />
+                                    ) : (
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--neon-blue)" strokeWidth="2">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                    )}
+                                </div>
 
-                            <div style={{ flex: 1 }}>
-                                <h3 style={{ fontSize: '1.1rem', marginBottom: '2px', fontWeight: 600 }}>{lead.contact_name}</h3>
-                                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>
-                                    {lead.contact_title} {lead.company_name ? `@ ${lead.company_name}` : ''}
-                                </p>
+                                <div style={{ flex: 1, minWidth: 0 }}> {/* minWidth 0 prevents text overflow in flex flex-1 items */}
+                                    <h3 style={{ fontSize: '1.1rem', marginBottom: '2px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{lead.contact_name}</h3>
+                                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                        {lead.contact_title} {lead.company_name ? `@ ${lead.company_name}` : ''}
+                                    </p>
 
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 700 }}>Prioridad</div>
-                                    <div style={{ display: 'flex', gap: '4px' }}>
-                                        {[1, 2, 3, 4, 5].map(level => (
-                                            <button
-                                                key={level}
-                                                onClick={() => handleUpdateInterest(lead.connection_id, level)}
-                                                style={{
-                                                    width: 24, height: 24,
-                                                    borderRadius: '4px',
-                                                    border: '1px solid var(--surface-border)',
-                                                    background: lead.interest_level >= level ? 'var(--neon-blue)' : 'rgba(255,255,255,0.05)',
-                                                    cursor: 'pointer',
-                                                    transition: 'all 0.2s ease'
-                                                }}
-                                            />
-                                        ))}
+                                    <div className="lead-priority-control" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 700 }}>Prioridad</div>
+                                        <div style={{ display: 'flex', gap: '4px' }}>
+                                            {[1, 2, 3, 4, 5].map(level => (
+                                                <button
+                                                    key={level}
+                                                    onClick={() => handleUpdateInterest(lead.connection_id, level)}
+                                                    style={{
+                                                        width: 24, height: 24,
+                                                        borderRadius: '4px',
+                                                        border: '1px solid var(--surface-border)',
+                                                        background: lead.interest_level >= level ? 'var(--neon-blue)' : 'rgba(255,255,255,0.05)',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.2s ease'
+                                                    }}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="lead-date-label" style={{ textAlign: 'right' }}>
+                                    <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
+                                        {lead.scanned_at ? new Date(lead.scanned_at).toLocaleDateString() : 'Hoy'}
                                     </div>
                                 </div>
                             </div>
+                        ))}
+                    </div>
 
-                            <div style={{ textAlign: 'right' }}>
-                                <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
-                                    {lead.scanned_at ? new Date(lead.scanned_at).toLocaleDateString() : 'Hoy'}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                    <style jsx>{`
+                        .leads-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+                            gap: var(--space-lg);
+                        }
+
+                        @media (max-width: 768px) {
+                            .leads-grid {
+                                grid-template-columns: 1fr;
+                            }
+
+                            .lead-card {
+                                flex-wrap: wrap; /* Allow contents to wrap if very tight */
+                                gap: var(--space-md) !important;
+                            }
+
+                            .lead-priority-control {
+                                flex-direction: column;
+                                align-items: flex-start !important;
+                                gap: 4px !important;
+                            }
+
+                            .lead-date-label {
+                                position: absolute;
+                                top: 1rem;
+                                right: 1rem;
+                            }
+                        }
+                    `}</style>
+                </>
             )}
         </div>
     );

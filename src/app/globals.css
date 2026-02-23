@@ -85,6 +85,8 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+  /* Prevent scrollbar layout shifts and text resizing on mobile */
+  -webkit-text-size-adjust: 100%;
 }
 
 h1,
@@ -145,6 +147,120 @@ button {
   height: 2px;
   background: var(--gradient-primary);
   border-radius: 1px;
+}
+
+/* ============================================================
+   RESPONSIVE DASHBOARD & APP-LIKE NAVIGATION
+   ============================================================ */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: white;
+}
+
+.dashboard-sidebar {
+  width: 280px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--surface-border);
+  padding: var(--space-xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 50;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: var(--space-2xl);
+  overflow-y: auto;
+  /* Add padding bottom equal to nav bar height on mobile to prevent occlusion */
+  padding-bottom: var(--space-2xl);
+}
+
+/* Bottom App Bar for Mobile */
+.bottom-nav-mobile {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10, 17, 40, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--surface-border);
+  z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom);
+  /* Support for iPhone notch */
+}
+
+.bottom-nav-links {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 65px;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  font-size: 0.65rem;
+  font-weight: 500;
+  width: 20%;
+  transition: all var(--transition-fast);
+}
+
+.bottom-nav-item svg {
+  width: 24px;
+  height: 24px;
+  transition: all var(--transition-fast);
+}
+
+.bottom-nav-item.active {
+  color: var(--accent-light);
+}
+
+.bottom-nav-item.active svg {
+  color: var(--accent-light);
+  transform: translateY(-2px);
+}
+
+.bottom-nav-item:hover {
+  color: var(--text-primary);
+}
+
+/* Dashboard Component Overrides for Mobile */
+@media (max-width: 768px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+
+  .dashboard-sidebar {
+    display: none;
+    /* Hide desktop sidebar on mobile */
+  }
+
+  .dashboard-main {
+    padding: var(--space-md);
+    padding-bottom: calc(85px + env(safe-area-inset-bottom));
+    /* Make room for bottom nav */
+  }
+
+  .bottom-nav-mobile {
+    display: block;
+    /* Show bottom nav on mobile */
+  }
+
+  .section-label::before {
+    display: none;
+  }
 }
 
 .section-title {

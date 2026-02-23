@@ -51,18 +51,21 @@ export default function DirectorioPage() {
 
                 if (error) throw error;
 
-                // Map to frontend structure
-                const mapped = data.map(c => ({
-                    id: c.id,
-                    name: c.trade_name,
-                    initials: c.trade_name.substring(0, 2).toUpperCase(),
-                    sector: c.sector,
-                    municipality: c.municipality,
-                    offer: c.offer_description,
-                    search: c.search_description,
-                    verified: c.is_verified,
-                    logo_url: c.logo_url
-                }));
+                // Map to frontend structure with safe fallbacks
+                const mapped = data.map(c => {
+                    const name = c.trade_name || 'Empresa No Definida';
+                    return {
+                        id: c.id,
+                        name: name,
+                        initials: name.substring(0, 2).toUpperCase(),
+                        sector: c.sector || 'No especificado',
+                        municipality: c.municipality || 'No especificado',
+                        offer: c.offer_description || 'Sin descripción.',
+                        search: c.search_description || 'Sin descripción.',
+                        verified: c.is_verified || false,
+                        logo_url: c.logo_url
+                    };
+                });
 
                 setCompanies(mapped);
             } catch (err) {

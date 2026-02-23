@@ -350,7 +350,7 @@ export default function HomePage() {
               </p>
               <ul className="day-features" style={{ marginBottom: '1rem' }}>
                 <li><span className="check">&#10003;</span> <strong>Expo Empresarial:</strong> 50+ marcas líderes locales.</li>
-                <li><span className="check">&#10003;</span> <strong>Ponencias Regionales:</strong> Estrategias de quienes mueven Los Altos.</li>
+                <li><span className="check">&#10003;</span> <strong>Ponencias Regionales:</strong> Estrategias de quienes mueven Sede 2026 Tepatitlán de Morelos.</li>
                 <li><span className="check">&#10003;</span> <strong>Feria de Empleo:</strong> Conecta talento con vacantes clave.</li>
                 <li><span className="check">&#10003;</span> <strong>Networking Pro:</strong> Acceso a la mayor base de negocios de la zona.</li>
                 <li><span className="check">&#10003;</span> <strong>Invitado Sorpresa:</strong> Para una apertura impactante.</li>
@@ -497,7 +497,7 @@ export default function HomePage() {
               Talentos <span className="highlight">Regionales</span>
             </h2>
             <p className="section-subtitle center">
-              Casos de éxito y estrategias de los empresarios que están moviendo la economía de Los Altos.
+              Casos de éxito y estrategias de los empresarios que están moviendo la economía de Sede 2026 Tepatitlán de Morelos.
             </p>
           </div>
 
@@ -559,7 +559,7 @@ export default function HomePage() {
                 sin perder tiempo y con tecnología que trabaja por ti.
               </p>
               <p className="why-body">
-                Conecta es la expo que une a todas las potencias de Los Altos de Jalisco
+                Conecta es la expo que une a todas las potencias de Sede 2026 Tepatitlán de Morelos
                 para convertirse en un referente regional. El enfoque no se limita a
                 municipios, sino que integra marcas, escuelas y diversos sectores
                 productivos en un solo ecosistema de negocios.
