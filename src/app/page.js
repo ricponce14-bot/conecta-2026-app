@@ -292,6 +292,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ══════════ CONECTA ALLIANCES ══════════ */}
+      <section className="section" style={{ paddingTop: 'var(--space-lg)', paddingBottom: 'var(--space-2xl)' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)' }}>
+            <h2 className="section-title center">
+              Alianzas <span className="highlight">Conecta</span>
+            </h2>
+          </div>
+          <div className="alliance-grid alliance-grid-4">
+            {CONECTA_ALLIANCES.map((name, i) => (
+              <div key={i} className="alliance-slot alliance-slot-org">
+                <div className="alliance-slot-initials">
+                  {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                </div>
+                <div className="alliance-slot-name">{name}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ══════════ SCHEDULE: DAY 1 / DAY 2 ══════════ */}
       <section className="section" id="schedule">
         <div className="container">
@@ -628,20 +649,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Alianzas Conecta */}
-          <div className="alliance-section">
-            <h3 className="alliance-category-title">Alianzas Conecta</h3>
-            <div className="alliance-grid alliance-grid-4">
-              {CONECTA_ALLIANCES.map((name, i) => (
-                <div key={i} className="alliance-slot alliance-slot-org">
-                  <div className="alliance-slot-initials">
-                    {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                  </div>
-                  <div className="alliance-slot-name">{name}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+
 
           {/* Alianzas Estratégicas */}
           <div className="alliance-section">
