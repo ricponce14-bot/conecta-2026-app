@@ -8,37 +8,20 @@ export default function EscanerPage() {
     const [error, setError] = useState(null);
     const [isScanning, setIsScanning] = useState(true);
     const scannerRef = useRef(null);
+    const isScanningRef = useRef(true); // Ref to track scanning state without closure issues
 
-    // Active Event ID (Can be dynamic later, typically stored in context or cookies)
-    const ACTIVE_EVENT_ID = 'e19b5b24-b19b-4f9e-a892-12b2a6f2b4c1'; // Default seed UUID
-
+    // Sync ref with state
     useEffect(() => {
-        // Initialize scanner only on client side
-        if (typeof window !== 'undefined' && !scannerRef.current) {
-            import('html5-qrcode').then(({ Html5QrcodeScanner }) => {
-                scannerRef.current = new Html5QrcodeScanner(
-                    "qr-reader",
-                    { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 },
-                    /* verbose= */ false
-                );
+        isScanningRef.current = isScanning;
+    }, [isScanning]);
 
-                scannerRef.current.render(onScanSuccess, onScanFailure);
-            });
-        }
+    // Active Event ID
+    const ACTIVE_EVENT_ID = 'e19b5b24-b19b-4f9e-a892-12b2a6f2b4c1';
 
-        return () => {
-            if (scannerRef.current) {
-                scannerRef.current.clear().catch(error => {
-                    console.error("Failed to clear html5QrcodeScanner. ", error);
-                });
-                scannerRef.current = null;
-            }
-        };
-    }, [onScanSuccess, onScanFailure]);
-
+    // Move handlers above useEffect and use stable closures via Ref
     const onScanSuccess = async (decodedText, decodedResult) => {
-        // Pause scanning to prevent multiple triggers
-        if (!isScanning) return;
+        if (!isScanningRef.current) return;
+
         setIsScanning(false);
         setError(null);
 
@@ -46,7 +29,6 @@ export default function EscanerPage() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) throw new Error("Debes iniciar sesión para escanear.");
 
-            // Call Supabase RPC
             const { data, error: rpcError } = await supabase.rpc('scan_qr', {
                 p_scanner_id: user.id,
                 p_qr_code: decodedText,
@@ -69,14 +51,40 @@ export default function EscanerPage() {
         } catch (err) {
             console.error("Scan error:", err);
             setError(err.message || "Ocurrió un error al procesar el código.");
-            setTimeout(() => setIsScanning(true), 3000); // Resume scanning after 3s on error
+            setTimeout(() => setIsScanning(true), 3000);
         }
     };
 
     const onScanFailure = (error) => {
-        // handle scan failure, usually better to ignore and keep scanning
-        // console.warn(`Code scan error = ${error}`);
+        // ignore
     };
+
+    useEffect(() => {
+        let scanner = null;
+
+        if (typeof window !== 'undefined' && !scannerRef.current) {
+            import('html5-qrcode').then(({ Html5QrcodeScanner }) => {
+                scanner = new Html5QrcodeScanner(
+                    "qr-reader",
+                    { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 },
+                    false
+                );
+                scannerRef.current = scanner;
+                // We use a small hack to ensure the latest callback is used if needed, 
+                // but since we use isScanningRef, the first closure is fine
+                scanner.render(onScanSuccess, onScanFailure);
+            }).catch(err => {
+                console.error("Failed to load scanner:", err);
+            });
+        }
+
+        return () => {
+            if (scannerRef.current) {
+                scannerRef.current.clear().catch(e => console.error("Clear error", e));
+                scannerRef.current = null;
+            }
+        };
+    }, []);
 
     const resetScanner = () => {
         setScanResult(null);
