@@ -1746,11 +1746,15 @@ button {
   .hero .container {
     flex-direction: column;
     justify-content: center;
+    padding-top: var(--space-xl);
   }
 
   .hero-metrics {
-    gap: var(--space-xl);
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg) var(--space-sm);
+    text-align: center;
+    width: 100%;
   }
 
   .hero-metric-value {
@@ -1760,6 +1764,16 @@ button {
   .countdown {
     flex-wrap: wrap;
     justify-content: center;
+    gap: var(--space-xs);
+  }
+
+  .countdown-item {
+    padding: var(--space-sm);
+    min-width: 65px;
+  }
+
+  .countdown-value {
+    font-size: 1.4rem;
   }
 
   .schedule-grid {
@@ -1802,6 +1816,10 @@ button {
     margin: 0 auto;
   }
 
+  .pricing-card {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
   .company-grid {
     grid-template-columns: 1fr;
   }
@@ -1833,11 +1851,13 @@ button {
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: 2.2rem;
+    font-size: 1.9rem;
+    line-height: 1.15;
   }
 
   .hero-actions {
     flex-direction: column;
+    width: 100%;
   }
 
   .hero-actions .btn {
@@ -1846,11 +1866,29 @@ button {
 
   .sponsors-row {
     grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
   }
 
   .alliance-grid-4,
   .alliance-grid-5 {
     grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+
+  .alliance-slot {
+    aspect-ratio: auto;
+    min-height: 100px;
+    padding: var(--space-sm);
+  }
+
+  .alliance-slot-initials {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+
+  .speaker-card {
+    padding: var(--space-xl) var(--space-md);
   }
 
   .why-stats {

@@ -190,7 +190,7 @@ export default function HomePage() {
 
         <div className="container">
           <div className="hero-grid">
-            <div className="hero-content" style={{ marginTop: '2rem' }}>
+            <div className="hero-content">
               <div className="hero-eyebrow">
                 <span className="dot"></span>
                 <span>18 — 19 Abril 2026 &middot; Centro de Convenciones Olimpo</span>
@@ -266,7 +266,7 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div className="sponsors-row" style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: 'var(--space-3xl)' }}>
+          <div className="sponsors-row" style={{ marginBottom: 'var(--space-3xl)' }}>
             {officialSponsors.length > 0 ? officialSponsors.map((s, i) => (
               <div key={i} className={`sponsor-slot ${!s.is_filled ? 'sponsor-slot-available' : ''}`} style={{
                 flex: '1 1 200px',
@@ -501,7 +501,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="speakers-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', maxWidth: '1200px' }}>
+          <div className="speakers-grid" style={{ maxWidth: '1200px' }}>
             {regionalSpeakers.length > 0 ? regionalSpeakers.map((speaker, i) => (
               <div
                 key={i}
@@ -675,7 +675,7 @@ export default function HomePage() {
           </div>
 
           {/* Alianzas Estratégicas y Universitarias */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', marginTop: 'var(--space-2xl)' }}>
+          <div className="schedule-grid" style={{ marginTop: 'var(--space-2xl)' }}>
             <div className="alliance-section">
               <h3 className="alliance-category-title">Alianzas Estratégicas</h3>
               <div className="alliance-grid alliance-grid-3">
