@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
 
 export default function MisContactosPage() {
     const [leads, setLeads] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [userRole, setUserRole] = useState('attendee');
 
     useEffect(() => {
         async function fetchMyLeads() {
@@ -13,8 +15,12 @@ export default function MisContactosPage() {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (!user) return;
 
-                // Active Event ID (Can be dynamic later)
-                const ACTIVE_EVENT_ID = 'e19b5b24-b19b-4f9e-a892-12b2a6f2b4c1'; // Default seed UUID
+                // Sync role
+                const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+                if (profile?.role) setUserRole(profile.role);
+
+                // Active Event ID
+                const ACTIVE_EVENT_ID = 'e19b5b24-b19b-4f9e-a892-12b2a6f2b4c1';
 
                 const { data, error } = await supabase.rpc('get_my_leads', {
                     p_user_id: user.id,
@@ -22,7 +28,6 @@ export default function MisContactosPage() {
                 });
 
                 if (error) {
-                    // Suppress if event ID is wrong on a fresh DB, just show empty
                     console.warn("Could not fetch leads:", error.message);
                 } else if (data) {
                     setLeads(data);
@@ -57,83 +62,108 @@ export default function MisContactosPage() {
     }
 
     if (loading) {
-        return <div style={{ padding: 'var(--space-xl)' }}>Cargando contactos...</div>;
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '1rem' }}>
+                <div className="loading-spinner" style={{ width: '40px', height: '40px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--neon-blue)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                <p style={{ color: 'var(--text-secondary)' }}>Recuperando red de contactos...</p>
+                <style jsx>{`
+                    @keyframes spin { to { transform: rotate(360deg); } }
+                `}</style>
+            </div>
+        );
     }
 
+    const subtitleText = userRole === 'attendee'
+        ? 'Personas y empresas que has marcado como relevantes para tu crecimiento.'
+        : 'Prospectos capturados durante el evento para seguimiento comercial.';
+
     return (
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-            <div style={{ marginBottom: 'var(--space-xl)' }}>
-                <h1 className="section-title" style={{ fontSize: '2rem', marginBottom: 'var(--space-sm)' }}>
-                    Mis <span className="highlight">Contactos</span>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <div style={{ marginBottom: 'var(--space-2xl)' }}>
+                <h1 className="section-title" style={{ fontSize: '2.5rem', marginBottom: 'var(--space-sm)' }}>
+                    {userRole === 'attendee' ? 'Mis ' : 'Mis '} <span className="highlight">{userRole === 'attendee' ? 'Intereses' : 'Leads'}</span>
                 </h1>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                    Aquí aparecerán todas las personas que has escaneado en el evento.
+                <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
+                    {subtitleText}
                 </p>
             </div>
 
             {leads.length === 0 ? (
-                <div className="glass-card" style={{ padding: 'var(--space-2xl)', textAlign: 'center' }}>
-                    <div style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-md)' }}>
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                <div className="glass-card" style={{ padding: 'var(--space-3xl)', textAlign: 'center', border: '1px dashed rgba(255,255,255,0.1)' }}>
+                    <div style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--space-lg)' }}>
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                         </svg>
                     </div>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                        Usa la herramienta &quot;Escanear Contacto&quot; para leer los gafetes de otros asistentes y añadirlos aquí.
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '400px', margin: '0 auto 1.5rem' }}>
+                        Aún no has registrado conexiones. Comienza a escanear gafetes para construir tu red.
                     </p>
+                    <Link href="/dashboard/escaner" className="btn btn-primary">Abrir Escáner</Link>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gap: 'var(--space-md)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(450px, 1fr))', gap: 'var(--space-lg)' }}>
                     {leads.map((lead) => (
                         <div key={lead.connection_id} className="glass-card" style={{
                             padding: 'var(--space-lg)',
                             display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center'
+                            gap: 'var(--space-lg)',
+                            alignItems: 'center',
+                            border: '1px solid rgba(255,255,255,0.05)',
+                            transition: 'transform 0.2s ease',
+                            cursor: 'default'
                         }}>
-                            <div>
-                                <h3 style={{ fontSize: '1.2rem', marginBottom: '4px' }}>{lead.contact_name}</h3>
-                                {lead.company_name && (
-                                    <div style={{
-                                        fontSize: '0.85rem',
-                                        color: 'var(--accent-light)',
-                                        background: 'rgba(37, 99, 235, 0.1)',
-                                        padding: '2px 8px',
-                                        borderRadius: 'var(--radius-pill)',
-                                        display: 'inline-block',
-                                        marginBottom: '8px'
-                                    }}>
-                                        {lead.company_name}
-                                    </div>
+                            {/* Photo / Avatar */}
+                            <div style={{
+                                width: 60, height: 60,
+                                borderRadius: 'var(--radius-md)',
+                                background: 'rgba(37, 99, 235, 0.1)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                border: '1px solid rgba(37, 99, 235, 0.2)',
+                                flexShrink: 0
+                            }}>
+                                {lead.photo_url ? (
+                                    <img src={lead.photo_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-md)' }} />
+                                ) : (
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--neon-blue)" strokeWidth="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
                                 )}
-                                <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                                    {lead.scanned_at ? new Date(lead.scanned_at).toLocaleString() : 'Recientemente'}
+                            </div>
+
+                            <div style={{ flex: 1 }}>
+                                <h3 style={{ fontSize: '1.1rem', marginBottom: '2px', fontWeight: 600 }}>{lead.contact_name}</h3>
+                                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+                                    {lead.contact_title} {lead.company_name ? `@ ${lead.company_name}` : ''}
+                                </p>
+
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 700 }}>Prioridad</div>
+                                    <div style={{ display: 'flex', gap: '4px' }}>
+                                        {[1, 2, 3, 4, 5].map(level => (
+                                            <button
+                                                key={level}
+                                                onClick={() => handleUpdateInterest(lead.connection_id, level)}
+                                                style={{
+                                                    width: 24, height: 24,
+                                                    borderRadius: '4px',
+                                                    border: '1px solid var(--surface-border)',
+                                                    background: lead.interest_level >= level ? 'var(--neon-blue)' : 'rgba(255,255,255,0.05)',
+                                                    cursor: 'pointer',
+                                                    transition: 'all 0.2s ease'
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 
                             <div style={{ textAlign: 'right' }}>
-                                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                    Nivel de interés (1-5)
-                                </div>
-                                <div style={{ display: 'flex', gap: '4px' }}>
-                                    {[1, 2, 3, 4, 5].map(level => (
-                                        <button
-                                            key={level}
-                                            onClick={() => handleUpdateInterest(lead.connection_id, level)}
-                                            style={{
-                                                width: 32, height: 32,
-                                                borderRadius: '50%',
-                                                border: '1px solid var(--surface-border)',
-                                                background: lead.interest_level >= level ? 'var(--accent-warn)' : 'transparent',
-                                                color: lead.interest_level >= level ? 'var(--bg-primary)' : 'var(--text-secondary)',
-                                                cursor: 'pointer',
-                                                transition: 'all 0.2s ease',
-                                                fontWeight: 'bold'
-                                            }}
-                                        >
-                                            {level}
-                                        </button>
-                                    ))}
+                                <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
+                                    {lead.scanned_at ? new Date(lead.scanned_at).toLocaleDateString() : 'Hoy'}
                                 </div>
                             </div>
                         </div>

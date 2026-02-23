@@ -42,15 +42,11 @@ export default function DirectorioPage() {
         async function loadCompanies() {
             setLoading(true);
             try {
-                // Assuming `supabase` is imported, let's make sure it is at the top of the file
                 const { supabase } = await import('@/lib/supabase');
 
                 const { data, error } = await supabase
                     .from('companies')
-                    .select(`
-                        id, trade_name, municipality, sector, offer_description, search_description, is_verified,
-                        profiles!inner (fullName: full_name)
-                    `)
+                    .select('id, trade_name, municipality, sector, offer_description, search_description, is_verified, logo_url')
                     .order('trade_name');
 
                 if (error) throw error;
@@ -65,6 +61,7 @@ export default function DirectorioPage() {
                     offer: c.offer_description,
                     search: c.search_description,
                     verified: c.is_verified,
+                    logo_url: c.logo_url
                 }));
 
                 setCompanies(mapped);

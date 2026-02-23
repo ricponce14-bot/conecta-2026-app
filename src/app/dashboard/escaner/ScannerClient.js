@@ -85,21 +85,21 @@ export default function EscanerPage() {
     };
 
     return (
-        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <div style={{ marginBottom: 'var(--space-xl)' }}>
-                <h1 className="section-title" style={{ fontSize: '2rem', marginBottom: 'var(--space-sm)' }}>
-                    Escanear <span className="highlight">Gafete</span>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <div style={{ marginBottom: 'var(--space-2xl)' }}>
+                <h1 className="section-title" style={{ fontSize: '2.5rem', marginBottom: 'var(--space-sm)' }}>
+                    Escáner <span className="highlight">Networking</span>
                 </h1>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                    Apunta la cámara al código QR de otro asistente para agregarlo a tus contactos (Leads).
+                <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
+                    Sincroniza datos profesionales escaneando el código QR de otros asistentes.
                 </p>
             </div>
 
-            <div className="glass-card" style={{ padding: 'var(--space-xl)', overflow: 'hidden' }}>
+            <div className="glass-card" style={{ padding: 'var(--space-2xl)', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)' }}>
 
                 {/* Scanner Container */}
                 <div style={{ display: scanResult ? 'none' : 'block' }}>
-                    <div id="qr-reader" style={{ width: '100%', border: 'none', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}></div>
+                    <div id="qr-reader" style={{ width: '100%', border: 'none', borderRadius: 'var(--radius-lg)', overflow: 'hidden', background: 'rgba(0,0,0,0.2)' }}></div>
                     {error && (
                         <div style={{
                             marginTop: 'var(--space-md)',
@@ -108,10 +108,11 @@ export default function EscanerPage() {
                             color: '#fca5a5',
                             borderRadius: 'var(--radius-md)',
                             textAlign: 'center',
-                            fontSize: '0.9rem'
+                            fontSize: '0.9rem',
+                            border: '1px solid rgba(239, 68, 68, 0.2)'
                         }}>
                             {error}
-                            <p style={{ fontSize: '0.8rem', marginTop: '4px', opacity: 0.8 }}>Reintentando en unos segundos...</p>
+                            <p style={{ fontSize: '0.8rem', marginTop: '4px', opacity: 0.8 }}>Reintentando validación en breve...</p>
                         </div>
                     )}
                 </div>
@@ -120,40 +121,46 @@ export default function EscanerPage() {
                 {scanResult && (
                     <div style={{ textAlign: 'center', animation: 'slideIn 0.5s ease-out forwards' }}>
                         <div style={{
-                            width: 64, height: 64,
+                            width: 80, height: 80,
                             background: 'rgba(16, 185, 129, 0.1)',
                             color: 'var(--accent-success)',
                             borderRadius: '50%',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            margin: '0 auto var(--space-lg)'
+                            margin: '0 auto var(--space-xl)',
+                            border: '1px solid rgba(16, 185, 129, 0.2)'
                         }}>
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </div>
 
-                        <h2 style={{ fontSize: '1.4rem', color: 'var(--accent-success)', marginBottom: 'var(--space-sm)' }}>
-                            ¡Contacto Registrado!
+                        <h2 style={{ fontSize: '1.8rem', color: 'white', marginBottom: 'var(--space-sm)', fontWeight: 700 }}>
+                            Conexión Exitosa
                         </h2>
-                        <p style={{ fontSize: '1.1rem', marginBottom: 'var(--space-md)' }}>
-                            Has agregado a <strong>{scanResult.contact?.full_name}</strong> a tus leads.
+                        <p style={{ fontSize: '1.15rem', marginBottom: 'var(--space-xl)', color: 'var(--text-secondary)' }}>
+                            Has sincronizado con <strong>{scanResult.contact?.full_name}</strong>.
                         </p>
 
-                        {scanResult.company && (
+                        {scanResult.contact && (
                             <div style={{
                                 background: 'rgba(255, 255, 255, 0.03)',
-                                padding: 'var(--space-md)',
-                                borderRadius: 'var(--radius-md)',
-                                marginBottom: 'var(--space-xl)'
+                                padding: 'var(--space-xl)',
+                                borderRadius: 'var(--radius-lg)',
+                                marginBottom: 'var(--space-2xl)',
+                                border: '1px solid rgba(255,255,255,0.05)',
+                                textAlign: 'left'
                             }}>
-                                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Empresa</div>
-                                <div style={{ fontSize: '1.1rem', fontWeight: 600 }}>{scanResult.company.trade_name}</div>
-                                <div style={{ fontSize: '0.9rem', color: 'var(--accent-light)' }}>{scanResult.company.sector}</div>
+                                <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Perfil Detectado</div>
+                                <div style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '2px' }}>{scanResult.contact.full_name}</div>
+                                <div style={{ fontSize: '1rem', color: 'var(--neon-blue)', fontWeight: 600 }}>{scanResult.contact.title || 'Asistente'}</div>
+                                {scanResult.contact.company_name && (
+                                    <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{scanResult.contact.company_name}</div>
+                                )}
                             </div>
                         )}
 
-                        <button onClick={resetScanner} className="btn btn-primary" style={{ width: '100%' }}>
-                            Escanear otro gafete
+                        <button onClick={resetScanner} className="btn btn-primary" style={{ width: '100%', padding: '1rem' }}>
+                            Continuar Escaneando
                         </button>
                     </div>
                 )}
@@ -162,23 +169,37 @@ export default function EscanerPage() {
             <style jsx global>{`
                 /* Override html5-qrcode default ugly styles */
                 #qr-reader {
-                    border: 1px solid var(--surface-border) !important;
+                    border: 1px solid rgba(255,255,255,0.1) !important;
                 }
                 #qr-reader__dashboard_section_csr span {
-                    color: var(--text-primary) !important;
+                    color: var(--text-secondary) !important;
+                    font-family: inherit !important;
                 }
                 #qr-reader__dashboard_section_csr button {
-                    background: var(--accent-light) !important;
+                    background: var(--neon-blue) !important;
                     color: white !important;
                     border: none !important;
-                    padding: 8px 16px !important;
+                    padding: 10px 20px !important;
                     border-radius: var(--radius-md) !important;
                     cursor: pointer !important;
-                    margin: 10px 0 !important;
+                    margin: 15px 0 !important;
+                    font-weight: 600 !important;
+                    text-transform: uppercase !important;
+                    letter-spacing: 0.5px !important;
+                    font-size: 0.8rem !important;
                 }
                 #qr-reader__dashboard_section_swaplink {
                     color: var(--accent-light) !important;
                     text-decoration: none !important;
+                    font-size: 0.85rem !important;
+                }
+                #qr-reader__camera_selection {
+                    padding: 8px !important;
+                    background: var(--bg-secondary) !important;
+                    color: white !important;
+                    border: 1px solid var(--surface-border) !important;
+                    border-radius: var(--radius-md) !important;
+                    margin-bottom: 10px !important;
                 }
             `}</style>
         </div>
