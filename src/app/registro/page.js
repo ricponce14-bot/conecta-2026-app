@@ -59,17 +59,12 @@ export default function RegisterPage() {
         }
     };
 
-    // Check URL parameters and auth state on mount
+    // We rely on Middleware for redirecting already logged-in users.
+    // This effect only handles the post-registration success view.
     useEffect(() => {
         const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
             const params = new URLSearchParams(window.location.search);
             const successParam = params.get('success') === 'true';
-
-            if (user && !successParam && !isSuccess) {
-                window.location.href = '/dashboard';
-                return;
-            }
 
             if (successParam) {
                 setIsSuccess(true);

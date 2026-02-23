@@ -15,16 +15,9 @@ export default function LoginPage() {
     const [error, setError] = useState('');
     const [justLoggedIn, setJustLoggedIn] = useState(false);
 
-    // Redirect if already logged in
-    useEffect(() => {
-        const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user && !justLoggedIn) {
-                window.location.href = '/dashboard';
-            }
-        };
-        checkUser();
-    }, [justLoggedIn]);
+    // We rely on Middleware for automatic redirects to /dashboard
+    // to avoid conflicts with safe session propagation.
+    // The previous useEffect was empty and is now removed as per instructions.
 
     const handleLogin = async (e) => {
         e.preventDefault();

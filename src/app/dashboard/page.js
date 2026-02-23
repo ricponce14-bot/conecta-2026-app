@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
 
 export default function DashboardPage() {
     const [profile, setProfile] = useState(null);
