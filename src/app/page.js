@@ -5,7 +5,8 @@ import AnimatedCounter from '@/components/AnimatedCounter';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 // ... (skip lines 9-145 in instruction)
 /* ── DATA ── */
@@ -55,40 +56,6 @@ const FEATURES = [
   },
 ];
 
-const HEADLINERS = [
-  {
-    name: 'Jessica Fernández',
-    role: 'Conferencista Estelar',
-    topic: 'Enfoque: El Síndrome del Impostor.',
-    description: 'Aprende a vencer las barreras que limitan tu potencial. Jessica comparte estrategias clave para superar el síndrome del impostor, impulsando un liderazgo auténtico y valiente desde el poder femenino.',
-    image: '/jesduo.png',
-    accentColor: '#ec4899', // A modern Pink/Rose from Tailwind
-  },
-  {
-    name: 'Farid Dieck',
-    role: 'Conferencista Estelar',
-    topic: 'Enfoque: Construyendo un Sentido.',
-    description: 'Referente nacional en psicología y emprendimiento con significado. Aporta las herramientas necesarias para encontrar el "porqué" detrás de cada proyecto, transformando la motivación en resultados tangibles con valor humano.',
-    image: '/faridduo.png',
-  },
-];
-
-const REGIONAL_SPEAKERS = Array(5).fill({
-  name: 'Buscando Talento',
-  role: 'Talento Regional',
-  topic: 'Próximamente estaremos anunciando a los expertos locales.',
-  description: 'Un espacio dedicado a los líderes de Los Altos de Jalisco que están innovando en sus industrias.',
-  image: '/images/speaker-placeholder.png', // Or use a generic placeholder like an empty silhouette
-});
-
-const OFFICIAL_SPONSORS = [
-  { name: 'Grupo El Alteño', filled: true, image: '/grupoalteño.png' },
-  { name: 'Sisay', filled: true, image: '/sisay.png' },
-  { name: 'Disponible', filled: false },
-  { name: 'Disponible', filled: false },
-  { name: 'Disponible', filled: false },
-];
-
 const EXPO_STANDS = [
   {
     name: 'Stand Básico',
@@ -111,46 +78,60 @@ const SPONSORS = [
   { label: 'Patrocinador Plata' },
 ];
 
-const STRATEGIC_ALLIANCES = [
-  'COPARMEX Los Altos',
-  'Cámara de Comercio',
-  'Gobierno Municipal',
-  'Promoción Económica',
-  'CANACO',
-  'CANACINTRA',
-  'Cluster Tecnológico',
-  'Desarrollo Regional',
-  'Secretaría de Economía',
-  'Red Empresarial Altos',
-];
+/* ── DATA ── */
+// These will be fetched from DB in the component logic
 
-const UNIVERSITY_ALLIANCES = [
-  'Universidad de Guadalajara (CUAltos)',
-  'ITESO',
-  'Tec de Monterrey',
-  'UNIVA',
-  'Universidad Autónoma',
-  'UTEG',
-  'UVM',
-  'Instituto Tecnológico',
-  'Universidad del Valle',
-  'Centro Universitario',
-];
-
-const CONECTA_ALLIANCES = [
-  'Gobierno de Tepatitlán',
-  'Promoción Económica de Tepatitlán',
-  'Cámara de Comercio de Tepa',
-  'COPARMEX Tepatitlán',
-];
 
 /* ── PAGE ── */
 
 export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [modalDay, setModalDay] = useState(1);
   const [leadInfo, setLeadInfo] = useState({ name: '', company: '', phone: '', interest: 'Stand Básico' });
+
+  // Dynamic Data States
+  const [headliners, setHeadliners] = useState([]);
+  const [regionalSpeakers, setRegionalSpeakers] = useState([]);
+  const [officialSponsors, setOfficialSponsors] = useState([]);
+  const [strategicAlliances, setStrategicAlliances] = useState([]);
+  const [universityAlliances, setUniversityAlliances] = useState([]);
+  const [conectaAlliances, setConectaAlliances] = useState([]);
+  const [itinerary, setItinerary] = useState([]);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      // Fetch Speakers
+      const { data: speakersData } = await supabase.from('speakers').select('*').order('display_order');
+      if (speakersData) {
+        setHeadliners(speakersData.filter(s => !s.is_regional));
+        setRegionalSpeakers(speakersData.filter(s => s.is_regional));
+      }
+
+      // Fetch Alliances & Sponsors
+      const { data: allianceData } = await supabase.from('alliances_sponsors').select('*').order('display_order');
+      if (allianceData) {
+        setOfficialSponsors(allianceData.filter(a => a.type === 'official'));
+        setStrategicAlliances(allianceData.filter(a => a.type === 'strategic').map(a => a.name));
+        setUniversityAlliances(allianceData.filter(a => a.type === 'university').map(a => a.name));
+        setConectaAlliances(allianceData.filter(a => a.type === 'conecta').map(a => a.name));
+      }
+    };
+
+    fetchContent();
+  }, []);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      const fetchItinerary = async () => {
+        const { data } = await supabase.from('itinerary').select('*').eq('day', modalDay).order('time_label');
+        if (data) setItinerary(data);
+      };
+      fetchItinerary();
+    }
+  }, [isModalOpen, modalDay]);
 
   const openModal = (day) => {
     setModalDay(day);
@@ -159,18 +140,37 @@ export default function HomePage() {
 
   const openLeadModal = (interest = 'Stand Básico') => {
     setLeadInfo(prev => ({ ...prev, interest }));
+    setIsSuccess(false);
     setIsLeadModalOpen(true);
   };
 
-  const handleLeadSubmit = (e) => {
+  const handleLeadSubmit = async (e) => {
     e.preventDefault();
-    const message = `Hola! Me interesa reservar un espacio en CONECTA 2026.
-Nombre: ${leadInfo.name}
-Empresa: ${leadInfo.company}
-Teléfono: ${leadInfo.phone}
-Interés: ${leadInfo.interest}`;
-    window.open(`https://wa.me/523781002683?text=${encodeURIComponent(message)}`, '_blank');
-    setIsLeadModalOpen(false);
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from('stand_leads')
+        .insert([
+          {
+            name: leadInfo.name,
+            company: leadInfo.company,
+            phone: leadInfo.phone,
+            interest: leadInfo.interest,
+            status: 'pending'
+          }
+        ]);
+
+      if (error) throw error;
+
+      setIsSuccess(true);
+      // Optional: Logic to notify admin via email/webhook could go here
+    } catch (err) {
+      console.error('Error saving lead:', err);
+      alert('Hubo un error al guardar tu información. Por favor, intenta de nuevo o contáctanos por WhatsApp.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const closeModal = () => {
@@ -266,30 +266,30 @@ Interés: ${leadInfo.interest}`;
             </h2>
           </div>
           <div className="sponsors-row" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            {OFFICIAL_SPONSORS.map((s, i) => {
-              const content = s.image ? (
-                <Image src={s.image} alt={s.name} width={200} height={60} style={{ maxWidth: '80%', maxHeight: '60px', objectFit: 'contain' }} />
+            {officialSponsors.length > 0 ? officialSponsors.map((s, i) => {
+              const content = s.image_url ? (
+                <Image src={s.image_url} alt={s.name} width={200} height={60} style={{ maxWidth: '80%', maxHeight: '60px', objectFit: 'contain' }} />
               ) : (
-                s.filled ? s.name : "Sé Patrocinador Oficial"
+                s.is_filled ? s.name : "Sé Patrocinador Oficial"
               );
 
               const boxStyles = {
                 flex: '1 1 180px',
                 maxWidth: '220px',
                 minHeight: '100px',
-                background: s.filled ? 'var(--bg-glass)' : 'rgba(255,255,255,0.02)',
-                border: s.filled ? '1px solid var(--border-color)' : '1px dashed var(--border-color)',
+                background: s.is_filled ? 'var(--bg-glass)' : 'rgba(255,255,255,0.02)',
+                border: s.is_filled ? '1px solid var(--border-color)' : '1px dashed var(--border-color)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontWeight: s.filled ? '600' : '400',
-                color: s.filled ? 'var(--text-primary)' : 'var(--text-tertiary)',
+                fontWeight: s.is_filled ? '600' : '400',
+                color: s.is_filled ? 'var(--text-primary)' : 'var(--text-tertiary)',
                 textDecoration: 'none',
                 transition: 'all 0.3s ease',
-                cursor: s.filled ? 'default' : 'pointer'
+                cursor: s.is_filled ? 'default' : 'pointer'
               };
 
-              return s.filled ? (
+              return s.is_filled ? (
                 <div key={i} className="sponsor-slot" style={boxStyles}>
                   {content}
                 </div>
@@ -305,7 +305,25 @@ Interés: ${leadInfo.interest}`;
                   {content}
                 </a>
               );
-            })}
+            }) : Array(5).fill(0).map((_, i) => (
+              <div key={i} className="sponsor-slot" style={{
+                flex: '1 1 180px',
+                maxWidth: '220px',
+                minHeight: '100px',
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px dashed var(--border-color)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: '400',
+                color: 'var(--text-tertiary)',
+                textDecoration: 'none',
+                transition: 'all 0.3s ease',
+                cursor: 'default'
+              }}>
+                Cargando...
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -319,12 +337,17 @@ Interés: ${leadInfo.interest}`;
             </h2>
           </div>
           <div className="alliance-grid alliance-grid-4">
-            {CONECTA_ALLIANCES.map((name, i) => (
+            {conectaAlliances.length > 0 ? conectaAlliances.map((name, i) => (
               <div key={i} className="alliance-slot alliance-slot-org">
                 <div className="alliance-slot-initials">
                   {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
                 </div>
                 <div className="alliance-slot-name">{name}</div>
+              </div>
+            )) : Array(4).fill(0).map((_, i) => (
+              <div key={i} className="alliance-slot alliance-slot-org" style={{ opacity: 0.5 }}>
+                <div className="alliance-slot-initials">...</div>
+                <div className="alliance-slot-name">Cargando Alianza</div>
               </div>
             ))}
           </div>
@@ -466,30 +489,32 @@ Interés: ${leadInfo.interest}`;
           </div>
 
           <div className="speakers-grid">
-            {HEADLINERS.map((speaker, i) => (
+            {headliners.length > 0 ? headliners.map((speaker, i) => (
               <div
                 key={i}
                 className="speaker-card stagger-item"
-                style={speaker.accentColor ? {
-                  '--speaker-accent': speaker.accentColor,
-                  '--speaker-gradient': `linear-gradient(90deg, ${speaker.accentColor}, ${speaker.accentColor})`,
-                  '--speaker-shadow': `0 20px 60px ${speaker.accentColor}25`,
-                  '--speaker-glow': `conic-gradient(from 0deg, transparent, ${speaker.accentColor}40, transparent, ${speaker.accentColor}40, transparent)`,
-                  '--speaker-role-color': speaker.accentColor,
+                style={speaker.accent_color ? {
+                  '--speaker-accent': speaker.accent_color,
+                  '--speaker-gradient': `linear-gradient(90deg, ${speaker.accent_color}, ${speaker.accent_color})`,
+                  '--speaker-shadow': `0 20px 60px ${speaker.accent_color}25`,
+                  '--speaker-glow': `conic-gradient(from 0deg, transparent, ${speaker.accent_color}40, transparent, ${speaker.accent_color}40, transparent)`,
+                  '--speaker-role-color': speaker.accent_color,
                 } : {}}
               >
                 <div className="speaker-photo-wrap">
-                  <Image src={speaker.image} alt={speaker.name} className="speaker-photo" width={400} height={400} />
+                  <Image src={speaker.image_url || '/images/speaker-jessica.png'} alt={speaker.name} className="speaker-photo" width={400} height={400} />
                   <div className="speaker-photo-glow" />
                 </div>
                 <div className="speaker-info">
-                  <div className="speaker-role" style={speaker.accentColor ? { background: `${speaker.accentColor}10`, padding: '4px 12px', borderRadius: 'var(--radius-pill)', display: 'inline-block', border: `1px solid ${speaker.accentColor}30` } : { padding: '4px 0' }}>{speaker.role}</div>
+                  <div className="speaker-role" style={speaker.accent_color ? { background: `${speaker.accent_color}10`, padding: '4px 12px', borderRadius: 'var(--radius-pill)', display: 'inline-block', border: `1px solid ${speaker.accent_color}30` } : { padding: '4px 0' }}>{speaker.role}</div>
                   <h3 className="speaker-name" style={{ marginTop: '0.5rem' }}>{speaker.name}</h3>
                   <p className="speaker-topic" style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.4rem', fontSize: '0.95rem' }}>{speaker.topic}</p>
                   <p className="speaker-description" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>{speaker.description}</p>
                 </div>
               </div>
-            ))}
+            )) : (
+              <p style={{ gridColumn: '1/-1', textAlign: 'center', color: 'var(--text-secondary)' }}>Cargando conferencistas...</p>
+            )}
           </div>
         </div>
       </section>
@@ -508,11 +533,32 @@ Interés: ${leadInfo.interest}`;
           </div>
 
           <div className="speakers-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', maxWidth: '1200px' }}>
-            {REGIONAL_SPEAKERS.map((speaker, i) => (
+            {regionalSpeakers.length > 0 ? regionalSpeakers.map((speaker, i) => (
               <div
                 key={i}
                 className="speaker-card stagger-item"
                 style={{ padding: 'var(--space-xl)' }}
+              >
+                <div className="speaker-photo-wrap" style={{ width: '120px', height: '120px' }}>
+                  {speaker.image_url ? (
+                    <Image src={speaker.image_url} alt={speaker.name} width={120} height={120} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: 'var(--bg-glass)', border: '2px dashed var(--surface-border-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                  )}
+                </div>
+                <div className="speaker-info">
+                  <div className="speaker-role" style={{ padding: '4px 0', fontSize: '0.65rem' }}>{speaker.role}</div>
+                  <h3 className="speaker-name" style={{ marginTop: '0.5rem', fontSize: '1.2rem' }}>{speaker.name}</h3>
+                  <p className="speaker-topic" style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.4rem', fontSize: '0.85rem' }}>{speaker.topic}</p>
+                </div>
+              </div>
+            )) : Array(4).fill(0).map((_, i) => (
+              <div
+                key={i}
+                className="speaker-card stagger-item"
+                style={{ padding: 'var(--space-xl)', opacity: 0.5 }}
               >
                 <div className="speaker-photo-wrap" style={{ width: '120px', height: '120px' }}>
                   <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: 'var(--bg-glass)', border: '2px dashed var(--surface-border-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -520,9 +566,9 @@ Interés: ${leadInfo.interest}`;
                   </div>
                 </div>
                 <div className="speaker-info">
-                  <div className="speaker-role" style={{ padding: '4px 0', fontSize: '0.65rem' }}>{speaker.role}</div>
-                  <h3 className="speaker-name" style={{ marginTop: '0.5rem', fontSize: '1.2rem' }}>{speaker.name}</h3>
-                  <p className="speaker-topic" style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.4rem', fontSize: '0.85rem' }}>{speaker.topic}</p>
+                  <div className="speaker-role" style={{ padding: '4px 0', fontSize: '0.65rem' }}>Cargando...</div>
+                  <h3 className="speaker-name" style={{ marginTop: '0.5rem', fontSize: '1.2rem' }}>Talento Regional</h3>
+                  <p className="speaker-topic" style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.4rem', fontSize: '0.85rem' }}>Próximamente</p>
                 </div>
               </div>
             ))}
@@ -663,6 +709,7 @@ Interés: ${leadInfo.interest}`;
           <div className="alliance-section">
             <h3 className="alliance-category-title">Patrocinadores</h3>
             <div className="alliance-grid alliance-grid-4">
+              {/* This section still uses a hardcoded SPONSORS array, assuming it's not meant to be dynamic from DB yet */}
               {SPONSORS.map((s, i) => (
                 <div key={i} className="alliance-slot">
                   <div className="alliance-slot-label">{s.label}</div>
@@ -677,12 +724,17 @@ Interés: ${leadInfo.interest}`;
           <div className="alliance-section">
             <h3 className="alliance-category-title">Alianzas Estratégicas</h3>
             <div className="alliance-grid alliance-grid-5">
-              {STRATEGIC_ALLIANCES.map((name, i) => (
+              {strategicAlliances.length > 0 ? strategicAlliances.map((name, i) => (
                 <div key={i} className="alliance-slot alliance-slot-org">
                   <div className="alliance-slot-initials">
                     {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
                   </div>
                   <div className="alliance-slot-name">{name}</div>
+                </div>
+              )) : Array(5).fill(0).map((_, i) => (
+                <div key={i} className="alliance-slot alliance-slot-org" style={{ opacity: 0.5 }}>
+                  <div className="alliance-slot-initials">...</div>
+                  <div className="alliance-slot-name">Cargando Alianza</div>
                 </div>
               ))}
             </div>
@@ -692,12 +744,17 @@ Interés: ${leadInfo.interest}`;
           <div className="alliance-section">
             <h3 className="alliance-category-title">Alianzas Universitarias</h3>
             <div className="alliance-grid alliance-grid-5">
-              {UNIVERSITY_ALLIANCES.map((name, i) => (
+              {universityAlliances.length > 0 ? universityAlliances.map((name, i) => (
                 <div key={i} className="alliance-slot alliance-slot-uni">
                   <div className="alliance-slot-initials">
                     {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
                   </div>
                   <div className="alliance-slot-name">{name}</div>
+                </div>
+              )) : Array(5).fill(0).map((_, i) => (
+                <div key={i} className="alliance-slot alliance-slot-uni" style={{ opacity: 0.5 }}>
+                  <div className="alliance-slot-initials">...</div>
+                  <div className="alliance-slot-name">Cargando Universidad</div>
                 </div>
               ))}
             </div>
@@ -766,20 +823,42 @@ Interés: ${leadInfo.interest}`;
               Horarios y actividades por confirmar. Próximamente publicaremos la agenda detallada para el Día {modalDay}.
             </p>
 
-            {/* Aquí podrás llenar la información de los itinerarios más adelante */}
             <div style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem'
+              gap: '1.5rem',
+              marginBottom: '2rem'
             }}>
-              <div style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)' }}>
-                <span style={{ color: 'var(--neon-green)', fontWeight: 'bold' }}>09:00 AM</span>
-                <h4 style={{ margin: '0.25rem 0' }}>Registro y Bienvenida</h4>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', margin: 0 }}>Lobby principal</p>
-              </div>
-              <div style={{ padding: '1rem', border: '1px dashed var(--border-color)', borderRadius: 'var(--radius-md)', textAlign: 'center', color: 'var(--text-tertiary)' }}>
-                <em>[Espacio para más actividades]</em>
-              </div>
+              {itinerary.length > 0 ? itinerary.map((item, index) => (
+                <div key={index} style={{
+                  padding: '1.25rem',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--bg-glass)',
+                  display: 'flex',
+                  gap: '1.5rem',
+                  alignItems: 'flex-start'
+                }}>
+                  <div style={{
+                    color: 'var(--neon-green)',
+                    fontWeight: 'bold',
+                    fontSize: '0.9rem',
+                    minWidth: '80px',
+                    paddingTop: '0.2rem'
+                  }}>
+                    {item.time_label}
+                  </div>
+                  <div>
+                    <h4 style={{ margin: '0 0 0.5rem 0', color: 'var(--text-primary)' }}>{item.title}</h4>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', margin: '0 0 0.5rem 0' }}>{item.description}</p>
+                    {item.location && <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', margin: 0 }}>📍 {item.location}</p>}
+                  </div>
+                </div>
+              )) : (
+                <p style={{ textAlign: 'center', color: 'var(--text-tertiary)', padding: '2rem' }}>
+                  Agenda para el Día {modalDay} próximamente disponible.
+                </p>
+              )}
             </div>
 
           </div>
@@ -811,60 +890,79 @@ Interés: ${leadInfo.interest}`;
 
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <div className="section-label" style={{ justifyContent: 'center' }}>Expositores</div>
-              <h2 style={{ fontSize: '1.75rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Reserva tu <span className="highlight">Espacio</span></h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Déjanos tus datos y un asesor se pondrá en contacto contigo para los detalles técnicos y de pago.</p>
+              <h2 style={{ fontSize: '1.75rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                {isSuccess ? '¡Registro <span class="highlight">Exitoso</span>!' : 'Reserva tu <span class="highlight">Espacio</span>'}
+              </h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                {isSuccess
+                  ? 'Hemos recibido tu información empresarial. Un asesor se pondrá en contacto contigo muy pronto para formalizar tu participación.'
+                  : 'Déjanos tus datos y un asesor se pondrá en contacto contigo para los detalles técnicos y de pago.'}
+              </p>
             </div>
 
-            <form onSubmit={handleLeadSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Nombre completo</label>
-                <input
-                  required
-                  type="text"
-                  placeholder="Tu nombre"
-                  value={leadInfo.name}
-                  onChange={(e) => setLeadInfo({ ...leadInfo, name: e.target.value })}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
-                />
+            {isSuccess ? (
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>✅</div>
+                <button onClick={() => setIsLeadModalOpen(false)} className="btn btn-primary" style={{ width: '100%' }}>
+                  Entendido
+                </button>
+                <p style={{ marginTop: '1.5rem', fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>
+                  ¿Tienes prisa? También puedes <a href="https://wa.me/523781002683" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--neon-green)', textDecoration: 'underline' }}>contactarnos vía WhatsApp</a>.
+                </p>
               </div>
-              <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Empresa</label>
-                <input
-                  required
-                  type="text"
-                  placeholder="Nombre de tu empresa"
-                  value={leadInfo.company}
-                  onChange={(e) => setLeadInfo({ ...leadInfo, company: e.target.value })}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
-                />
-              </div>
-              <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>WhatsApp / Teléfono</label>
-                <input
-                  required
-                  type="tel"
-                  placeholder="378 000 0000"
-                  value={leadInfo.phone}
-                  onChange={(e) => setLeadInfo({ ...leadInfo, phone: e.target.value })}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
-                />
-              </div>
-              <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Interés</label>
-                <select
-                  value={leadInfo.interest}
-                  onChange={(e) => setLeadInfo({ ...leadInfo, interest: e.target.value })}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
-                >
-                  <option value="Stand Básico" style={{ background: '#111', color: 'white' }}>Stand Básico ($2,900)</option>
-                  <option value="Stand Regional Plus" style={{ background: '#111', color: 'white' }}>Stand Regional Plus ($4,500)</option>
-                  <option value="Información General" style={{ background: '#111', color: 'white' }}>Información sobre patrocinios</option>
-                </select>
-              </div>
-              <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: '1rem' }}>
-                Enviar y contactar asesor
-              </button>
-            </form>
+            ) : (
+              <form onSubmit={handleLeadSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {/* ... existing fields ... */}
+                <div className="form-group">
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Nombre completo</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Tu nombre"
+                    value={leadInfo.name}
+                    onChange={(e) => setLeadInfo({ ...leadInfo, name: e.target.value })}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Empresa</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Nombre de tu empresa"
+                    value={leadInfo.company}
+                    onChange={(e) => setLeadInfo({ ...leadInfo, company: e.target.value })}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>WhatsApp / Teléfono</label>
+                  <input
+                    required
+                    type="tel"
+                    placeholder="378 000 0000"
+                    value={leadInfo.phone}
+                    onChange={(e) => setLeadInfo({ ...leadInfo, phone: e.target.value })}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Interés</label>
+                  <select
+                    value={leadInfo.interest}
+                    onChange={(e) => setLeadInfo({ ...leadInfo, interest: e.target.value })}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
+                  >
+                    <option value="Stand Básico" style={{ background: '#111', color: 'white' }}>Stand Básico ($2,900)</option>
+                    <option value="Stand Regional Plus" style={{ background: '#111', color: 'white' }}>Stand Regional Plus ($4,500)</option>
+                    <option value="Información General" style={{ background: '#111', color: 'white' }}>Información sobre patrocinios</option>
+                  </select>
+                </div>
+                <button type="submit" disabled={isSubmitting} className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: '1rem', opacity: isSubmitting ? 0.7 : 1 }}>
+                  {isSubmitting ? 'Enviando...' : 'Enviar y ser contactado'}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       )}
