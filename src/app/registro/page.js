@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -18,6 +18,7 @@ export default function RegisterPage() {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -44,10 +45,12 @@ export default function RegisterPage() {
 
             if (error) throw error;
 
-            // The database trigger handles the creation of the Profile and QR Code ID automatically.
-            // Redirect to dashboard
-            router.push('/dashboard');
-            router.refresh();
+            // Update URL and show success message
+            const url = new URL(window.location);
+            url.searchParams.set('success', 'true');
+            url.searchParams.set('email', formData.email);
+            window.history.pushState({}, '', url);
+            setIsSuccess(true);
 
         } catch (err) {
             setError(err.message || 'Error al registrarse. Intenta nuevamente.');
@@ -55,6 +58,43 @@ export default function RegisterPage() {
             setLoading(false);
         }
     };
+
+    // Check URL parameters on mount to handle potential reloads
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('success') === 'true') {
+            setIsSuccess(true);
+            if (params.get('email')) {
+                setFormData(prev => ({ ...prev, email: params.get('email') }));
+            }
+        }
+    }, []);
+
+    if (isSuccess) {
+        return (
+            <>
+                <Navbar />
+                <div className="page-header" style={{ paddingBottom: 'var(--space-2xl)', minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
+                    <div className="container" style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>📧</div>
+                        <h1 className="section-title">
+                            ¡Ya casi <span className="highlight">estás dentro</span>!
+                        </h1>
+                        <p className="section-subtitle center">
+                            Hemos enviado un enlace de confirmación a <strong>{formData.email || 'tu correo electrónico'}</strong>.
+                            Por favor, revisa tu bandeja de entrada (y tu carpeta de spam) para activar tu cuenta.
+                        </p>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Link href="/login" className="btn btn-primary btn-lg">
+                                Ir al Inicio de Sesión
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+                <Footer />
+            </>
+        );
+    }
 
     return (
         <>

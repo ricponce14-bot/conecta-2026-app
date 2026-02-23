@@ -1052,12 +1052,22 @@ button {
   gap: var(--space-md);
 }
 
+.alliance-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .alliance-grid-4 {
   grid-template-columns: repeat(4, 1fr);
 }
 
 .alliance-grid-5 {
   grid-template-columns: repeat(5, 1fr);
+}
+
+.alliance-slot-empty {
+  opacity: 0.4;
+  border-style: dashed !important;
+  background: transparent !important;
 }
 
 .alliance-slot {

@@ -39,7 +39,9 @@ export async function middleware(request) {
     }
 
     // Si ya está logueado y va a login/registro, mándalo al dashboard
-    if ((request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/registro') && user) {
+    // Pero permite /registro si tiene el parámetro de éxito para mostrar el mensaje de confirmación
+    const isSuccess = request.nextUrl.searchParams.get('success') === 'true'
+    if ((request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/registro') && user && !isSuccess) {
         const url = request.nextUrl.clone()
         url.pathname = '/dashboard'
         return NextResponse.redirect(url)

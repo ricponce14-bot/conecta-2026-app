@@ -114,9 +114,9 @@ export default function HomePage() {
       const { data: allianceData } = await supabase.from('alliances_sponsors').select('*').order('display_order');
       if (allianceData) {
         setOfficialSponsors(allianceData.filter(a => a.type === 'official'));
-        setStrategicAlliances(allianceData.filter(a => a.type === 'strategic').map(a => a.name));
-        setUniversityAlliances(allianceData.filter(a => a.type === 'university').map(a => a.name));
-        setConectaAlliances(allianceData.filter(a => a.type === 'conecta').map(a => a.name));
+        setStrategicAlliances(allianceData.filter(a => a.type === 'strategic'));
+        setUniversityAlliances(allianceData.filter(a => a.type === 'university'));
+        setConectaAlliances(allianceData.filter(a => a.type === 'conecta'));
       }
     };
 
@@ -149,6 +149,7 @@ export default function HomePage() {
     setIsSubmitting(true);
 
     try {
+
       const { error } = await supabase
         .from('stand_leads')
         .insert([
@@ -255,9 +256,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ══════════ OFFICIAL SPONSORS ══════════ */}
-      <section className="section" style={{ paddingBottom: 0 }}>
+      {/* ══════════ OFFICIAL SPONSORS & CONECTA ALLIANCES ══════════ */}
+      <section className="section" style={{ paddingBottom: 'var(--space-2xl)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 'var(--space-2xl)' }}>
             <div className="section-label" style={{ justifyContent: 'center' }}>Aliados Principales</div>
@@ -265,94 +265,63 @@ export default function HomePage() {
               Patrocinadores <span className="highlight">Oficiales</span>
             </h2>
           </div>
-          <div className="sponsors-row" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            {officialSponsors.length > 0 ? officialSponsors.map((s, i) => {
-              const content = s.image_url ? (
-                <Image src={s.image_url} alt={s.name} width={200} height={60} style={{ maxWidth: '80%', maxHeight: '60px', objectFit: 'contain' }} />
-              ) : (
-                s.is_filled ? s.name : "Sé Patrocinador Oficial"
-              );
 
-              const boxStyles = {
-                flex: '1 1 180px',
-                maxWidth: '220px',
-                minHeight: '100px',
+          <div className="sponsors-row" style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: 'var(--space-3xl)' }}>
+            {officialSponsors.length > 0 ? officialSponsors.map((s, i) => (
+              <div key={i} className={`sponsor-slot ${!s.is_filled ? 'sponsor-slot-available' : ''}`} style={{
+                flex: '1 1 200px',
+                maxWidth: '240px',
+                minHeight: '110px',
                 background: s.is_filled ? 'var(--bg-glass)' : 'rgba(255,255,255,0.02)',
                 border: s.is_filled ? '1px solid var(--border-color)' : '1px dashed var(--border-color)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontWeight: s.is_filled ? '600' : '400',
-                color: s.is_filled ? 'var(--text-primary)' : 'var(--text-tertiary)',
-                textDecoration: 'none',
-                transition: 'all 0.3s ease',
-                cursor: s.is_filled ? 'default' : 'pointer'
-              };
-
-              return s.is_filled ? (
-                <div key={i} className="sponsor-slot" style={boxStyles}>
-                  {content}
-                </div>
-              ) : (
-                <a
-                  key={i}
-                  href="https://wa.me/523781002683?text=Hola,%20me%20gustar%C3%ADa%20ser%20patrocinador%20oficial%20de%20CONECTA%202026."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="sponsor-slot sponsor-slot-available"
-                  style={{ ...boxStyles, textAlign: 'center', padding: '1rem' }}
-                >
-                  {content}
-                </a>
-              );
-            }) : Array(5).fill(0).map((_, i) => (
-              <div key={i} className="sponsor-slot" style={{
-                flex: '1 1 180px',
-                maxWidth: '220px',
-                minHeight: '100px',
-                background: 'rgba(255,255,255,0.02)',
-                border: '1px dashed var(--border-color)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: '400',
-                color: 'var(--text-tertiary)',
-                textDecoration: 'none',
-                transition: 'all 0.3s ease',
-                cursor: 'default'
+                borderRadius: 'var(--radius-lg)',
+                padding: '1.5rem',
+                transition: 'all 0.3s ease'
               }}>
-                Cargando...
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════ CONECTA ALLIANCES ══════════ */}
-      <section className="section" style={{ paddingTop: 'var(--space-lg)', paddingBottom: 'var(--space-2xl)' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)' }}>
-            <h2 className="section-title center">
-              Alianzas <span className="highlight">Conecta</span>
-            </h2>
-          </div>
-          <div className="alliance-grid alliance-grid-4">
-            {conectaAlliances.length > 0 ? conectaAlliances.map((name, i) => (
-              <div key={i} className="alliance-slot alliance-slot-org">
-                <div className="alliance-slot-initials">
-                  {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                </div>
-                <div className="alliance-slot-name">{name}</div>
+                {s.image_url && s.is_filled ? (
+                  <Image src={s.image_url} alt={s.name} width={180} height={70} style={{ objectFit: 'contain' }} />
+                ) : (
+                  <div style={{ textAlign: 'center', color: s.is_filled ? 'white' : 'var(--text-tertiary)', fontSize: '0.9rem' }}>
+                    {s.is_filled ? s.name : "Espacio Disponible"}
+                  </div>
+                )}
               </div>
             )) : Array(4).fill(0).map((_, i) => (
-              <div key={i} className="alliance-slot alliance-slot-org" style={{ opacity: 0.5 }}>
-                <div className="alliance-slot-initials">...</div>
-                <div className="alliance-slot-name">Cargando Alianza</div>
+              <div key={i} className="sponsor-slot" style={{ flex: '1 1 200px', maxWidth: '240px', minHeight: '110px', background: 'rgba(255,255,255,0.02)', border: '1px dashed var(--border-color)', borderRadius: 'var(--radius-lg)' }}></div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)' }}>
+            <h3 className="alliance-category-title" style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>Alianzas Conecta</h3>
+          </div>
+
+          <div className="alliance-grid alliance-grid-4">
+            {conectaAlliances.length > 0 ? conectaAlliances.map((alliance, i) => (
+              <div key={i} className="alliance-slot alliance-slot-org">
+                {alliance.image_url ? (
+                  <Image src={alliance.image_url} alt={alliance.name} width={120} height={60} style={{ objectFit: 'contain' }} />
+                ) : (
+                  <>
+                    <div className="alliance-slot-initials">
+                      {alliance.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                    </div>
+                    <div className="alliance-slot-name">{alliance.name}</div>
+                  </>
+                )}
+              </div>
+            )) : Array(4).fill(0).map((_, i) => (
+              <div key={i} className="alliance-slot alliance-slot-empty">
+                <div className="alliance-slot-label">Alianza</div>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+
 
       {/* ══════════ SCHEDULE: DAY 1 / DAY 2 ══════════ */}
       <section className="section" id="schedule">
@@ -705,85 +674,42 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Patrocinadores */}
-          <div className="alliance-section">
-            <h3 className="alliance-category-title">Patrocinadores Oficiales</h3>
-            <div className="alliance-grid alliance-grid-4">
-              {officialSponsors.length > 0 ? officialSponsors.map((sponsor, i) => (
-                <div key={i} className="alliance-slot">
-                  {sponsor.image_url ? (
-                    <Image src={sponsor.image_url} alt={sponsor.name} width={150} height={80} style={{ objectFit: 'contain' }} />
-                  ) : (
-                    <div className="alliance-slot-label">{sponsor.label || sponsor.name}</div>
-                  )}
-                </div>
-              )) : Array(4).fill(0).map((_, i) => (
-                <div key={i} className="alliance-slot" style={{ opacity: 0.5 }}>
-                  <div className="alliance-slot-label">Patrocinador</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-
-
-          {/* Alianzas Estratégicas */}
-          <div className="alliance-section">
-            <h3 className="alliance-category-title">Alianzas Estratégicas</h3>
-            <div className="alliance-grid alliance-grid-5">
-              {strategicAlliances.length > 0 ? strategicAlliances.map((name, i) => (
-                <div key={i} className="alliance-slot alliance-slot-org">
-                  <div className="alliance-slot-initials">
-                    {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+          {/* Alianzas Estratégicas y Universitarias */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', marginTop: 'var(--space-2xl)' }}>
+            <div className="alliance-section">
+              <h3 className="alliance-category-title">Alianzas Estratégicas</h3>
+              <div className="alliance-grid alliance-grid-3">
+                {strategicAlliances.length > 0 ? strategicAlliances.map((alliance, i) => (
+                  <div key={i} className="alliance-slot alliance-slot-org">
+                    <div className="alliance-slot-initials">
+                      {alliance.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                    </div>
+                    <div className="alliance-slot-name">{alliance.name}</div>
                   </div>
-                  <div className="alliance-slot-name">{name}</div>
-                </div>
-              )) : Array(5).fill(0).map((_, i) => (
-                <div key={i} className="alliance-slot alliance-slot-org" style={{ opacity: 0.5 }}>
-                  <div className="alliance-slot-initials">...</div>
-                  <div className="alliance-slot-name">Cargando Alianza</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Alianzas Universitarias */}
-          <div className="alliance-section">
-            <h3 className="alliance-category-title">Alianzas Universitarias</h3>
-            <div className="alliance-grid alliance-grid-5">
-              {universityAlliances.length > 0 ? universityAlliances.map((name, i) => (
-                <div key={i} className="alliance-slot alliance-slot-uni">
-                  <div className="alliance-slot-initials">
-                    {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                )) : (
+                  <div className="alliance-slot alliance-slot-empty">
+                    <div className="alliance-slot-label">Próximamente</div>
                   </div>
-                  <div className="alliance-slot-name">{name}</div>
-                </div>
-              )) : Array(5).fill(0).map((_, i) => (
-                <div key={i} className="alliance-slot alliance-slot-uni" style={{ opacity: 0.5 }}>
-                  <div className="alliance-slot-initials">...</div>
-                  <div className="alliance-slot-name">Universidad</div>
-                </div>
-              ))}
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Alianzas Conecta */}
-          <div className="alliance-section">
-            <h3 className="alliance-category-title">Alianzas Conecta</h3>
-            <div className="alliance-grid alliance-grid-5">
-              {conectaAlliances.length > 0 ? conectaAlliances.map((name, i) => (
-                <div key={i} className="alliance-slot alliance-slot-org">
-                  <div className="alliance-slot-initials">
-                    {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+            <div className="alliance-section">
+              <h3 className="alliance-category-title">Alianzas Universitarias</h3>
+              <div className="alliance-grid alliance-grid-3">
+                {universityAlliances.length > 0 ? universityAlliances.map((alliance, i) => (
+                  <div key={i} className="alliance-slot alliance-slot-uni">
+                    <div className="alliance-slot-initials">
+                      {alliance.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                    </div>
+                    <div className="alliance-slot-name">{alliance.name}</div>
                   </div>
-                  <div className="alliance-slot-name">{name}</div>
-                </div>
-              )) : Array(5).fill(0).map((_, i) => (
-                <div key={i} className="alliance-slot alliance-slot-org" style={{ opacity: 0.5 }}>
-                  <div className="alliance-slot-initials">...</div>
-                  <div className="alliance-slot-name">Alianza</div>
-                </div>
-              ))}
+                )) : (
+                  <div className="alliance-slot alliance-slot-empty">
+                    <div className="alliance-slot-label">Próximamente</div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
