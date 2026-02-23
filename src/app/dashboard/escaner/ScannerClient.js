@@ -26,7 +26,8 @@ export default function EscanerPage() {
         setError(null);
 
         try {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { session } } = await supabase.auth.getSession();
+            const user = session?.user;
             if (!user) throw new Error("Debes iniciar sesión para escanear.");
 
             const { data, error: rpcError } = await supabase.rpc('scan_qr', {

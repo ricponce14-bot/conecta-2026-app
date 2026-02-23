@@ -40,7 +40,8 @@ export default function PreciosPage() {
                 const { supabase } = await import('@/lib/supabase');
 
                 // Get current user if any
-                const { data: { user: currentUser } } = await supabase.auth.getUser();
+                const { data: { session } } = await supabase.auth.getSession();
+                const currentUser = session?.user;
                 setUser(currentUser);
 
                 // Fetch catalog

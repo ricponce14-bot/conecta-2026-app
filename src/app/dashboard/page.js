@@ -18,7 +18,8 @@ export default function DashboardPage() {
         async function fetchProfile() {
             try {
                 setFetchError(null);
-                const { data: { user }, error: authError } = await supabase.auth.getUser();
+                const { data: { session }, error: authError } = await supabase.auth.getSession();
+                const user = session?.user;
                 if (authError) throw authError;
                 if (!user) {
                     setFetchError("No se encontró sesión activa.");
