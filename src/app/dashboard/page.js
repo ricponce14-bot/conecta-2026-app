@@ -103,8 +103,8 @@ export default function DashboardPage() {
                 <h3 style={{ fontSize: '1rem', marginBottom: 'var(--space-sm)' }}>ℹ️ ¿Cómo funciona?</h3>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                     Cuando otros asistentes o empresas escaneen este código desde su propia app de CONECTA 2026,
-                    les aparecerán tus datos automáticamente en su directorio de "Mis Leads". Tú puedes hacer lo mismo
-                    desde el menú "Escanear Contacto".
+                    les aparecerán tus datos automáticamente en su directorio de &quot;Mis Leads&quot;. Tú puedes hacer lo mismo
+                    desde el menú &quot;Escanear Contacto&quot;.
                 </p>
             </div>
         </div>

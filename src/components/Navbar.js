@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -17,8 +18,7 @@ export default function Navbar() {
         <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
             <div className="container navbar-inner">
                 <Link href="/" className="navbar-logo">
-                    <div className="logo-mark">C</div>
-                    <span>CONECTA <span className="logo-year">2026</span></span>
+                    <Image src="/conectacorto.png" alt="CONECTA 2026 Logo" width={200} height={60} style={{ height: '60px', width: 'auto' }} />
                 </Link>
 
                 <ul className="navbar-links" style={mobileOpen ? {

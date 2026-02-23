@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 const MUNICIPALITIES = [
     'Todos', 'Tepatitlán de Morelos', 'Arandas', 'Lagos de Moreno',
@@ -147,7 +148,7 @@ export default function DirectorioPage() {
                                 onClick={() => setExpandedCard(expandedCard === i ? null : i)}
                             >
                                 <div className="company-card-image">
-                                    <img src={getMuniImage(company.municipality)} alt={company.municipality} />
+                                    <Image src={getMuniImage(company.municipality)} alt={company.municipality} width={300} height={150} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
                                     <div className="company-card-municipality">{company.municipality}</div>
                                 </div>
                                 <div className="company-card-body">

@@ -1,22 +1,29 @@
+import { Outfit } from "next/font/google";
 import "./globals.css";
 
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-outfit',
+});
+
 export const metadata = {
-  title: "CONECTA 2026 — Expo de Negocios B2B | Los Altos de Jalisco",
+  title: "CONECTA 2026 — Conexiones y Oportunidades de Negocio | Sede 2026 Tepatitlán de Morelos",
   description:
-    "La expo de negocios B2B más importante de Los Altos de Jalisco. 18 y 19 de Abril 2026 en el Centro de Convenciones Olimpo. Matchmaking inteligente, networking con QR y oportunidades de crecimiento para toda la región.",
+    "El evento diseñado para conectar empresas y generar oportunidades de negocio en la región. Sede 2026: Tepatitlán de Morelos. 18 y 19 de Abril en el Centro de Convenciones Olimpo. Encuentros estratégicos, networking eficaz y crecimiento.",
   keywords:
-    "CONECTA 2026, expo negocios, B2B, Los Altos de Jalisco, Tepatitlán, networking, matchmaking empresarial, Centro de Convenciones Olimpo",
+    "CONECTA 2026, negocios, conexiones empresariales, Sede 2026 Tepatitlán de Morelos, networking, oportunidades de negocio, Centro de Convenciones Olimpo",
   openGraph: {
-    title: "CONECTA 2026 — El Poder de Los Altos Se Conecta Aquí",
+    title: "CONECTA 2026 — El Poder de la Región Se Conecta Aquí",
     description:
-      "La expo de negocios B2B más importante de Los Altos de Jalisco. 18 y 19 de Abril 2026.",
+      "El principal encuentro para conectar empresas y hacer negocios. Sede 2026: Tepatitlán de Morelos. 18 y 19 de Abril.",
     type: "website",
   },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es">
+    <html lang="es" className={outfit.variable}>
       <body>
         {children}
       </body>

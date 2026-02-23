@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
     return (
@@ -7,12 +8,11 @@ export default function Footer() {
                 <div className="footer-grid">
                     <div className="footer-brand">
                         <div className="navbar-logo" style={{ marginBottom: '0.5rem' }}>
-                            <div className="logo-mark">C</div>
-                            <span>CONECTA <span className="logo-year">2026</span></span>
+                            <Image src="/conectacorto.png" alt="CONECTA 2026 Logo" width={200} height={60} style={{ height: '40px', width: 'auto' }} />
                         </div>
                         <p>
-                            La expo de negocios B2B más importante de Los Altos de Jalisco.
-                            Conectamos empresas, impulsamos la región.
+                            El evento diseñado para conectar empresas y generar oportunidades de negocio en la región.
+                            Sede 2026: Tepatitlán de Morelos.
                         </p>
                     </div>
 
@@ -31,7 +31,7 @@ export default function Footer() {
                         <ul className="footer-links">
                             <li><a>18–19 Abril 2026</a></li>
                             <li><a>Centro de Convenciones Olimpo</a></li>
-                            <li><a>Los Altos, Jalisco</a></li>
+                            <li><a>Sede 2026 Tepatitlán de Morelos</a></li>
                         </ul>
                     </div>
 
@@ -46,7 +46,7 @@ export default function Footer() {
 
                 <div className="footer-bottom">
                     <span>&copy; 2026 CONECTA. Todos los derechos reservados.</span>
-                    <span>Hecho en Los Altos de Jalisco</span>
+                    <span>Hecho en Tepatitlán de Morelos</span>
                 </div>
             </div>
         </footer>
