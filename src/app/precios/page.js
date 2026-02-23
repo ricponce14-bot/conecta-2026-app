@@ -31,7 +31,7 @@ export default function PreciosPage() {
     const [user, setUser] = useState(null);
 
     // Active Event ID (Can be dynamic later)
-    const ACTIVE_EVENT_ID = 'e19b5b24-b19b-4f9e-a892-12b2a6f2b4c1';
+    const ACTIVE_EVENT_ID = '00000000-0000-0000-0000-000000000001';
 
     useEffect(() => {
         async function fetchPricing() {

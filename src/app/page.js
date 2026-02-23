@@ -137,6 +137,13 @@ const UNIVERSITY_ALLIANCES = [
   'Centro Universitario',
 ];
 
+const CONECTA_ALLIANCES = [
+  'Gobierno de Tepatitlán',
+  'Promoción Económica de Tepatitlán',
+  'Cámara de Comercio de Tepa',
+  'COPARMEX Tepatitlán',
+];
+
 /* ── PAGE ── */
 
 export default function HomePage() {
@@ -616,6 +623,21 @@ export default function HomePage() {
               {SPONSORS.map((s, i) => (
                 <div key={i} className="alliance-slot">
                   <div className="alliance-slot-label">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Alianzas Conecta */}
+          <div className="alliance-section">
+            <h3 className="alliance-category-title">Alianzas Conecta</h3>
+            <div className="alliance-grid alliance-grid-4">
+              {CONECTA_ALLIANCES.map((name, i) => (
+                <div key={i} className="alliance-slot alliance-slot-org">
+                  <div className="alliance-slot-initials">
+                    {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                  </div>
+                  <div className="alliance-slot-name">{name}</div>
                 </div>
               ))}
             </div>
