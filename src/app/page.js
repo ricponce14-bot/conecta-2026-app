@@ -399,10 +399,10 @@ Interés: ${leadInfo.interest}`;
                 <li><span className="check">&#10003;</span> <strong>Barra Libre:</strong> Brindis de clausura por nuevos negocios.</li>
               </ul>
               <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', flexWrap: 'wrap' }}>
-                <Link href="/precios" className="btn btn-primary" style={{ flex: 1 }}>
+                <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ flex: 1 }}>
                   Comprar boleto Día 2
                   <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
-                </Link>
+                </a>
                 <button onClick={() => openModal(2)} className="btn btn-secondary" style={{ flex: 1 }}>
                   Ver Actividades
                 </button>
@@ -716,10 +716,10 @@ Interés: ${leadInfo.interest}`;
             más importante de la región. Sede 2026: Tepatitlán de Morelos.
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 'var(--space-md)', flexWrap: 'wrap' }}>
-            <Link href="/precios" className="btn btn-primary btn-lg">
+            <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg">
               Registrarme ahora
               <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
-            </Link>
+            </a>
             <a href="https://wa.me/523781002683" target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-lg">
               Contactar por WhatsApp
             </a>
