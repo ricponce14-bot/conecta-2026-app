@@ -15,16 +15,44 @@ export default function DashboardPage() {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (!user) return;
 
-                const { data, error } = await supabase
+                // Try to get profile
+                let { data, error } = await supabase
                     .from('profiles')
                     .select('*')
                     .eq('id', user.id)
                     .single();
 
-                if (error) throw error;
+                // If no profile, try to create it (self-healing)
+                if (error && error.code === 'PGRST116') {
+                    console.log("Profile not found, creating from metadata...");
+                    const metadata = user.user_metadata || {};
+                    const newProfile = {
+                        id: user.id,
+                        email: user.email,
+                        full_name: metadata.full_name || user.email.split('@')[0],
+                        role: metadata.role || 'attendee',
+                        whatsapp: metadata.whatsapp || '',
+                        qr_code_id: `qr_${user.id.substring(0, 8)}_${Date.now()}`
+                    };
+
+                    const { data: created, error: insertError } = await supabase
+                        .from('profiles')
+                        .insert([newProfile])
+                        .select()
+                        .single();
+
+                    if (insertError) {
+                        console.error("Failed to create fallback profile:", insertError);
+                        throw insertError;
+                    }
+                    data = created;
+                } else if (error) {
+                    throw error;
+                }
+
                 setProfile(data);
             } catch (err) {
-                console.error("Error fetching profile:", err.message);
+                console.error("Error fetching/syncing profile:", err.message);
             } finally {
                 setLoading(false);
             }
