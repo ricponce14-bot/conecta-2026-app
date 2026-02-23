@@ -71,19 +71,34 @@ export default function Navbar() {
                     <li><Link href="/#schedule" onClick={() => setMobileOpen(false)}>Programa</Link></li>
                     <li><Link href="/#speakers" onClick={() => setMobileOpen(false)}>Ponentes</Link></li>
                     {isAdmin && <li><Link href="/admin" style={{ color: 'var(--neon-blue)', fontWeight: 'bold' }}>Panel Admin</Link></li>}
-                    <li>
-                        {user ? (
-                            <Link href="/dashboard" className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>Mi Cuenta</Link>
-                        ) : (
-                            <Link href="/login" className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>Acceso</Link>
-                        )}
-                    </li>
-                    <li>
-                        <Link href="/registro" className="btn btn-primary" onClick={() => setMobileOpen(false)}>
-                            Registrarme
-                            <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
-                        </Link>
-                    </li>
+
+                    {user ? (
+                        <>
+                            <li><Link href="/dashboard" className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>Mi Cuenta</Link></li>
+                            <li>
+                                <button
+                                    onClick={async () => {
+                                        await supabase.auth.signOut();
+                                        window.location.href = '/';
+                                    }}
+                                    className="btn btn-outline"
+                                    style={{ padding: '0.5rem 1rem', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#fca5a5' }}
+                                >
+                                    Salir
+                                </button>
+                            </li>
+                        </>
+                    ) : (
+                        <>
+                            <li><Link href="/login" className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>Acceso</Link></li>
+                            <li>
+                                <Link href="/registro" className="btn btn-primary" onClick={() => setMobileOpen(false)}>
+                                    Registrarme
+                                    <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
+                                </Link>
+                            </li>
+                        </>
+                    )}
                 </ul>
 
                 <button className="navbar-mobile-toggle" onClick={() => setMobileOpen(true)}>

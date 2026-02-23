@@ -59,16 +59,28 @@ export default function RegisterPage() {
         }
     };
 
-    // Check URL parameters on mount to handle potential reloads
+    // Check URL parameters and auth state on mount
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('success') === 'true') {
-            setIsSuccess(true);
-            if (params.get('email')) {
-                setFormData(prev => ({ ...prev, email: params.get('email') }));
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            const params = new URLSearchParams(window.location.search);
+            const successParam = params.get('success') === 'true';
+
+            if (user && !successParam && !isSuccess) {
+                window.location.href = '/dashboard';
+                return;
             }
-        }
-    }, []);
+
+            if (successParam) {
+                setIsSuccess(true);
+                if (params.get('email')) {
+                    setFormData(prev => ({ ...prev, email: params.get('email') }));
+                }
+            }
+        };
+
+        checkUser();
+    }, [isSuccess]);
 
     if (isSuccess) {
         return (
