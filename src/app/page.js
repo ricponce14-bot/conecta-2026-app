@@ -210,14 +210,9 @@ Interés: ${leadInfo.interest}`;
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </Link>
-                <div style={{ display: 'flex', gap: 'var(--space-md)' }}>
-                  <Link href="/#schedule" className="btn btn-outline btn-lg">
-                    Ver Programa
-                  </Link>
-                  <button onClick={() => openLeadModal('Información General')} className="btn btn-secondary btn-lg">
-                    Reservar un Espacio
-                  </button>
-                </div>
+                <Link href="/#schedule" className="btn btn-outline btn-lg">
+                  Ver Programa
+                </Link>
               </div>
 
               <CountdownTimer targetDate="2026-04-18T09:00:00-06:00" />
@@ -861,9 +856,9 @@ Interés: ${leadInfo.interest}`;
                   onChange={(e) => setLeadInfo({ ...leadInfo, interest: e.target.value })}
                   style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
                 >
-                  <option value="Stand Básico">Stand Básico ($2,900)</option>
-                  <option value="Stand Regional Plus">Stand Regional Plus ($4,500)</option>
-                  <option value="Información General">Información sobre patrocinios</option>
+                  <option value="Stand Básico" style={{ background: '#111', color: 'white' }}>Stand Básico ($2,900)</option>
+                  <option value="Stand Regional Plus" style={{ background: '#111', color: 'white' }}>Stand Regional Plus ($4,500)</option>
+                  <option value="Información General" style={{ background: '#111', color: 'white' }}>Información sobre patrocinios</option>
                 </select>
               </div>
               <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: '1rem' }}>
