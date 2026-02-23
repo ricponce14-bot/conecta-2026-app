@@ -3,15 +3,49 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [user, setUser] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+
+        // Auth Listener
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
+            if (user) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', user.id)
+                    .single();
+                setIsAdmin(profile?.role === 'admin' || user.email === 'ricponce14@gmail.com');
+            }
+        };
+
+        checkUser();
+
+        const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+            setUser(session?.user || null);
+            if (!session) {
+                setIsAdmin(false);
+            } else {
+                checkUser();
+            }
+        });
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            authListener.subscription.unsubscribe();
+        };
     }, []);
 
     return (
@@ -36,7 +70,14 @@ export default function Navbar() {
                     <li><Link href="/" onClick={() => setMobileOpen(false)}>Inicio</Link></li>
                     <li><Link href="/#schedule" onClick={() => setMobileOpen(false)}>Programa</Link></li>
                     <li><Link href="/#speakers" onClick={() => setMobileOpen(false)}>Ponentes</Link></li>
-                    <li><Link href="/#about" onClick={() => setMobileOpen(false)}>Acerca de</Link></li>
+                    {isAdmin && <li><Link href="/admin" style={{ color: 'var(--neon-blue)', fontWeight: 'bold' }}>Panel Admin</Link></li>}
+                    <li>
+                        {user ? (
+                            <Link href="/dashboard" className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>Mi Cuenta</Link>
+                        ) : (
+                            <Link href="/login" className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>Acceso</Link>
+                        )}
+                    </li>
                     <li>
                         <Link href="/registro" className="btn btn-primary" onClick={() => setMobileOpen(false)}>
                             Registrarme
