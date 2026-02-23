@@ -148,11 +148,29 @@ const CONECTA_ALLIANCES = [
 
 export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const [modalDay, setModalDay] = useState(1);
+  const [leadInfo, setLeadInfo] = useState({ name: '', company: '', phone: '', interest: 'Stand Básico' });
 
   const openModal = (day) => {
     setModalDay(day);
     setIsModalOpen(true);
+  };
+
+  const openLeadModal = (interest = 'Stand Básico') => {
+    setLeadInfo(prev => ({ ...prev, interest }));
+    setIsLeadModalOpen(true);
+  };
+
+  const handleLeadSubmit = (e) => {
+    e.preventDefault();
+    const message = `Hola! Me interesa reservar un espacio en CONECTA 2026.
+Nombre: ${leadInfo.name}
+Empresa: ${leadInfo.company}
+Teléfono: ${leadInfo.phone}
+Interés: ${leadInfo.interest}`;
+    window.open(`https://wa.me/523781002683?text=${encodeURIComponent(message)}`, '_blank');
+    setIsLeadModalOpen(false);
   };
 
   const closeModal = () => {
@@ -192,9 +210,14 @@ export default function HomePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </Link>
-                <Link href="/#speakers" className="btn btn-outline btn-lg">
-                  Ver Programa
-                </Link>
+                <div style={{ display: 'flex', gap: 'var(--space-md)' }}>
+                  <Link href="/#schedule" className="btn btn-outline btn-lg">
+                    Ver Programa
+                  </Link>
+                  <button onClick={() => openLeadModal('Información General')} className="btn btn-secondary btn-lg">
+                    Reservar un Espacio
+                  </button>
+                </div>
               </div>
 
               <CountdownTimer targetDate="2026-04-18T09:00:00-06:00" />
@@ -629,9 +652,13 @@ export default function HomePage() {
                       <li key={j}><span className="check">&#10003;</span> {feature}</li>
                     ))}
                   </ul>
-                  <Link href="/precios" className={`btn ${stand.popular ? 'btn-primary' : 'btn-outline'}`} style={{ width: '100%', marginTop: 'var(--space-auto)' }}>
+                  <button
+                    onClick={() => openLeadModal(stand.name)}
+                    className={`btn ${stand.popular ? 'btn-primary' : 'btn-outline'}`}
+                    style={{ width: '100%', marginTop: 'var(--space-auto)' }}
+                  >
                     Reservar espacio
-                  </Link>
+                  </button>
                 </div>
               ))}
             </div>
@@ -760,6 +787,89 @@ export default function HomePage() {
               </div>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* ══════════ MODAL LEAD CAPTURE ══════════ */}
+      {isLeadModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsLeadModalOpen(false)} style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.85)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 10000,
+          padding: '1rem'
+        }}>
+          <div className="modal-content glass-card" onClick={(e) => e.stopPropagation()} style={{
+            maxWidth: '500px',
+            width: '100%',
+            position: 'relative',
+            padding: '2.5rem'
+          }}>
+            <button onClick={() => setIsLeadModalOpen(false)} style={{
+              position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none',
+              color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '1.5rem'
+            }}>&times;</button>
+
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <div className="section-label" style={{ justifyContent: 'center' }}>Expositores</div>
+              <h2 style={{ fontSize: '1.75rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Reserva tu <span className="highlight">Espacio</span></h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Déjanos tus datos y un asesor se pondrá en contacto contigo para los detalles técnicos y de pago.</p>
+            </div>
+
+            <form onSubmit={handleLeadSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Nombre completo</label>
+                <input
+                  required
+                  type="text"
+                  placeholder="Tu nombre"
+                  value={leadInfo.name}
+                  onChange={(e) => setLeadInfo({ ...leadInfo, name: e.target.value })}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
+                />
+              </div>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Empresa</label>
+                <input
+                  required
+                  type="text"
+                  placeholder="Nombre de tu empresa"
+                  value={leadInfo.company}
+                  onChange={(e) => setLeadInfo({ ...leadInfo, company: e.target.value })}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
+                />
+              </div>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>WhatsApp / Teléfono</label>
+                <input
+                  required
+                  type="tel"
+                  placeholder="378 000 0000"
+                  value={leadInfo.phone}
+                  onChange={(e) => setLeadInfo({ ...leadInfo, phone: e.target.value })}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
+                />
+              </div>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Interés</label>
+                <select
+                  value={leadInfo.interest}
+                  onChange={(e) => setLeadInfo({ ...leadInfo, interest: e.target.value })}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
+                >
+                  <option value="Stand Básico">Stand Básico ($2,900)</option>
+                  <option value="Stand Regional Plus">Stand Regional Plus ($4,500)</option>
+                  <option value="Información General">Información sobre patrocinios</option>
+                </select>
+              </div>
+              <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: '1rem' }}>
+                Enviar y contactar asesor
+              </button>
+            </form>
           </div>
         </div>
       )}

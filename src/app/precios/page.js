@@ -48,6 +48,7 @@ export default function PreciosPage() {
                     .from('pricing_catalog')
                     .select('*')
                     .eq('event_id', ACTIVE_EVENT_ID)
+                    .neq('item_slug', 'pabellon-municipal')
                     .eq('is_active', true)
                     .order('price_mxn', { ascending: true });
 
