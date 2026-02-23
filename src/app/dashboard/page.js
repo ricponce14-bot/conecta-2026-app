@@ -33,11 +33,29 @@ export default function DashboardPage() {
     }, []);
 
     if (loading) {
-        return <div>Cargando tu gafete...</div>;
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '1rem' }}>
+                <div className="loading-spinner" style={{ width: '40px', height: '40px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--neon-blue)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                <p style={{ color: 'var(--text-secondary)' }}>Cargando tu gafete digital...</p>
+                <style jsx>{`
+                    @keyframes spin { to { transform: rotate(360deg); } }
+                `}</style>
+            </div>
+        );
     }
 
     if (!profile) {
-        return <div>Error al cargar el perfil. Intenta recargar la página.</div>;
+        return (
+            <div style={{ textAlign: 'center', padding: 'var(--space-2xl)', background: 'rgba(239, 68, 68, 0.05)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠️</div>
+                <h2 style={{ color: '#fca5a5', marginBottom: 'var(--space-md)' }}>Perfil no encontrado</h2>
+                <p style={{ color: 'var(--text-tertiary)', maxWidth: '400px', margin: '0 auto 2rem' }}>
+                    No pudimos cargar la información de tu cuenta. Esto puede pasar si el registro fue incompleto.
+                </p>
+                <button onClick={() => window.location.reload()} className="btn btn-outline" style={{ marginRight: '1rem' }}>Reintentar</button>
+                <Link href="/login" className="btn btn-primary" onClick={async () => await supabase.auth.signOut()}>Cerrar Sesión e intentar de nuevo</Link>
+            </div>
+        );
     }
 
     // Role Label Mapping
