@@ -707,12 +707,19 @@ export default function HomePage() {
 
           {/* Patrocinadores */}
           <div className="alliance-section">
-            <h3 className="alliance-category-title">Patrocinadores</h3>
+            <h3 className="alliance-category-title">Patrocinadores Oficiales</h3>
             <div className="alliance-grid alliance-grid-4">
-              {/* This section still uses a hardcoded SPONSORS array, assuming it's not meant to be dynamic from DB yet */}
-              {SPONSORS.map((s, i) => (
+              {officialSponsors.length > 0 ? officialSponsors.map((sponsor, i) => (
                 <div key={i} className="alliance-slot">
-                  <div className="alliance-slot-label">{s.label}</div>
+                  {sponsor.image_url ? (
+                    <Image src={sponsor.image_url} alt={sponsor.name} width={150} height={80} style={{ objectFit: 'contain' }} />
+                  ) : (
+                    <div className="alliance-slot-label">{sponsor.label || sponsor.name}</div>
+                  )}
+                </div>
+              )) : Array(4).fill(0).map((_, i) => (
+                <div key={i} className="alliance-slot" style={{ opacity: 0.5 }}>
+                  <div className="alliance-slot-label">Patrocinador</div>
                 </div>
               ))}
             </div>
@@ -754,7 +761,27 @@ export default function HomePage() {
               )) : Array(5).fill(0).map((_, i) => (
                 <div key={i} className="alliance-slot alliance-slot-uni" style={{ opacity: 0.5 }}>
                   <div className="alliance-slot-initials">...</div>
-                  <div className="alliance-slot-name">Cargando Universidad</div>
+                  <div className="alliance-slot-name">Universidad</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Alianzas Conecta */}
+          <div className="alliance-section">
+            <h3 className="alliance-category-title">Alianzas Conecta</h3>
+            <div className="alliance-grid alliance-grid-5">
+              {conectaAlliances.length > 0 ? conectaAlliances.map((name, i) => (
+                <div key={i} className="alliance-slot alliance-slot-org">
+                  <div className="alliance-slot-initials">
+                    {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                  </div>
+                  <div className="alliance-slot-name">{name}</div>
+                </div>
+              )) : Array(5).fill(0).map((_, i) => (
+                <div key={i} className="alliance-slot alliance-slot-org" style={{ opacity: 0.5 }}>
+                  <div className="alliance-slot-initials">...</div>
+                  <div className="alliance-slot-name">Alianza</div>
                 </div>
               ))}
             </div>
@@ -891,7 +918,7 @@ export default function HomePage() {
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <div className="section-label" style={{ justifyContent: 'center' }}>Expositores</div>
               <h2 style={{ fontSize: '1.75rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                {isSuccess ? '¡Registro <span class="highlight">Exitoso</span>!' : 'Reserva tu <span class="highlight">Espacio</span>'}
+                {isSuccess ? <>¡Registro <span className="highlight">Exitoso</span>!</> : <>Reserva tu <span className="highlight">Espacio</span></>}
               </h2>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                 {isSuccess
