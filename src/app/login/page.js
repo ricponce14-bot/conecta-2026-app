@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -13,6 +13,18 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [justLoggedIn, setJustLoggedIn] = useState(false);
+
+    // Redirect if already logged in
+    useEffect(() => {
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user && !justLoggedIn) {
+                router.push('/dashboard');
+            }
+        };
+        checkUser();
+    }, [router, justLoggedIn]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -27,7 +39,8 @@ export default function LoginPage() {
 
             if (error) throw error;
 
-            // Navigate to dashboard on success
+            // Show welcome state before redirect
+            setJustLoggedIn(true);
             router.push('/dashboard');
             router.refresh();
 
@@ -37,6 +50,26 @@ export default function LoginPage() {
             setLoading(false);
         }
     };
+
+    if (justLoggedIn) {
+        return (
+            <>
+                <Navbar />
+                <div className="page-header" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
+                    <div className="container" style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>👋</div>
+                        <h1 className="section-title">
+                            ¡Bienvenido <span className="highlight">de nuevo</span>!
+                        </h1>
+                        <p className="section-subtitle center">
+                            Estamos preparando tu panel personal. Redirigiendo...
+                        </p>
+                    </div>
+                </div>
+                <Footer />
+            </>
+        );
+    }
 
     return (
         <>
