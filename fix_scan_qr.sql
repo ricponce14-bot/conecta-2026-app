@@ -1,6 +1,9 @@
 -- Solución de compatibilidad de esquema para funciones de Networking
 -- Ejecutar en el SQL Editor de Supabase
 
+-- 0. Asegurar que event_id sea opcional en la tabla física
+ALTER TABLE public.connections ALTER COLUMN event_id DROP NOT NULL;
+
 -- 1. Actualizar scan_qr para usar "scanned_id" en lugar de "contact_id"
 DROP FUNCTION IF EXISTS scan_qr(UUID, TEXT, UUID, TEXT);
 DROP FUNCTION IF EXISTS scan_qr(UUID, TEXT, UUID);
