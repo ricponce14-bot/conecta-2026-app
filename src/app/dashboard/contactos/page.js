@@ -8,6 +8,7 @@ export default function MisContactosPage() {
     const [leads, setLeads] = useState([]);
     const [loading, setLoading] = useState(true);
     const [userRole, setUserRole] = useState('attendee');
+    const [selectedLead, setSelectedLead] = useState(null);
 
     useEffect(() => {
         async function fetchMyLeads() {
@@ -115,8 +116,8 @@ export default function MisContactosPage() {
                                 alignItems: 'center',
                                 border: '1px solid rgba(255,255,255,0.05)',
                                 transition: 'transform 0.2s ease',
-                                cursor: 'default'
-                            }}>
+                                cursor: 'pointer'
+                            }} onClick={() => setSelectedLead(lead)}>
                                 {/* Photo / Avatar */}
                                 <div style={{
                                     width: 60, height: 60,
@@ -178,6 +179,12 @@ export default function MisContactosPage() {
                             grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
                             gap: var(--space-lg);
                         }
+                        
+                        .lead-card:hover {
+                            transform: translateY(-2px);
+                            border-color: var(--neon-blue) !important;
+                            background: rgba(255, 255, 255, 0.05) !important;
+                        }
 
                         @media (max-width: 768px) {
                             .leads-grid {
@@ -201,7 +208,151 @@ export default function MisContactosPage() {
                                 right: 1rem;
                             }
                         }
+
+                        .lead-modal-overlay {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background: rgba(0, 0, 0, 0.8);
+                            backdrop-filter: blur(8px);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            z-index: 1000;
+                            padding: var(--space-lg);
+                        }
+
+                        .lead-modal-content {
+                            background: var(--bg-secondary);
+                            border: 1px solid var(--surface-border);
+                            border-radius: var(--radius-xl);
+                            width: 100%;
+                            max-width: 600px;
+                            max-height: 90vh;
+                            overflow-y: auto;
+                            position: relative;
+                            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                        }
+
+                        .modal-close {
+                            position: absolute;
+                            top: 1rem;
+                            right: 1rem;
+                            background: rgba(255,255,255,0.05);
+                            border: none;
+                            color: white;
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+                            z-index: 10;
+                        }
                     `}</style>
+
+                    {/* Lead Detail Modal */}
+                    {selectedLead && (
+                        <div className="lead-modal-overlay" onClick={() => setSelectedLead(null)}>
+                            <div className="lead-modal-content" onClick={e => e.stopPropagation()}>
+                                <button className="modal-close" onClick={() => setSelectedLead(null)}>×</button>
+
+                                <div style={{ padding: 'var(--space-2xl)' }}>
+                                    <div style={{ display: 'flex', gap: 'var(--space-xl)', marginBottom: 'var(--space-2xl)', alignItems: 'center' }}>
+                                        <div style={{
+                                            width: 100, height: 100,
+                                            borderRadius: 'var(--radius-lg)',
+                                            overflow: 'hidden',
+                                            border: '2px solid var(--neon-blue)',
+                                            background: 'rgba(37, 99, 235, 0.1)',
+                                            flexShrink: 0
+                                        }}>
+                                            {selectedLead.photo_url ? (
+                                                <img src={selectedLead.photo_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            ) : (
+                                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--neon-blue)" strokeWidth="1.5">
+                                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                        <circle cx="12" cy="7" r="4"></circle>
+                                                    </svg>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <h2 style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '4px' }}>{selectedLead.contact_name}</h2>
+                                            <p style={{ fontSize: '1.1rem', color: 'var(--neon-blue)', fontWeight: 600 }}>{selectedLead.contact_title || 'Asistente'}</p>
+                                            {selectedLead.company_name && (
+                                                <p style={{ color: 'var(--text-secondary)' }}>{selectedLead.company_name}</p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-lg)', marginBottom: 'var(--space-2xl)' }}>
+                                        {selectedLead.contact_whatsapp && (
+                                            <a
+                                                href={`https://wa.me/${selectedLead.contact_whatsapp.replace(/\D/g, '')}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="btn btn-outline"
+                                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px' }}
+                                            >
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" /></svg>
+                                                WhatsApp
+                                            </a>
+                                        )}
+                                        {selectedLead.contact_email && (
+                                            <a
+                                                href={`mailto:${selectedLead.contact_email}`}
+                                                className="btn btn-outline"
+                                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px' }}
+                                            >
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                                Email
+                                            </a>
+                                        )}
+                                    </div>
+
+                                    {selectedLead.offer_description && (
+                                        <div style={{ marginBottom: 'var(--space-xl)' }}>
+                                            <h4 style={{ fontSize: '0.9rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '8px' }}>Propuesta / Lo que ofrece</h4>
+                                            <div style={{ padding: 'var(--space-md)', background: 'rgba(255,255,255,0.03)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                                {selectedLead.offer_description}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {selectedLead.search_description && (
+                                        <div style={{ marginBottom: 'var(--space-xl)' }}>
+                                            <h4 style={{ fontSize: '0.9rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '8px' }}>Intereses / Lo que busca</h4>
+                                            <div style={{ padding: 'var(--space-md)', background: 'rgba(255,255,255,0.03)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                                {selectedLead.search_description}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {selectedLead.gallery_urls && selectedLead.gallery_urls.length > 0 && (
+                                        <div style={{ marginBottom: 'var(--space-xl)' }}>
+                                            <h4 style={{ fontSize: '0.9rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '8px' }}>Galería de Negocio</h4>
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px' }}>
+                                                {selectedLead.gallery_urls.map((url, i) => (
+                                                    <div key={i} style={{ aspectRatio: '1', borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                                        <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div style={{ marginTop: 'var(--space-2xl)', pt: 'var(--space-xl)', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>
+                                        Contacto sincronizado el {new Date(selectedLead.scanned_at).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </>
             )}
         </div>

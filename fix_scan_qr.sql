@@ -62,6 +62,11 @@ RETURNS TABLE (
     contact_title TEXT,
     company_name TEXT,
     photo_url TEXT,
+    contact_email TEXT,
+    contact_whatsapp TEXT,
+    offer_description TEXT,
+    search_description TEXT,
+    gallery_urls JSONB,
     interest_level INTEGER, -- Lo definimos como INTEGER para maxima compatibilidad
     scanned_at TIMESTAMP WITH TIME ZONE
 )
@@ -77,6 +82,11 @@ BEGIN
         p.title as contact_title,
         p.company_name as company_name,
         p.photo_url as photo_url,
+        p.email as contact_email,
+        p.whatsapp as contact_whatsapp,
+        p.offer_description as offer_description,
+        p.search_description as search_description,
+        to_jsonb(p.gallery_urls) as gallery_urls,
         COALESCE(c.interest_level, 0)::INTEGER as interest_level, -- Casteo explicitamente a INTEGER
         c.created_at as scanned_at
     FROM connections c
