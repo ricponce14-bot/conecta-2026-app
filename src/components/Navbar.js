@@ -59,13 +59,17 @@ export default function Navbar() {
                 <ul className="navbar-links" style={mobileOpen ? {
                     display: 'flex', flexDirection: 'column', position: 'fixed',
                     top: 0, left: 0, right: 0, bottom: 0,
-                    background: 'rgba(6, 11, 24, 0.97)', backdropFilter: 'blur(20px)',
-                    justifyContent: 'center', alignItems: 'center', gap: '2rem', zIndex: 200,
+                    background: '#060b18', // Solid background to avoid translucent overlaps
+                    justifyContent: 'center', alignItems: 'center', gap: '2.5rem', zIndex: 9999,
+                    padding: '2rem'
                 } : {}}>
                     {mobileOpen && (
                         <button onClick={() => setMobileOpen(false)} style={{
-                            position: 'absolute', top: '1.5rem', right: '1.5rem',
-                            background: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer',
+                            position: 'absolute', top: '2rem', right: '2rem',
+                            background: 'rgba(255,255,255,0.1)', color: 'white',
+                            fontSize: '1.8rem', cursor: 'pointer',
+                            width: '45px', height: '45px', borderRadius: '50%',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center'
                         }}>&#x2715;</button>
                     )}
                     <li><Link href="/" onClick={() => setMobileOpen(false)}>Inicio</Link></li>

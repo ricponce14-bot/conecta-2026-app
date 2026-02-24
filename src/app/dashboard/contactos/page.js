@@ -9,6 +9,7 @@ export default function MisContactosPage() {
     const [loading, setLoading] = useState(true);
     const [userRole, setUserRole] = useState('attendee');
     const [selectedLead, setSelectedLead] = useState(null);
+    const [savingNotes, setSavingNotes] = useState(false);
 
     useEffect(() => {
         async function fetchMyLeads() {
@@ -60,6 +61,30 @@ export default function MisContactosPage() {
             }
         } catch (e) {
             console.error("Update failed:", e);
+        }
+    }
+
+    const handleUpdateNotes = async () => {
+        if (!selectedLead) return;
+        setSavingNotes(true);
+        try {
+            const { error } = await supabase
+                .from('connections')
+                .update({ notes: selectedLead.connection_notes })
+                .eq('id', selectedLead.connection_id);
+
+            if (!error) {
+                setLeads(prev => prev.map(l =>
+                    l.connection_id === selectedLead.connection_id
+                        ? { ...l, connection_notes: selectedLead.connection_notes }
+                        : l
+                ));
+                // Optional: show a success toast or brief visual feedback
+            }
+        } catch (e) {
+            console.error("Update notes failed:", e);
+        } finally {
+            setSavingNotes(false);
         }
     }
 
@@ -137,11 +162,24 @@ export default function MisContactosPage() {
                                     )}
                                 </div>
 
-                                <div style={{ flex: 1, minWidth: 0 }}> {/* minWidth 0 prevents text overflow in flex flex-1 items */}
-                                    <h3 style={{ fontSize: '1.1rem', marginBottom: '2px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{lead.contact_name}</h3>
-                                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        {lead.contact_title} {lead.company_name ? `@ ${lead.company_name}` : ''}
-                                    </p>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <h3 style={{ fontSize: '1.15rem', marginBottom: '4px', fontWeight: 700, color: 'white' }}>{lead.contact_name}</h3>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
+                                        <span style={{ fontSize: '0.75rem', padding: '2px 8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-secondary)' }}>
+                                            {lead.contact_title || 'Asistente'}
+                                        </span>
+                                        {lead.company_name && (
+                                            <span style={{ fontSize: '0.75rem', padding: '2px 8px', background: 'rgba(37, 99, 235, 0.1)', borderRadius: '4px', color: 'var(--neon-blue)', fontWeight: 600 }}>
+                                                {lead.company_name}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {lead.connection_notes && (
+                                        <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginBottom: '12px', fontStyle: 'italic', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                            "{lead.connection_notes}"
+                                        </p>
+                                    )}
 
                                     <div className="lead-priority-control" style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '200px', width: '100%' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -336,6 +374,36 @@ export default function MisContactosPage() {
                                                 <p style={{ color: 'var(--text-secondary)' }}>{selectedLead.company_name}</p>
                                             )}
                                         </div>
+                                    </div>
+
+                                    <div style={{ marginBottom: 'var(--space-xl)', padding: 'var(--space-lg)', background: 'rgba(37, 99, 235, 0.05)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(37, 99, 235, 0.1)' }}>
+                                        <h4 style={{ fontSize: '0.8rem', color: 'var(--neon-blue)', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 800, letterSpacing: '0.05em' }}>Mis Notas / Recordatorio</h4>
+                                        <textarea
+                                            value={selectedLead.connection_notes || ''}
+                                            onChange={(e) => setSelectedLead({ ...selectedLead, connection_notes: e.target.value })}
+                                            placeholder="Escribe algo para recordar este contacto..."
+                                            style={{
+                                                width: '100%',
+                                                minHeight: '80px',
+                                                background: 'rgba(0,0,0,0.2)',
+                                                border: '1px solid rgba(255,255,255,0.1)',
+                                                borderRadius: 'var(--radius-md)',
+                                                color: 'white',
+                                                padding: '12px',
+                                                fontSize: '0.9rem',
+                                                resize: 'vertical',
+                                                marginBottom: '12px',
+                                                outline: 'none'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={handleUpdateNotes}
+                                            disabled={savingNotes}
+                                            className="btn btn-primary"
+                                            style={{ width: '100%', fontSize: '0.85rem', padding: '10px' }}
+                                        >
+                                            {savingNotes ? 'Guardando...' : 'Guardar Nota'}
+                                        </button>
                                     </div>
 
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-lg)', marginBottom: 'var(--space-2xl)' }}>
