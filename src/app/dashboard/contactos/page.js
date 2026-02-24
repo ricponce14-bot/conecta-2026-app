@@ -143,27 +143,47 @@ export default function MisContactosPage() {
                                         {lead.contact_title} {lead.company_name ? `@ ${lead.company_name}` : ''}
                                     </p>
 
-                                    <div className="lead-priority-control" style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxWidth: '180px', width: '100%' }}>
+                                    <div className="lead-priority-control" style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '200px', width: '100%' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 700 }}>Prioridad</div>
-                                            <div style={{ fontSize: '0.85rem', color: 'var(--neon-blue)', fontWeight: 700 }}>{lead.interest_level || 1}/5</div>
+                                            <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 800 }}>Interés / Prioridad</div>
+                                            <div style={{ fontSize: '0.85rem', fontWeight: 800, color: lead.interest_level >= 4 ? '#ff4d4d' : lead.interest_level >= 3 ? '#fbbf24' : 'var(--neon-blue)' }}>
+                                                {lead.interest_level === 5 ? '🔥 VIP' : lead.interest_level === 4 ? 'Alta' : lead.interest_level === 3 ? 'Media' : lead.interest_level === 2 ? 'Baja' : 'Nueva'}
+                                            </div>
                                         </div>
-                                        <input
-                                            type="range"
-                                            min="1"
-                                            max="5"
-                                            step="1"
-                                            value={lead.interest_level || 1}
+                                        <div
+                                            className="heat-bar-container"
                                             onClick={(e) => e.stopPropagation()}
-                                            onChange={(e) => {
-                                                e.stopPropagation();
-                                                const val = parseInt(e.target.value);
-                                                setLeads(prev => prev.map(l => l.connection_id === lead.connection_id ? { ...l, interest_level: val } : l));
+                                            style={{
+                                                display: 'flex',
+                                                height: '24px',
+                                                background: 'rgba(255,255,255,0.05)',
+                                                borderRadius: '12px',
+                                                overflow: 'hidden',
+                                                border: '1px solid rgba(255,255,255,0.1)',
+                                                cursor: 'pointer'
                                             }}
-                                            onMouseUp={(e) => handleUpdateInterest(lead.connection_id, parseInt(e.target.value))}
-                                            onTouchEnd={(e) => handleUpdateInterest(lead.connection_id, parseInt(e.target.value))}
-                                            className="priority-slider"
-                                        />
+                                        >
+                                            {[1, 2, 3, 4, 5].map((level) => {
+                                                const isActive = (lead.interest_level || 1) >= level;
+                                                const colors = ['#2563eb', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+                                                return (
+                                                    <div
+                                                        key={level}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleUpdateInterest(lead.connection_id, level);
+                                                        }}
+                                                        style={{
+                                                            flex: 1,
+                                                            background: isActive ? colors[level - 1] : 'transparent',
+                                                            transition: 'all 0.2s ease',
+                                                            borderRight: level < 5 ? '1px solid rgba(0,0,0,0.2)' : 'none',
+                                                            boxShadow: isActive ? `inset 0 0 10px rgba(0,0,0,0.2)` : 'none'
+                                                        }}
+                                                    />
+                                                );
+                                            })}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -256,36 +276,12 @@ export default function MisContactosPage() {
                             z-index: 10;
                         }
 
-                        .priority-slider {
-                            -webkit-appearance: none;
-                            width: 100%;
-                            height: 6px;
-                            border-radius: 5px;
-                            background: rgba(255, 255, 255, 0.1);
-                            outline: none;
-                            margin: 10px 0;
+                        .heat-bar-container:hover div {
+                            opacity: 0.8;
                         }
-
-                        .priority-slider::-webkit-slider-thumb {
-                            -webkit-appearance: none;
-                            appearance: none;
-                            width: 18px;
-                            height: 18px;
-                            border-radius: 50%;
-                            background: var(--neon-blue);
-                            cursor: pointer;
-                            box-shadow: 0 0 10px var(--neon-blue);
-                            transition: all 0.2s ease;
-                        }
-
-                        .priority-slider::-moz-range-thumb {
-                            width: 18px;
-                            height: 18px;
-                            border-radius: 50%;
-                            background: var(--neon-blue);
-                            cursor: pointer;
-                            box-shadow: 0 0 10px var(--neon-blue);
-                            border: none;
+                        .heat-bar-container div:hover {
+                            opacity: 1 !important;
+                            transform: scaleY(1.1);
                         }
                     `}</style>
 
