@@ -134,7 +134,7 @@ export default function DashboardPage() {
     return (
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 'var(--space-2xl)', alignItems: 'start' }}>
+            <div className="profile-layout">
 
                 {/* Left: Interactive Gafete */}
                 <div>
@@ -156,7 +156,7 @@ export default function DashboardPage() {
                         </div>
 
                         {!editing ? (
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-xl)' }}>
+                            <div className="profile-form-grid">
                                 <div>
                                     <label style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Nombre</label>
                                     <p style={{ fontSize: '1.1rem', marginBottom: 'var(--space-lg)', fontWeight: 500 }}>{profile.full_name}</p>
@@ -171,8 +171,8 @@ export default function DashboardPage() {
                                     <label style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>WhatsApp</label>
                                     <p style={{ fontSize: '1.1rem', marginBottom: 'var(--space-lg)', fontWeight: 500 }}>{profile.whatsapp || 'No especificado'}</p>
                                 </div>
-                                <div style={{ gridColumn: '1 / span 2', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 'var(--space-lg)' }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-xl)' }}>
+                                <div style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 'var(--space-lg)' }}>
+                                    <div className="profile-form-grid">
                                         <div>
                                             <label style={{ fontSize: '0.75rem', color: 'var(--accent-success)', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 700 }}>Lo que ofrezco</label>
                                             <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{profile.offer_description || 'No especificado'}</p>
@@ -185,8 +185,8 @@ export default function DashboardPage() {
                                 </div>
                             </div>
                         ) : (
-                            <form onSubmit={handleUpdateProfile} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
-                                <div style={{ gridColumn: '1 / span 2' }}>
+                            <form onSubmit={handleUpdateProfile} className="profile-form-grid">
+                                <div style={{ gridColumn: '1 / -1' }}>
                                     <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Nombre Completo</label>
                                     <input
                                         type="text"
@@ -218,7 +218,7 @@ export default function DashboardPage() {
                                         onChange={e => setEditData({ ...editData, company_name: e.target.value })}
                                     />
                                 </div>
-                                <div style={{ gridColumn: '1 / span 2' }}>
+                                <div style={{ gridColumn: '1 / -1' }}>
                                     <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>WhatsApp Corporativo</label>
                                     <input
                                         type="text"
@@ -228,7 +228,7 @@ export default function DashboardPage() {
                                         onChange={e => setEditData({ ...editData, whatsapp: e.target.value })}
                                     />
                                 </div>
-                                <div style={{ gridColumn: '1 / span 2' }}>
+                                <div style={{ gridColumn: '1 / -1' }}>
                                     <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--accent-success)', marginBottom: '4px' }}>¿Qué ofreces? (Para Matchmaking)</label>
                                     <textarea
                                         className="filter-input"
@@ -238,7 +238,7 @@ export default function DashboardPage() {
                                         onChange={e => setEditData({ ...editData, offer_description: e.target.value })}
                                     />
                                 </div>
-                                <div style={{ gridColumn: '1 / span 2' }}>
+                                <div style={{ gridColumn: '1 / -1' }}>
                                     <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--accent-warn)', marginBottom: '4px' }}>¿Qué buscas? (Para Matchmaking)</label>
                                     <textarea
                                         className="filter-input"
@@ -248,7 +248,7 @@ export default function DashboardPage() {
                                         onChange={e => setEditData({ ...editData, search_description: e.target.value })}
                                     />
                                 </div>
-                                <div style={{ gridColumn: '1 / span 2', marginTop: 'var(--space-md)' }}>
+                                <div style={{ gridColumn: '1 / -1', marginTop: 'var(--space-md)' }}>
                                     <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={updating}>
                                         {updating ? 'Guardando...' : 'Actualizar Perfil'}
                                     </button>
