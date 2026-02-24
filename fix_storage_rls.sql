@@ -40,5 +40,4 @@ ON storage.objects FOR DELETE
 TO authenticated
 USING ( bucket_id = 'public-assets' );
 
--- Asegurarse de que RLS está habilitado en la tabla de almacenamiento
-ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+-- (La sentencia ALTER TABLE ha sido removida ya que el usuario 'postgres' u otro propietario gestiona la tabla base de storage)
