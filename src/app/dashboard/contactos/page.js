@@ -145,44 +145,26 @@ export default function MisContactosPage() {
 
                                     <div className="lead-priority-control" style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '200px', width: '100%' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 800 }}>Interés / Prioridad</div>
+                                            <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 800 }}>Prioridad / Interés</div>
                                             <div style={{ fontSize: '0.85rem', fontWeight: 800, color: lead.interest_level >= 4 ? '#ff4d4d' : lead.interest_level >= 3 ? '#fbbf24' : 'var(--neon-blue)' }}>
-                                                {lead.interest_level === 5 ? '🔥 VIP' : lead.interest_level === 4 ? 'Alta' : lead.interest_level === 3 ? 'Media' : lead.interest_level === 2 ? 'Baja' : 'Nueva'}
+                                                {lead.interest_level || 1}/5
                                             </div>
                                         </div>
-                                        <div
-                                            className="heat-bar-container"
-                                            onClick={(e) => e.stopPropagation()}
-                                            style={{
-                                                display: 'flex',
-                                                height: '24px',
-                                                background: 'rgba(255,255,255,0.05)',
-                                                borderRadius: '12px',
-                                                overflow: 'hidden',
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                cursor: 'pointer'
-                                            }}
-                                        >
-                                            {[1, 2, 3, 4, 5].map((level) => {
-                                                const isActive = (lead.interest_level || 1) >= level;
-                                                const colors = ['#2563eb', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
-                                                return (
-                                                    <div
-                                                        key={level}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            handleUpdateInterest(lead.connection_id, level);
-                                                        }}
-                                                        style={{
-                                                            flex: 1,
-                                                            background: isActive ? colors[level - 1] : 'transparent',
-                                                            transition: 'all 0.2s ease',
-                                                            borderRight: level < 5 ? '1px solid rgba(0,0,0,0.2)' : 'none',
-                                                            boxShadow: isActive ? `inset 0 0 10px rgba(0,0,0,0.2)` : 'none'
-                                                        }}
-                                                    />
-                                                );
-                                            })}
+                                        <div onClick={e => e.stopPropagation()} style={{ width: '100%', padding: '4px 0' }}>
+                                            <input
+                                                type="range"
+                                                min="1"
+                                                max="5"
+                                                step="1"
+                                                value={lead.interest_level || 1}
+                                                onChange={(e) => {
+                                                    const val = parseInt(e.target.value);
+                                                    setLeads(prev => prev.map(l => l.connection_id === lead.connection_id ? { ...l, interest_level: val } : l));
+                                                }}
+                                                onMouseUp={(e) => handleUpdateInterest(lead.connection_id, parseInt(e.target.value))}
+                                                onTouchEnd={(e) => handleUpdateInterest(lead.connection_id, parseInt(e.target.value))}
+                                                className="premium-slider"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -276,12 +258,47 @@ export default function MisContactosPage() {
                             z-index: 10;
                         }
 
-                        .heat-bar-container:hover div {
-                            opacity: 0.8;
+                        .premium-slider {
+                            -webkit-appearance: none;
+                            width: 100%;
+                            height: 8px;
+                            border-radius: 4px;
+                            background: linear-gradient(to right, #2563eb, #ef4444);
+                            outline: none;
+                            opacity: 0.9;
+                            transition: opacity .2s;
+                            cursor: pointer;
                         }
-                        .heat-bar-container div:hover {
-                            opacity: 1 !important;
-                            transform: scaleY(1.1);
+
+                        .premium-slider:hover {
+                            opacity: 1;
+                        }
+
+                        .premium-slider::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            appearance: none;
+                            width: 24px;
+                            height: 24px;
+                            border-radius: 50%;
+                            background: #ffffff;
+                            cursor: pointer;
+                            border: 3px solid var(--neon-blue);
+                            box-shadow: 0 0 15px var(--neon-blue), 0 0 5px rgba(0,0,0,0.5);
+                            transition: all 0.2s ease;
+                        }
+
+                        .premium-slider::-webkit-slider-thumb:hover {
+                            transform: scale(1.2);
+                        }
+
+                        .premium-slider::-moz-range-thumb {
+                            width: 24px;
+                            height: 24px;
+                            border-radius: 50%;
+                            background: #ffffff;
+                            cursor: pointer;
+                            border: 3px solid var(--neon-blue);
+                            box-shadow: 0 0 15px var(--neon-blue);
                         }
                     `}</style>
 
