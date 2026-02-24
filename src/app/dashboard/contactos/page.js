@@ -143,27 +143,27 @@ export default function MisContactosPage() {
                                         {lead.contact_title} {lead.company_name ? `@ ${lead.company_name}` : ''}
                                     </p>
 
-                                    <div className="lead-priority-control" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                        <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 700 }}>Prioridad</div>
-                                        <div style={{ display: 'flex', gap: '4px' }}>
-                                            {[1, 2, 3, 4, 5].map(level => (
-                                                <button
-                                                    key={level}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleUpdateInterest(lead.connection_id, level);
-                                                    }}
-                                                    style={{
-                                                        width: 24, height: 24,
-                                                        borderRadius: '4px',
-                                                        border: '1px solid var(--surface-border)',
-                                                        background: lead.interest_level >= level ? 'var(--neon-blue)' : 'rgba(255,255,255,0.05)',
-                                                        cursor: 'pointer',
-                                                        transition: 'all 0.2s ease'
-                                                    }}
-                                                />
-                                            ))}
+                                    <div className="lead-priority-control" style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxWidth: '180px', width: '100%' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 700 }}>Prioridad</div>
+                                            <div style={{ fontSize: '0.85rem', color: 'var(--neon-blue)', fontWeight: 700 }}>{lead.interest_level || 1}/5</div>
                                         </div>
+                                        <input
+                                            type="range"
+                                            min="1"
+                                            max="5"
+                                            step="1"
+                                            value={lead.interest_level || 1}
+                                            onClick={(e) => e.stopPropagation()}
+                                            onChange={(e) => {
+                                                e.stopPropagation();
+                                                const val = parseInt(e.target.value);
+                                                setLeads(prev => prev.map(l => l.connection_id === lead.connection_id ? { ...l, interest_level: val } : l));
+                                            }}
+                                            onMouseUp={(e) => handleUpdateInterest(lead.connection_id, parseInt(e.target.value))}
+                                            onTouchEnd={(e) => handleUpdateInterest(lead.connection_id, parseInt(e.target.value))}
+                                            className="priority-slider"
+                                        />
                                     </div>
                                 </div>
 
@@ -254,6 +254,38 @@ export default function MisContactosPage() {
                             justify-content: center;
                             cursor: pointer;
                             z-index: 10;
+                        }
+
+                        .priority-slider {
+                            -webkit-appearance: none;
+                            width: 100%;
+                            height: 6px;
+                            border-radius: 5px;
+                            background: rgba(255, 255, 255, 0.1);
+                            outline: none;
+                            margin: 10px 0;
+                        }
+
+                        .priority-slider::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            appearance: none;
+                            width: 18px;
+                            height: 18px;
+                            border-radius: 50%;
+                            background: var(--neon-blue);
+                            cursor: pointer;
+                            box-shadow: 0 0 10px var(--neon-blue);
+                            transition: all 0.2s ease;
+                        }
+
+                        .priority-slider::-moz-range-thumb {
+                            width: 18px;
+                            height: 18px;
+                            border-radius: 50%;
+                            background: var(--neon-blue);
+                            cursor: pointer;
+                            box-shadow: 0 0 10px var(--neon-blue);
+                            border: none;
                         }
                     `}</style>
 
