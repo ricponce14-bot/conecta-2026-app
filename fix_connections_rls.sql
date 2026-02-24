@@ -10,6 +10,12 @@ DROP POLICY IF EXISTS "Enable read access for all users" ON public.connections;
 DROP POLICY IF EXISTS "Enable update for users based on email" ON public.connections;
 DROP POLICY IF EXISTS "connections_insert_policy" ON public.connections;
 
+-- Eliminar también las políticas que este script crea, por si se ejecuta múltiples veces
+DROP POLICY IF EXISTS "Permitir insertar conexiones" ON public.connections;
+DROP POLICY IF EXISTS "Permitir ver conexiones" ON public.connections;
+DROP POLICY IF EXISTS "Permitir actualizar conexiones" ON public.connections;
+DROP POLICY IF EXISTS "Permitir borrar conexiones" ON public.connections;
+
 -- 2. Crear Política para que cualquier usuario autenticado pueda registrar un escaneo (insertar)
 CREATE POLICY "Permitir insertar conexiones"
 ON public.connections FOR INSERT
