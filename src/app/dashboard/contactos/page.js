@@ -21,7 +21,7 @@ export default function MisContactosPage() {
                 if (profile?.role) setUserRole(profile.role);
 
                 // Active Event ID
-                const ACTIVE_EVENT_ID = null;
+                const ACTIVE_EVENT_ID = '00000000-0000-0000-0000-000000000001';
 
                 const { data, error } = await supabase.rpc('get_my_leads', {
                     p_user_id: user.id,

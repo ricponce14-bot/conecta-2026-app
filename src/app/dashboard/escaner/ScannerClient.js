@@ -15,8 +15,8 @@ export default function EscanerPage() {
         isScanningRef.current = isScanning;
     }, [isScanning]);
 
-    // Active Event ID (Set to null to avoid FK constraint error if no universal event entry exists)
-    const ACTIVE_EVENT_ID = null;
+    // Active Event ID (Fetched from events table)
+    const ACTIVE_EVENT_ID = '00000000-0000-0000-0000-000000000001';
 
     // Move handlers above useEffect and use stable closures via Ref
     const onScanSuccess = async (decodedText, decodedResult) => {
