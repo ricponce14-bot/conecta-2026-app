@@ -16,3 +16,19 @@ CREATE POLICY "Forzar Update Universal"
 ON storage.objects FOR UPDATE
 TO public
 USING ( bucket_id = 'public-assets' );
+
+-- 3. PERMISOS DE PERFILES (Para que el networking pueda leer nombres y el usuario pueda guardar su foto)
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Perfiles Visibles" ON public.profiles;
+CREATE POLICY "Perfiles Visibles"
+ON public.profiles FOR SELECT
+TO public
+USING ( true );
+
+DROP POLICY IF EXISTS "Editar Propio Perfil" ON public.profiles;
+CREATE POLICY "Editar Propio Perfil"
+ON public.profiles FOR UPDATE
+TO authenticated
+USING ( auth.uid() = id );
+
