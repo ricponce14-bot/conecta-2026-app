@@ -29,10 +29,11 @@ BEGIN
         RETURN json_build_object('success', false, 'message', 'No puedes escanear tu propio código.');
     END IF;
 
-    -- Insertar conexión (Nota: La tabla connections usa scanner_id y scanned_id)
-    INSERT INTO connections (scanner_id, scanned_id, event_id, notes)
-    VALUES (p_scanner_id, v_contact_id, p_event_id, p_notes)
-    ON CONFLICT (scanner_id, scanned_id) DO NOTHING;
+    -- Insertar conexión si no existe previamente
+    IF NOT EXISTS (SELECT 1 FROM connections WHERE scanner_id = p_scanner_id AND scanned_id = v_contact_id) THEN
+        INSERT INTO connections (scanner_id, scanned_id, event_id, notes)
+        VALUES (p_scanner_id, v_contact_id, p_event_id, p_notes);
+    END IF;
 
     -- Obtener información de contacto para la UI
     SELECT json_build_object(
@@ -46,8 +47,10 @@ END;
 $$;
 
 -- 2. Actualizar get_my_leads para usar "scanned_id" y "created_at"
+-- Eliminamos primero para asegurar que cambiamos la firma de retorno si es necesario
 DROP FUNCTION IF EXISTS get_my_leads(UUID, UUID);
 DROP FUNCTION IF EXISTS get_my_leads(UUID);
+
 CREATE OR REPLACE FUNCTION get_my_leads(
     p_user_id UUID,
     p_event_id UUID DEFAULT NULL
@@ -59,7 +62,7 @@ RETURNS TABLE (
     contact_title TEXT,
     company_name TEXT,
     photo_url TEXT,
-    interest_level INTEGER,
+    interest_level INTEGER, -- Lo definimos como INTEGER para maxima compatibilidad
     scanned_at TIMESTAMP WITH TIME ZONE
 )
 LANGUAGE plpgsql
@@ -74,7 +77,7 @@ BEGIN
         p.title as contact_title,
         p.company_name as company_name,
         p.photo_url as photo_url,
-        c.interest_level,
+        COALESCE(c.interest_level, 0)::INTEGER as interest_level, -- Casteo explicitamente a INTEGER
         c.created_at as scanned_at
     FROM connections c
     -- Nota: Unir con scanned_id
@@ -83,3 +86,4 @@ BEGIN
     ORDER BY c.created_at DESC;
 END;
 $$;
+
