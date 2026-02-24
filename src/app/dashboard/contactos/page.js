@@ -149,7 +149,10 @@ export default function MisContactosPage() {
                                             {[1, 2, 3, 4, 5].map(level => (
                                                 <button
                                                     key={level}
-                                                    onClick={() => handleUpdateInterest(lead.connection_id, level)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleUpdateInterest(lead.connection_id, level);
+                                                    }}
                                                     style={{
                                                         width: 24, height: 24,
                                                         borderRadius: '4px',
