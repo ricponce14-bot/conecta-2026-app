@@ -183,6 +183,19 @@ export default function EscanerPage() {
                                 {scanResult.contact.company_name && (
                                     <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{scanResult.contact.company_name}</div>
                                 )}
+
+                                {scanResult.contact.gallery_urls && scanResult.contact.gallery_urls.length > 0 && (
+                                    <div style={{ marginTop: 'var(--space-md)' }}>
+                                        <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Galería de Negocio</div>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(60px, 1fr))', gap: '8px' }}>
+                                            {scanResult.contact.gallery_urls.map((url, i) => (
+                                                <div key={i} style={{ aspectRatio: '1', borderRadius: '4px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                                    <img src={url} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         )}
 

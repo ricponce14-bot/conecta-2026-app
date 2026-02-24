@@ -25,7 +25,7 @@ export default function LeadsAdmin() {
 
     return (
         <div>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '2rem' }}>Gestión de <span className="highlight">Leads</span></h1>
+            <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', marginBottom: '2rem' }}>Gestión de <span className="highlight">Leads</span></h1>
 
             <div className="glass-card" style={{ padding: '0', overflow: 'hidden' }}>
                 <div style={{ overflowX: 'auto', width: '100%' }}>

@@ -133,8 +133,8 @@ export default function ContentCMS() {
 
             {/* SPEAKERS SECTION */}
             <section>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h2 style={{ fontSize: '1.75rem', margin: 0 }}>Gestión de <span className="highlight">Ponentes</span></h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                    <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 1.75rem)', margin: 0 }}>Gestión de <span className="highlight">Ponentes</span></h2>
                     <button className="btn btn-primary" onClick={() => openModal('speaker')}>+ Agregar Ponente</button>
                 </div>
 
@@ -182,8 +182,8 @@ export default function ContentCMS() {
 
             {/* ALLIANCES SECTION */}
             <section>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h2 style={{ fontSize: '1.75rem', margin: 0 }}>Alianzas y <span className="highlight">Patrocinios</span></h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                    <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 1.75rem)', margin: 0 }}>Alianzas y <span className="highlight">Patrocinios</span></h2>
                     <button className="btn btn-primary" onClick={() => openModal('alliance')}>+ Agregar Aliado</button>
                 </div>
 
@@ -232,7 +232,7 @@ export default function ContentCMS() {
                     zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center',
                     padding: '1rem'
                 }}>
-                    <div className="glass-card" style={{ width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto' }}>
+                    <div className="glass-card" style={{ width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto', padding: '1.5rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                             <h3 style={{ fontSize: '1.5rem', margin: 0 }}>
                                 {editingItem ? 'Editar' : 'Agregar'} {modalType === 'speaker' ? 'Ponente' : 'Aliado'}
@@ -287,13 +287,13 @@ export default function ContentCMS() {
                             {/* SPEAKER FIELDS */}
                             {modalType === 'speaker' && (
                                 <>
-                                    <div style={{ display: 'flex', gap: '1rem' }}>
-                                        <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                                        <div style={{ flex: '1 1 200px' }}>
                                             <label className="form-label">Puesto / Cargo</label>
                                             <input type="text" className="filter-input" style={{ width: '100%' }}
                                                 value={formData.role || ''} onChange={e => setFormData({ ...formData, role: e.target.value })} />
                                         </div>
-                                        <div style={{ flex: 1 }}>
+                                        <div style={{ flex: '1 1 200px' }}>
                                             <label className="form-label">Empresa</label>
                                             <input type="text" className="filter-input" style={{ width: '100%' }}
                                                 value={formData.company || ''} onChange={e => setFormData({ ...formData, company: e.target.value })} />

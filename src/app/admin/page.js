@@ -27,7 +27,7 @@ export default function AdminDashboard() {
 
     return (
         <div>
-            <h1 style={{ fontSize: '2.5rem', color: 'white', marginBottom: '1rem' }}>Panel de <span className="highlight">Control</span></h1>
+            <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', color: 'white', marginBottom: '1rem' }}>Panel de <span className="highlight">Control</span></h1>
             <p style={{ color: '#888', marginBottom: '3rem' }}>Resumen operativo de la plataforma CONECTA 2026.</p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>

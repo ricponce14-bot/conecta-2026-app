@@ -14,6 +14,10 @@ export default function DashboardPage() {
     const [editData, setEditData] = useState({});
     const [updating, setUpdating] = useState(false);
 
+    // Upload States
+    const [uploadingPhoto, setUploadingPhoto] = useState(false);
+    const [uploadingGallery, setUploadingGallery] = useState(false);
+
     useEffect(() => {
         async function fetchProfile() {
             try {
@@ -92,6 +96,112 @@ export default function DashboardPage() {
             alert("Error al actualizar: " + err.message);
         } finally {
             setUpdating(false);
+        }
+    };
+
+    const handleUploadPhoto = async (e) => {
+        try {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            setUploadingPhoto(true);
+            const fileExt = file.name.split('.').pop();
+            const fileName = `avatar_${profile.id}_${Date.now()}.${fileExt}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('public-assets')
+                .upload(`avatars/${fileName}`, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data } = supabase.storage
+                .from('public-assets')
+                .getPublicUrl(`avatars/${fileName}`);
+
+            // Update profile
+            const { error: updateError } = await supabase
+                .from('profiles')
+                .update({ photo_url: data.publicUrl })
+                .eq('id', profile.id);
+
+            if (updateError) throw updateError;
+
+            setProfile(prev => ({ ...prev, photo_url: data.publicUrl }));
+        } catch (error) {
+            alert("Error al subir foto: " + error.message);
+        } finally {
+            setUploadingPhoto(false);
+        }
+    };
+
+    const handleUploadGallery = async (e) => {
+        try {
+            const files = Array.from(e.target.files);
+            if (!files.length) return;
+
+            const currentGallery = profile.gallery_urls || [];
+            if (currentGallery.length + files.length > 3) {
+                alert("Solo puedes tener un máximo de 3 fotos en tu galería.");
+                return;
+            }
+
+            setUploadingGallery(true);
+            const uploadedUrls = [];
+
+            for (const file of files) {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `gallery_${profile.id}_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('public-assets')
+                    .upload(`galleries/${fileName}`, file);
+
+                if (uploadError) throw uploadError;
+
+                const { data } = supabase.storage
+                    .from('public-assets')
+                    .getPublicUrl(`galleries/${fileName}`);
+
+                uploadedUrls.push(data.publicUrl);
+            }
+
+            const newGallery = [...currentGallery, ...uploadedUrls];
+
+            const { error: updateError } = await supabase
+                .from('profiles')
+                .update({ gallery_urls: newGallery })
+                .eq('id', profile.id);
+
+            if (updateError) {
+                if (updateError.code === '42703') {
+                    alert("La base de datos requiere una actualización para soportar galerías. Contacta a soporte técnico.");
+                } else {
+                    throw updateError;
+                }
+            } else {
+                setProfile(prev => ({ ...prev, gallery_urls: newGallery }));
+            }
+
+        } catch (error) {
+            alert("Error al subir fotos: " + error.message);
+        } finally {
+            setUploadingGallery(false);
+        }
+    };
+
+    const handleRemoveGalleryImage = async (urlToRemove) => {
+        try {
+            const newGallery = profile.gallery_urls.filter(url => url !== urlToRemove);
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ gallery_urls: newGallery })
+                .eq('id', profile.id);
+
+            if (error) throw error;
+            setProfile(prev => ({ ...prev, gallery_urls: newGallery }));
+        } catch (error) {
+            alert("Error al eliminar foto: " + error.message);
         }
     };
 
@@ -270,19 +380,35 @@ export default function DashboardPage() {
                         border: '1px solid rgba(37, 99, 235, 0.3)',
                         boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
                     }}>
-                        {/* Photo placeholder until Storage is ready */}
+                        {/* Profile Photo */}
                         <div style={{
-                            width: 100, height: 100,
+                            width: 120, height: 120,
                             borderRadius: '50%',
                             background: 'linear-gradient(45deg, var(--bg-secondary), var(--surface-border))',
                             border: '2px solid var(--neon-blue)',
-                            marginBottom: 'var(--space-xl)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center'
+                            marginBottom: 'var(--space-md)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            overflow: 'hidden',
+                            position: 'relative'
                         }}>
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
+                            {profile.photo_url ? (
+                                <img src={profile.photo_url} alt={profile.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            ) : (
+                                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            )}
+
+                            {/* Overlay Upload Button */}
+                            <label style={{
+                                position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(0,0,0,0.6)',
+                                padding: '4px 0', fontSize: '0.7rem', color: 'white', cursor: 'pointer', textAlign: 'center',
+                                backdropFilter: 'blur(2px)'
+                            }}>
+                                <input type="file" accept="image/*" onChange={handleUploadPhoto} disabled={uploadingPhoto} style={{ display: 'none' }} />
+                                {uploadingPhoto ? '...' : 'Cambiar'}
+                            </label>
                         </div>
 
                         <div style={{
@@ -316,6 +442,47 @@ export default function DashboardPage() {
                             {profile.company_name || 'Asistente'}
                         </div>
                     </div>
+
+                    {/* Stand Gallery Section (Only for Stands / Company Reps) */}
+                    {(profile.role === 'company_rep' || profile.role === 'admin') && (
+                        <div className="glass-card" style={{ padding: 'var(--space-xl)', marginTop: 'var(--space-xl)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
+                                <h3 style={{ fontSize: '1.2rem', margin: 0, color: 'var(--neon-green)' }}>Galería de Negocio</h3>
+                                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                                    {(profile.gallery_urls || []).length} / 3 Fotos
+                                </div>
+                            </div>
+                            <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginBottom: 'var(--space-lg)', lineHeight: 1.5 }}>
+                                Al subir fotos, los asistentes podrán ver tus productos o espacio comercial cuando escaneen tu gafete.
+                            </p>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                                {(profile.gallery_urls || []).map((url, i) => (
+                                    <div key={i} style={{ position: 'relative', aspectRatio: '1', borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                        <img src={url} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        <button
+                                            onClick={() => handleRemoveGalleryImage(url)}
+                                            style={{ position: 'absolute', top: '4px', right: '4px', background: 'rgba(0,0,0,0.7)', color: 'white', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}
+                                        >
+                                            &times;
+                                        </button>
+                                    </div>
+                                ))}
+
+                                {(!profile.gallery_urls || profile.gallery_urls.length < 3) && (
+                                    <label style={{
+                                        aspectRatio: '1', borderRadius: '8px', border: '1px dashed rgba(255,255,255,0.2)',
+                                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                                        cursor: uploadingGallery ? 'not-allowed' : 'pointer', background: 'rgba(255,255,255,0.02)'
+                                    }}>
+                                        <input type="file" accept="image/*" multiple onChange={handleUploadGallery} disabled={uploadingGallery} style={{ display: 'none' }} />
+                                        <span style={{ fontSize: '24px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>+</span>
+                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{uploadingGallery ? 'Subiendo...' : 'Añadir'}</span>
+                                    </label>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
