@@ -31,8 +31,8 @@ export async function middleware(request) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    // Proteger las rutas /pymatch/dashboard y /pymatch/admin
-    if ((request.nextUrl.pathname.startsWith('/pymatch/dashboard') || request.nextUrl.pathname.startsWith('/pymatch/admin')) && !user) {
+    // Proteger las rutas /pymatch/dashboard, /pymatch/admin y /pymatch/onboarding
+    if ((request.nextUrl.pathname.startsWith('/pymatch/dashboard') || request.nextUrl.pathname.startsWith('/pymatch/admin') || request.nextUrl.pathname.startsWith('/pymatch/onboarding')) && !user) {
         const url = request.nextUrl.clone()
         url.pathname = '/pymatch/login'
         return NextResponse.redirect(url)

@@ -32,10 +32,21 @@ export default function LoginPage() {
 
             if (error) throw error;
 
+            // Check if profile is completed
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('profile_completed')
+                .eq('id', data.user.id)
+                .single();
+
             // Show welcome state before redirect
             setJustLoggedIn(true);
             setTimeout(() => {
-                window.location.href = '/pymatch/dashboard';
+                if (profile && profile.profile_completed) {
+                    window.location.href = '/pymatch/dashboard';
+                } else {
+                    window.location.href = '/pymatch/onboarding';
+                }
             }, 1500);
 
         } catch (err) {
