@@ -128,7 +128,7 @@ export default function MisContactosPage() {
                     <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '400px', margin: '0 auto 1.5rem' }}>
                         Aún no has registrado conexiones. Comienza a escanear gafetes para construir tu red.
                     </p>
-                    <Link href="/dashboard/escaner" className="btn btn-primary">Abrir Escáner</Link>
+                    <Link href="/pymatch/dashboard/escaner" className="btn btn-primary">Abrir Escáner</Link>
                 </div>
             ) : (
                 <>

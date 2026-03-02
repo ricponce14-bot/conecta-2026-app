@@ -94,7 +94,7 @@ export default function PreciosPage() {
     const handlePurchase = async (plan) => {
         if (!user) {
             alert('Por favor, inicia sesión o regístrate para continuar con la compra.');
-            router.push(`/registro?redirect=/precios`);
+            router.push(`/pymatch/registro?redirect=/precios`);
             return;
         }
 

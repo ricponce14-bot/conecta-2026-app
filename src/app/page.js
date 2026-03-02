@@ -205,7 +205,7 @@ export default function HomePage() {
               </p>
 
               <div className="hero-actions">
-                <Link href="/registro" className="btn btn-primary btn-lg">
+                <Link href="/pymatch/registro" className="btn btn-primary btn-lg">
                   Registrarme Ahora
                   <svg className="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -363,7 +363,7 @@ export default function HomePage() {
                 <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>Branding:</strong> Destaca en el mercado.</li>
               </ul>
               <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', flexWrap: 'wrap' }}>
-                <Link href="/registro" className="btn btn-outline" style={{ flex: 1 }}>
+                <Link href="/pymatch/registro" className="btn btn-outline" style={{ flex: 1 }}>
                   Regístrate Gratis
                 </Link>
                 <button onClick={() => openModal(1)} className="btn btn-secondary" style={{ flex: 1 }}>
@@ -730,7 +730,10 @@ export default function HomePage() {
               Registrarme ahora
               <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
             </a>
-            <a href="https://wa.me/523781002683" target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-lg">
+            <Link href="/pymatch" className="btn btn-secondary btn-lg">
+              Ir a la App PyMatch
+            </Link>
+            <a href="https://wa.me/523781002683" target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-lg">
               Contactar por WhatsApp
             </a>
           </div>

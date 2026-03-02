@@ -40,12 +40,12 @@ export default function ContentCMS() {
         setEditingItem(item);
         if (item) {
             setFormData({ ...item });
-            setImagePreview(item.image_url || item.logo_url || '');
+            setImagePreview(item.image_url || '');
         } else {
-            // Default empty state
+            // Default empty state with ALL fields
             setFormData(type === 'speaker'
-                ? { name: '', role: '', company: '', topic: '', is_regional: false, display_order: 0 }
-                : { name: '', type: 'Sponsor', display_order: 0 }
+                ? { name: '', role: '', company: '', topic: '', description: '', accent_color: '', is_regional: false, display_order: 0, image_url: '' }
+                : { name: '', type: 'official', display_order: 0, image_url: '', website_url: '', is_filled: true }
             );
             setImagePreview('');
         }
@@ -66,7 +66,7 @@ export default function ContentCMS() {
             if (!file) return;
 
             const fileExt = file.name.split('.').pop();
-            const fileName = `${Math.random()}.${fileExt}`;
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
             const filePath = `${modalType}s/${fileName}`;
 
             let { error: uploadError } = await supabase.storage
@@ -82,7 +82,7 @@ export default function ContentCMS() {
             setImagePreview(data.publicUrl);
             setFormData(prev => ({
                 ...prev,
-                [modalType === 'speaker' ? 'image_url' : 'logo_url']: data.publicUrl
+                image_url: data.publicUrl
             }));
 
         } catch (error) {
@@ -97,14 +97,25 @@ export default function ContentCMS() {
         e.preventDefault();
         const table = modalType === 'speaker' ? 'speakers' : 'alliances_sponsors';
 
+        // Clean formData: remove any undefined/null fields and id for insert
+        const cleanData = { ...formData };
+        if (!editingItem) {
+            delete cleanData.id; // Don't send id on insert
+        }
+        // Remove any empty strings for optional fields
+        Object.keys(cleanData).forEach(key => {
+            if (cleanData[key] === undefined) delete cleanData[key];
+        });
+
         try {
             if (editingItem) {
-                // Update
-                const { error } = await supabase.from(table).update(formData).eq('id', editingItem.id);
+                // Update - don't send id in the update payload
+                const { id, ...updateData } = cleanData;
+                const { error } = await supabase.from(table).update(updateData).eq('id', editingItem.id);
                 if (error) throw error;
             } else {
                 // Insert
-                const { error } = await supabase.from(table).insert([formData]);
+                const { error } = await supabase.from(table).insert([cleanData]);
                 if (error) throw error;
             }
             fetchData();
@@ -195,7 +206,7 @@ export default function ContentCMS() {
                                     <th style={{ padding: '1rem', width: '80px' }}>Logo</th>
                                     <th style={{ padding: '1rem' }}>Nombre</th>
                                     <th style={{ padding: '1rem' }}>Tipo</th>
-                                    <th style={{ padding: '1rem' }}>Enlace</th>
+                                    <th style={{ padding: '1rem' }}>Estado</th>
                                     <th style={{ padding: '1rem', textAlign: 'right' }}>Acciones</th>
                                 </tr>
                             </thead>
@@ -204,13 +215,27 @@ export default function ContentCMS() {
                                     <tr key={a.id} style={{ borderBottom: '1px solid #222' }}>
                                         <td style={{ padding: '1rem' }}>
                                             <div style={{ width: 60, height: 40, backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                                                {a.logo_url ? <img src={a.logo_url} alt={a.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} /> : 'img'}
+                                                {a.image_url ? <img src={a.image_url} alt={a.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} /> : 'img'}
                                             </div>
                                         </td>
                                         <td style={{ padding: '1rem' }}><strong>{a.name}</strong></td>
-                                        <td style={{ padding: '1rem' }}>{a.type}</td>
-                                        <td style={{ padding: '1rem', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                            {a.website_url ? <a href={a.website_url} target="_blank" rel="noreferrer" style={{ color: 'var(--neon-blue)' }}>Link</a> : '-'}
+                                        <td style={{ padding: '1rem' }}>
+                                            <span style={{
+                                                fontSize: '0.75rem', padding: '2px 8px', borderRadius: '4px',
+                                                background: a.type === 'official' ? 'rgba(255, 215, 0, 0.1)' : 'rgba(0, 210, 255, 0.1)',
+                                                color: a.type === 'official' ? '#ffd700' : '#00d2ff'
+                                            }}>
+                                                {a.type === 'official' ? 'Oficial' : a.type === 'strategic' ? 'Estratégica' : a.type === 'university' ? 'Universitaria' : a.type === 'conecta' ? 'Conecta' : a.type}
+                                            </span>
+                                        </td>
+                                        <td style={{ padding: '1rem' }}>
+                                            <span style={{
+                                                fontSize: '0.75rem', padding: '2px 8px', borderRadius: '4px',
+                                                background: a.is_filled ? '#003314' : '#330000',
+                                                color: a.is_filled ? '#00ff66' : '#ff4444'
+                                            }}>
+                                                {a.is_filled ? 'Activo' : 'Disponible'}
+                                            </span>
                                         </td>
                                         <td style={{ padding: '1rem', textAlign: 'right' }}>
                                             <button onClick={() => openModal('alliance', a)} className="btn-icon" style={{ marginRight: '8px' }}>Editar</button>
@@ -232,7 +257,7 @@ export default function ContentCMS() {
                     zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center',
                     padding: '1rem'
                 }}>
-                    <div className="glass-card" style={{ width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto', padding: '1.5rem' }}>
+                    <div className="glass-card" style={{ width: '100%', maxWidth: '560px', maxHeight: '90vh', overflowY: 'auto', padding: '1.5rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                             <h3 style={{ fontSize: '1.5rem', margin: 0 }}>
                                 {editingItem ? 'Editar' : 'Agregar'} {modalType === 'speaker' ? 'Ponente' : 'Aliado'}
@@ -259,15 +284,29 @@ export default function ContentCMS() {
                                             <span style={{ fontSize: '0.8rem', color: '#888' }}>No foto</span>
                                         )}
                                     </div>
-                                    <div>
+                                    <div style={{ flex: 1 }}>
                                         <input
                                             type="file"
                                             accept="image/*"
                                             onChange={handleUploadImage}
                                             disabled={uploading}
-                                            style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}
+                                            style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', maxWidth: '100%' }}
                                         />
                                         {uploading && <div style={{ fontSize: '0.8rem', color: 'var(--neon-blue)', marginTop: '4px' }}>Subiendo...</div>}
+                                        <div style={{ marginTop: '6px' }}>
+                                            <label className="form-label" style={{ marginBottom: '2px' }}>O pegar URL de imagen:</label>
+                                            <input
+                                                type="url"
+                                                className="filter-input"
+                                                style={{ width: '100%', fontSize: '0.85rem' }}
+                                                placeholder="https://..."
+                                                value={formData.image_url || ''}
+                                                onChange={e => {
+                                                    setFormData({ ...formData, image_url: e.target.value });
+                                                    setImagePreview(e.target.value);
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -304,6 +343,28 @@ export default function ContentCMS() {
                                         <input type="text" className="filter-input" style={{ width: '100%' }}
                                             value={formData.topic || ''} onChange={e => setFormData({ ...formData, topic: e.target.value })} />
                                     </div>
+                                    <div>
+                                        <label className="form-label">Descripción del Ponente</label>
+                                        <textarea
+                                            className="filter-input"
+                                            style={{ width: '100%', minHeight: '100px', resize: 'vertical', fontFamily: 'inherit' }}
+                                            placeholder="Breve biografía o descripción profesional..."
+                                            value={formData.description || ''}
+                                            onChange={e => setFormData({ ...formData, description: e.target.value })}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="form-label">Color de Acento (opcional, ej: #00d2ff)</label>
+                                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                            <input type="text" className="filter-input" style={{ flex: 1 }}
+                                                placeholder="#00d2ff"
+                                                value={formData.accent_color || ''} onChange={e => setFormData({ ...formData, accent_color: e.target.value })} />
+                                            <input type="color"
+                                                style={{ width: '40px', height: '36px', border: 'none', cursor: 'pointer', borderRadius: '4px', background: 'transparent' }}
+                                                value={formData.accent_color || '#00d2ff'}
+                                                onChange={e => setFormData({ ...formData, accent_color: e.target.value })} />
+                                        </div>
+                                    </div>
                                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
                                         <input type="checkbox"
                                             checked={formData.is_regional || false}
@@ -320,18 +381,25 @@ export default function ContentCMS() {
                                     <div>
                                         <label className="form-label">Tipo de Aliado</label>
                                         <select className="filter-input" style={{ width: '100%' }}
-                                            value={formData.type || 'Sponsor'} onChange={e => setFormData({ ...formData, type: e.target.value })}>
-                                            <option value="Sponsor">Patrocinador General</option>
-                                            <option value="Institucional">Socio Institucional</option>
-                                            <option value="Media Partner">Media Partner</option>
-                                            <option value="Colaborador">Colaborador</option>
+                                            value={formData.type || 'official'} onChange={e => setFormData({ ...formData, type: e.target.value })}>
+                                            <option value="official">Patrocinador Oficial</option>
+                                            <option value="strategic">Alianza Estratégica</option>
+                                            <option value="university">Alianza Universitaria</option>
+                                            <option value="conecta">Alianza Conecta</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label className="form-label">Enlace / Sitio Web</label>
-                                        <input type="url" className="filter-input" style={{ width: '100%' }} placeholder="https://"
+                                        <input type="url" className="filter-input" style={{ width: '100%' }} placeholder="https://..."
                                             value={formData.website_url || ''} onChange={e => setFormData({ ...formData, website_url: e.target.value })} />
                                     </div>
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                        <input type="checkbox"
+                                            checked={formData.is_filled !== false}
+                                            onChange={e => setFormData({ ...formData, is_filled: e.target.checked })}
+                                        />
+                                        Espacio Ocupado (desmarcar para mostrar como &quot;Espacio Disponible&quot;)
+                                    </label>
                                 </>
                             )}
 
@@ -339,12 +407,14 @@ export default function ContentCMS() {
                             <div>
                                 <label className="form-label">Orden de Visualización</label>
                                 <input type="number" className="filter-input" style={{ width: '100px' }}
-                                    value={formData.display_order || 0} onChange={e => setFormData({ ...formData, display_order: parseInt(e.target.value) })} />
+                                    value={formData.display_order || 0} onChange={e => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })} />
                             </div>
 
                             <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
                                 <button type="button" onClick={closeModal} className="btn btn-outline" style={{ flex: 1 }}>Cancelar</button>
-                                <button type="submit" className="btn btn-primary" style={{ flex: 1 }} disabled={uploading}>Guardar</button>
+                                <button type="submit" className="btn btn-primary" style={{ flex: 1 }} disabled={uploading}>
+                                    {uploading ? 'Subiendo...' : 'Guardar'}
+                                </button>
                             </div>
                         </form>
                     </div>

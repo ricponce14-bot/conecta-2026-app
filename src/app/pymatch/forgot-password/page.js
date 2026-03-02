@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
 
         try {
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${window.location.origin}/reset-password`,
+                redirectTo: `${window.location.origin}/pymatch/reset-password`,
             });
 
             if (error) throw error;
@@ -69,7 +69,7 @@ export default function ForgotPasswordPage() {
                                 }}>
                                     {message}
                                 </div>
-                                <Link href="/login" className="btn btn-outline" style={{ width: '100%' }}>
+                                <Link href="/pymatch/login" className="btn btn-outline" style={{ width: '100%' }}>
                                     Volver al Inicio de Sesión
                                 </Link>
                             </div>
@@ -118,7 +118,7 @@ export default function ForgotPasswordPage() {
                                 <div style={{ textAlign: 'center', marginTop: 'var(--space-lg)', paddingTop: 'var(--space-md)', borderTop: '1px solid var(--surface-border)' }}>
                                     <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
                                         ¿Recordaste tu contraseña?{' '}
-                                        <Link href="/login" style={{ color: 'var(--accent-light)', fontWeight: '600' }}>
+                                        <Link href="/pymatch/login" style={{ color: 'var(--accent-light)', fontWeight: '600' }}>
                                             Inicia sesión
                                         </Link>
                                     </p>

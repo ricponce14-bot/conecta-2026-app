@@ -17,7 +17,7 @@ export default function AdminLayout({ children }) {
             const { data: { session } } = await supabase.auth.getSession();
             const user = session?.user;
             if (!user) {
-                router.push('/login');
+                router.push('/pymatch/login');
                 return;
             }
 
@@ -112,10 +112,10 @@ export default function AdminLayout({ children }) {
                     </div>
 
                     <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <Link href="/admin" className="nav-link-admin" onClick={() => setSidebarOpen(false)}>Dashboard</Link>
-                        <Link href="/admin/leads" className="nav-link-admin" onClick={() => setSidebarOpen(false)}>Interesados (Leads)</Link>
-                        <Link href="/admin/content" className="nav-link-admin" onClick={() => setSidebarOpen(false)}>Contenido (CMS)</Link>
-                        <Link href="/admin/catalog" className="nav-link-admin" onClick={() => setSidebarOpen(false)}>Catálogo/Precios</Link>
+                        <Link href="/pymatch/admin" className="nav-link-admin" onClick={() => setSidebarOpen(false)}>Dashboard</Link>
+                        <Link href="/pymatch/admin/leads" className="nav-link-admin" onClick={() => setSidebarOpen(false)}>Interesados (Leads)</Link>
+                        <Link href="/pymatch/admin/content" className="nav-link-admin" onClick={() => setSidebarOpen(false)}>Contenido (CMS)</Link>
+                        <Link href="/pymatch/admin/catalog" className="nav-link-admin" onClick={() => setSidebarOpen(false)}>Catálogo/Precios</Link>
                         <hr style={{ border: 'none', borderTop: '1px solid #333', margin: '1rem 0' }} />
                         <Link href="/" style={{ fontSize: '0.9rem', color: '#888' }} onClick={() => setSidebarOpen(false)}>Ir al sitio público</Link>
                         <button

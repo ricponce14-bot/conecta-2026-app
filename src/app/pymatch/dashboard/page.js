@@ -230,7 +230,7 @@ export default function DashboardPage() {
                     </div>
                 )}
                 <button onClick={() => window.location.reload()} className="btn btn-outline" style={{ marginRight: '1rem' }}>Reintentar</button>
-                <Link href="/login" className="btn btn-primary" onClick={async () => await supabase.auth.signOut()}>Reautenticar</Link>
+                <Link href="/pymatch/login" className="btn btn-primary" onClick={async () => await supabase.auth.signOut()}>Reautenticar</Link>
             </div>
         );
     }

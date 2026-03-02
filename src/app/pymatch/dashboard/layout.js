@@ -29,12 +29,12 @@ export default function DashboardLayout({ children }) {
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
-        window.location.href = '/login';
+        window.location.href = '/pymatch/login';
     };
 
     const navItems = [
         {
-            href: '/dashboard',
+            href: '/pymatch/dashboard',
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -44,7 +44,7 @@ export default function DashboardLayout({ children }) {
             label: 'Gafete'
         },
         {
-            href: '/dashboard/escaner',
+            href: '/pymatch/dashboard/escaner',
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
@@ -54,7 +54,7 @@ export default function DashboardLayout({ children }) {
             label: 'Escáner'
         },
         {
-            href: '/dashboard/contactos',
+            href: '/pymatch/dashboard/contactos',
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -66,7 +66,7 @@ export default function DashboardLayout({ children }) {
             label: userRole === 'attendee' ? 'Intereses' : 'Leads'
         },
         {
-            href: '/dashboard/matchmaking',
+            href: '/pymatch/dashboard/matchmaking',
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -75,7 +75,7 @@ export default function DashboardLayout({ children }) {
             label: 'Matches'
         },
         {
-            href: '/directorio',
+            href: '/pymatch/directorio',
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="7" height="7"></rect>

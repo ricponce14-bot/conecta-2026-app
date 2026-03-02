@@ -92,7 +92,7 @@ export default function RegisterPage() {
                             Por favor, revisa tu bandeja de entrada (y tu carpeta de spam) para activar tu cuenta.
                         </p>
                         <div style={{ marginTop: '2rem' }}>
-                            <Link href="/login" className="btn btn-primary btn-lg">
+                            <Link href="/pymatch/login" className="btn btn-primary btn-lg">
                                 Ir al Inicio de Sesión
                             </Link>
                         </div>
@@ -250,7 +250,7 @@ export default function RegisterPage() {
                         <div style={{ textAlign: 'center', marginTop: 'var(--space-lg)', paddingTop: 'var(--space-md)', borderTop: '1px solid var(--surface-border)' }}>
                             <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
                                 ¿Ya tienes cuenta?{' '}
-                                <Link href="/login" style={{ color: 'var(--accent-light)', fontWeight: '600' }}>
+                                <Link href="/pymatch/login" style={{ color: 'var(--accent-light)', fontWeight: '600' }}>
                                     Inicia sesión
                                 </Link>
                             </p>

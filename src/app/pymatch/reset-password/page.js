@@ -50,7 +50,7 @@ export default function ResetPasswordPage() {
 
             setSuccess(true);
             setTimeout(() => {
-                router.push('/login');
+                router.push('/pymatch/login');
             }, 3000);
 
         } catch (err) {

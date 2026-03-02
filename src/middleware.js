@@ -31,19 +31,19 @@ export async function middleware(request) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    // Proteger las rutas /dashboard y /admin
-    if ((request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/admin')) && !user) {
+    // Proteger las rutas /pymatch/dashboard y /pymatch/admin
+    if ((request.nextUrl.pathname.startsWith('/pymatch/dashboard') || request.nextUrl.pathname.startsWith('/pymatch/admin')) && !user) {
         const url = request.nextUrl.clone()
-        url.pathname = '/login'
+        url.pathname = '/pymatch/login'
         return NextResponse.redirect(url)
     }
 
     // Si ya está logueado y va a login/registro, mándalo al dashboard
     // Pero permite /registro si tiene el parámetro de éxito para mostrar el mensaje de confirmación
     const isSuccess = request.nextUrl.searchParams.get('success') === 'true'
-    if ((request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/registro') && user && !isSuccess) {
+    if ((request.nextUrl.pathname === '/pymatch/login' || request.nextUrl.pathname === '/pymatch/registro') && user && !isSuccess) {
         const url = request.nextUrl.clone()
-        url.pathname = '/dashboard'
+        url.pathname = '/pymatch/dashboard'
         return NextResponse.redirect(url)
     }
 

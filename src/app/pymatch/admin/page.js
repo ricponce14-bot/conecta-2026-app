@@ -34,19 +34,19 @@ export default function AdminDashboard() {
                 <div className="glass-card" style={{ padding: '2rem', border: '1px solid rgba(255,255,255,0.1)' }}>
                     <h3 style={{ fontSize: '0.9rem', color: '#888', textTransform: 'uppercase', tracking: '0.05em' }}>Leads de Venta</h3>
                     <div style={{ fontSize: '3rem', fontWeight: 'bold', margin: '1rem 0' }}>{stats.leads}</div>
-                    <Link href="/admin/leads" style={{ color: '#00d2ff', textDecoration: 'none', fontSize: '0.9rem' }}>Gestionar leads &rarr;</Link>
+                    <Link href="/pymatch/admin/leads" style={{ color: '#00d2ff', textDecoration: 'none', fontSize: '0.9rem' }}>Gestionar leads &rarr;</Link>
                 </div>
 
                 <div className="glass-card" style={{ padding: '2rem', border: '1px solid rgba(255,255,255,0.1)' }}>
                     <h3 style={{ fontSize: '0.9rem', color: '#888', textTransform: 'uppercase' }}>Conferencistas</h3>
                     <div style={{ fontSize: '3rem', fontWeight: 'bold', margin: '1rem 0' }}>{stats.speakers}</div>
-                    <Link href="/admin/content" style={{ color: '#00d2ff', textDecoration: 'none', fontSize: '0.9rem' }}>Editar ponentes &rarr;</Link>
+                    <Link href="/pymatch/admin/content" style={{ color: '#00d2ff', textDecoration: 'none', fontSize: '0.9rem' }}>Editar ponentes &rarr;</Link>
                 </div>
 
                 <div className="glass-card" style={{ padding: '2rem', border: '1px solid rgba(255,255,255,0.1)' }}>
                     <h3 style={{ fontSize: '0.9rem', color: '#888', textTransform: 'uppercase' }}>Alianzas y Sponsors</h3>
                     <div style={{ fontSize: '3rem', fontWeight: 'bold', margin: '1rem 0' }}>{stats.content}</div>
-                    <Link href="/admin/content" style={{ color: '#00d2ff', textDecoration: 'none', fontSize: '0.9rem' }}>Gestionar socios &rarr;</Link>
+                    <Link href="/pymatch/admin/content" style={{ color: '#00d2ff', textDecoration: 'none', fontSize: '0.9rem' }}>Gestionar socios &rarr;</Link>
                 </div>
             </div>
 

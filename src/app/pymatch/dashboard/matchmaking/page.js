@@ -65,7 +65,7 @@ export default function MatchmakingPage() {
                 <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-2xl)', lineHeight: 1.6 }}>
                     Para activar el Matchmaking Inteligente, necesitamos saber qué ofreces y qué buscas en el evento.
                 </p>
-                <Link href="/dashboard" className="btn btn-primary">Completar mi Perfil</Link>
+                <Link href="/pymatch/dashboard" className="btn btn-primary">Completar mi Perfil</Link>
             </div>
         );
     }

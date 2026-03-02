@@ -15,7 +15,7 @@ export default function LoginPage() {
     const [error, setError] = useState('');
     const [justLoggedIn, setJustLoggedIn] = useState(false);
 
-    // We rely on Middleware for automatic redirects to /dashboard
+    // We rely on Middleware for automatic redirects to /pymatch/dashboard
     // to avoid conflicts with safe session propagation.
     // The previous useEffect was empty and is now removed as per instructions.
 
@@ -35,7 +35,7 @@ export default function LoginPage() {
             // Show welcome state before redirect
             setJustLoggedIn(true);
             setTimeout(() => {
-                window.location.href = '/dashboard';
+                window.location.href = '/pymatch/dashboard';
             }, 1500);
 
         } catch (err) {
@@ -129,7 +129,7 @@ export default function LoginPage() {
                                     placeholder="••••••••"
                                 />
                                 <div style={{ textAlign: 'right', marginTop: '8px' }}>
-                                    <Link href="/forgot-password" style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', textDecoration: 'none' }}>
+                                    <Link href="/pymatch/forgot-password" style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', textDecoration: 'none' }}>
                                         ¿Olvidaste tu contraseña?
                                     </Link>
                                 </div>
@@ -148,7 +148,7 @@ export default function LoginPage() {
                         <div style={{ textAlign: 'center', marginTop: 'var(--space-lg)', paddingTop: 'var(--space-md)', borderTop: '1px solid var(--surface-border)' }}>
                             <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
                                 ¿No tienes cuenta?{' '}
-                                <Link href="/registro" style={{ color: 'var(--accent-light)', fontWeight: '600' }}>
+                                <Link href="/pymatch/registro" style={{ color: 'var(--accent-light)', fontWeight: '600' }}>
                                     Regístrate aquí
                                 </Link>
                             </p>
