@@ -93,6 +93,19 @@ export default function HomePage() {
   const [leadInfo, setLeadInfo] = useState({ name: '', company: '', phone: '', interest: 'Stand Básico' });
 
   // Dynamic Data States
+  // LuisMi Negocios fallback — always show even if not yet in Supabase
+  const LUISMI_FALLBACK = {
+    name: 'Luis Miguel Altamirano',
+    role: 'Conferencista Estelar',
+    company: 'LuisMi Negocios',
+    topic: 'Enfoque: Finanzas para negocios y emprendimientos.',
+    description: 'Luis Miguel Altamirano es un especialista en finanzas personales y negocios, conocido como LuisMi Negocios en redes sociales, donde educa a millones de personas sobre cómo manejar dinero, ahorrar e invertir. Comparte estrategias accesibles para emprendedores y dueños de negocio. Autor del libro "Rico el que lo lea", una guía práctica de educación financiera.',
+    image_url: '/luismi.jpg',
+    accent_color: '#ffd700',
+    is_regional: false,
+    display_order: 0,
+  };
+
   const [headliners, setHeadliners] = useState([]);
   const [regionalSpeakers, setRegionalSpeakers] = useState([]);
   const [officialSponsors, setOfficialSponsors] = useState([]);
@@ -106,8 +119,15 @@ export default function HomePage() {
       // Fetch Speakers
       const { data: speakersData } = await supabase.from('speakers').select('*').order('display_order');
       if (speakersData) {
-        setHeadliners(speakersData.filter(s => !s.is_regional));
+        let stars = speakersData.filter(s => !s.is_regional);
+        // Ensure LuisMi is always shown
+        const hasLuisMi = stars.some(s => s.name && s.name.toLowerCase().includes('altamirano'));
+        if (!hasLuisMi) stars = [LUISMI_FALLBACK, ...stars];
+        setHeadliners(stars);
         setRegionalSpeakers(speakersData.filter(s => s.is_regional));
+      } else {
+        // If fetch fails, still show LuisMi
+        setHeadliners([LUISMI_FALLBACK]);
       }
 
       // Fetch Alliances & Sponsors
@@ -448,7 +468,7 @@ export default function HomePage() {
       <section className="section" id="speakers" style={{ background: 'var(--bg-secondary)' }}>
         <div className="container">
           <div style={{ textAlign: 'center' }}>
-            <div className="section-label" style={{ justifyContent: 'center' }}>19 de Abril</div>
+            <div className="section-label" style={{ justifyContent: 'center' }}>18 y 19 de Abril</div>
             <h2 className="section-title center">
               Conferencistas <span className="highlight">Estelares</span>
             </h2>
