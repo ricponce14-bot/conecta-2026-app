@@ -250,9 +250,9 @@ export default function PyMatchPage() {
                     .pymatch-hero-grid {
                         grid-template-columns: 1fr !important;
                         text-align: center;
-                        padding-top: var(--space-xl) !important;
+                        padding-top: 100px !important;
                         min-height: auto !important;
-                        gap: var(--space-xl) !important;
+                        gap: var(--space-lg) !important;
                     }
                     .pymatch-hero-content {
                         max-width: 100% !important;
