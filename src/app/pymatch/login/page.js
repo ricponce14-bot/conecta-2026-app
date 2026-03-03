@@ -32,11 +32,14 @@ export default function LoginPage() {
 
             if (error) throw error;
 
+            // Get current user session
+            const { data: { session } } = await supabase.auth.getSession();
+
             // Check if profile is completed
             const { data: profile } = await supabase
                 .from('profiles')
                 .select('profile_completed')
-                .eq('id', data.user.id)
+                .eq('id', session.user.id)
                 .single();
 
             // Show welcome state before redirect
