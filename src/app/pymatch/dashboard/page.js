@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { QRCodeSVG } from 'qrcode.react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 
 export default function DashboardPage() {
+    const router = useRouter();
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [fetchError, setFetchError] = useState(null);
@@ -62,6 +64,12 @@ export default function DashboardPage() {
 
                 setProfile(data);
                 setEditData(data);
+
+                // Redirect to onboarding if profile is not completed
+                if (!data.profile_completed) {
+                    router.push('/pymatch/onboarding');
+                    return;
+                }
             } catch (err) {
                 console.error("Error fetching/syncing profile:", err);
                 setFetchError(err.message || "Error desconocido al sincronizar.");
