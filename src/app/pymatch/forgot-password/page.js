@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
 
         try {
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${window.location.origin}/pymatch/reset-password`,
+                redirectTo: `${window.location.origin}/pymatch/auth/callback?next=/pymatch/reset-password`,
             });
 
             if (error) throw error;
