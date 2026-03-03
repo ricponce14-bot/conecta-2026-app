@@ -13,16 +13,42 @@ export default function ResetPasswordPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
+    const [sessionReady, setSessionReady] = useState(false);
+    const [checking, setChecking] = useState(true);
 
-    // Ensure we have a session (Supabase handles this via the recovery link)
+    // Listen for PASSWORD_RECOVERY event from Supabase
+    // This handles the token exchange from the email recovery link
     useEffect(() => {
-        const checkSession = async () => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+            async (event, session) => {
+                if (event === 'PASSWORD_RECOVERY') {
+                    setSessionReady(true);
+                    setChecking(false);
+                } else if (event === 'SIGNED_IN' && session) {
+                    // Sometimes recovery comes as SIGNED_IN
+                    setSessionReady(true);
+                    setChecking(false);
+                }
+            }
+        );
+
+        // Also check if there's already a session (user may have clicked link and page loaded)
+        const checkExistingSession = async () => {
+            // Give Supabase a moment to process the hash fragment
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
             const { data: { session } } = await supabase.auth.getSession();
-            if (!session) {
+            if (session) {
+                setSessionReady(true);
+            } else {
                 setError('El enlace de recuperación ha expirado o no es válido. Por favor, solicita uno nuevo.');
             }
+            setChecking(false);
         };
-        checkSession();
+
+        checkExistingSession();
+
+        return () => subscription.unsubscribe();
     }, []);
 
     const handlePasswordUpdate = async (e) => {
@@ -80,7 +106,13 @@ export default function ResetPasswordPage() {
                 <div className="container" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="glass-card" style={{ width: '100%', maxWidth: '440px', padding: 'var(--space-2xl)' }}>
 
-                        {success ? (
+                        {checking ? (
+                            <div style={{ textAlign: 'center', padding: 'var(--space-xl)' }}>
+                                <div style={{ width: '40px', height: '40px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--neon-blue)', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' }}></div>
+                                <p style={{ color: 'var(--text-secondary)' }}>Verificando enlace de recuperación...</p>
+                                <style jsx>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+                            </div>
+                        ) : success ? (
                             <div style={{ textAlign: 'center' }}>
                                 <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>✅</div>
                                 <h3 style={{ color: 'white', marginBottom: 'var(--space-md)' }}>¡Contraseña Actualizada!</h3>
@@ -104,48 +136,59 @@ export default function ResetPasswordPage() {
                                     </div>
                                 )}
 
-                                <form onSubmit={handlePasswordUpdate} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>
-                                            Nueva Contraseña
-                                        </label>
-                                        <input
-                                            type="password"
-                                            required
-                                            minLength={6}
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            className="filter-input"
-                                            style={{ width: '100%' }}
-                                            placeholder="Mínimo 6 caracteres"
-                                        />
-                                    </div>
+                                {sessionReady ? (
+                                    <form onSubmit={handlePasswordUpdate} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>
+                                                Nueva Contraseña
+                                            </label>
+                                            <input
+                                                type="password"
+                                                required
+                                                minLength={6}
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className="filter-input"
+                                                style={{ width: '100%' }}
+                                                placeholder="Mínimo 6 caracteres"
+                                            />
+                                        </div>
 
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>
-                                            Confirmar Contraseña
-                                        </label>
-                                        <input
-                                            type="password"
-                                            required
-                                            minLength={6}
-                                            value={confirmPassword}
-                                            onChange={(e) => setConfirmPassword(e.target.value)}
-                                            className="filter-input"
-                                            style={{ width: '100%' }}
-                                            placeholder="Repite tu nueva contraseña"
-                                        />
-                                    </div>
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>
+                                                Confirmar Contraseña
+                                            </label>
+                                            <input
+                                                type="password"
+                                                required
+                                                minLength={6}
+                                                value={confirmPassword}
+                                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                                className="filter-input"
+                                                style={{ width: '100%' }}
+                                                placeholder="Repite tu nueva contraseña"
+                                            />
+                                        </div>
 
-                                    <button
-                                        type="submit"
-                                        className="btn btn-primary"
-                                        style={{ width: '100%', marginTop: 'var(--space-sm)' }}
-                                        disabled={loading || error.includes('expirado')}
-                                    >
-                                        {loading ? 'Actualizando...' : 'Actualizar Contraseña'}
-                                    </button>
-                                </form>
+                                        <button
+                                            type="submit"
+                                            className="btn btn-primary"
+                                            style={{ width: '100%', marginTop: 'var(--space-sm)' }}
+                                            disabled={loading}
+                                        >
+                                            {loading ? 'Actualizando...' : 'Actualizar Contraseña'}
+                                        </button>
+                                    </form>
+                                ) : (
+                                    <div style={{ textAlign: 'center' }}>
+                                        <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-lg)' }}>
+                                            Si el enlace no funciona, solicita uno nuevo.
+                                        </p>
+                                        <a href="/pymatch/forgot-password" className="btn btn-outline" style={{ width: '100%' }}>
+                                            Solicitar nuevo enlace
+                                        </a>
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>
