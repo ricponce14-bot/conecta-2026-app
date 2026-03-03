@@ -120,8 +120,22 @@ export default function DashboardPage() {
                 .eq('id', profile.id);
 
             if (error) throw error;
-            setProfile({ ...profile, ...editData });
+            const updatedProfile = { ...profile, ...editData };
+            setProfile(updatedProfile);
             setEditing(false);
+
+            // Regenerate AI embedding with updated data
+            fetch('/api/embeddings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: profile.id }),
+            }).then(async (res) => {
+                if (res.ok) {
+                    // Refresh profile to get new embedding
+                    const { data } = await supabase.from('profiles').select('embedding').eq('id', profile.id).single();
+                    if (data?.embedding) setProfile(prev => ({ ...prev, embedding: data.embedding }));
+                }
+            }).catch(err => console.error('Embedding update error:', err));
         } catch (err) {
             alert("Error al actualizar: " + err.message);
         } finally {
@@ -530,8 +544,35 @@ export default function DashboardPage() {
                     {!profile?.embedding ? (
                         <div style={{ textAlign: 'center', padding: 'var(--space-xl)', color: 'var(--text-secondary)' }}>
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1.5" style={{ marginBottom: '1rem' }}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
-                            <p style={{ marginBottom: '0.5rem' }}>Completa tu perfil para activar el matchmaking inteligente</p>
-                            <p style={{ fontSize: '0.82rem', color: 'var(--text-tertiary)' }}>Llena los campos "Lo que ofrezco" y "Lo que busco" para que nuestra IA encuentre tus mejores contactos.</p>
+                            <p style={{ marginBottom: '0.5rem' }}>Activa el matchmaking inteligente</p>
+                            <p style={{ fontSize: '0.82rem', color: 'var(--text-tertiary)', marginBottom: '1rem' }}>Nuestra IA analizará tu perfil para encontrar los contactos más relevantes para ti.</p>
+                            <button
+                                className="btn btn-primary"
+                                disabled={matchesLoading}
+                                onClick={async () => {
+                                    setMatchesLoading(true);
+                                    try {
+                                        const res = await fetch('/api/embeddings', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ userId: profile.id }),
+                                        });
+                                        if (res.ok) {
+                                            const { data } = await supabase.from('profiles').select('embedding').eq('id', profile.id).single();
+                                            if (data?.embedding) setProfile(prev => ({ ...prev, embedding: data.embedding }));
+                                        } else {
+                                            const err = await res.json();
+                                            alert(err.error || 'Error al generar embedding');
+                                        }
+                                    } catch (e) {
+                                        alert('Error de conexión');
+                                    } finally {
+                                        setMatchesLoading(false);
+                                    }
+                                }}
+                            >
+                                {matchesLoading ? 'Analizando perfil...' : 'Activar Matchmaking IA'}
+                            </button>
                         </div>
                     ) : matchesLoading ? (
                         <div style={{ textAlign: 'center', padding: 'var(--space-lg)' }}>
