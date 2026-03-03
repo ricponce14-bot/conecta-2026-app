@@ -18,6 +18,10 @@ export default function DashboardPage() {
 
     // Upload States
     const [uploadingPhoto, setUploadingPhoto] = useState(false);
+
+    // AI Matches
+    const [matches, setMatches] = useState([]);
+    const [matchesLoading, setMatchesLoading] = useState(false);
     const [uploadingGallery, setUploadingGallery] = useState(false);
 
     useEffect(() => {
@@ -80,6 +84,24 @@ export default function DashboardPage() {
 
         fetchProfile();
     }, []);
+
+    // Fetch AI matches when profile is loaded
+    useEffect(() => {
+        if (!profile?.id || !profile?.embedding) return;
+        const fetchMatches = async () => {
+            setMatchesLoading(true);
+            try {
+                const res = await fetch(`/api/matches?userId=${profile.id}&limit=8`);
+                const data = await res.json();
+                if (data.matches) setMatches(data.matches);
+            } catch (err) {
+                console.error('Error fetching matches:', err);
+            } finally {
+                setMatchesLoading(false);
+            }
+        };
+        fetchMatches();
+    }, [profile?.id, profile?.embedding]);
 
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
@@ -492,6 +514,85 @@ export default function DashboardPage() {
                         </div>
                     )}
                 </div>
+
+                {/* ══════════ AI MATCHES ══════════ */}
+                <div className="glass-card" style={{ padding: 'var(--space-xl)', marginTop: 'var(--space-xl)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
+                        <h2 style={{ fontSize: '1.3rem', margin: 0 }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" strokeWidth="2" style={{ marginRight: '8px', verticalAlign: 'middle' }}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
+                            Tus Matches de Negocio
+                        </h2>
+                        {profile?.embedding && (
+                            <span style={{ fontSize: '0.75rem', color: 'var(--neon-green)', background: 'rgba(0,255,136,0.08)', padding: '4px 10px', borderRadius: 'var(--radius-pill)', border: '1px solid rgba(0,255,136,0.2)' }}>IA Activa</span>
+                        )}
+                    </div>
+
+                    {!profile?.embedding ? (
+                        <div style={{ textAlign: 'center', padding: 'var(--space-xl)', color: 'var(--text-secondary)' }}>
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1.5" style={{ marginBottom: '1rem' }}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
+                            <p style={{ marginBottom: '0.5rem' }}>Completa tu perfil para activar el matchmaking inteligente</p>
+                            <p style={{ fontSize: '0.82rem', color: 'var(--text-tertiary)' }}>Llena los campos "Lo que ofrezco" y "Lo que busco" para que nuestra IA encuentre tus mejores contactos.</p>
+                        </div>
+                    ) : matchesLoading ? (
+                        <div style={{ textAlign: 'center', padding: 'var(--space-lg)' }}>
+                            <div style={{ width: '32px', height: '32px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--neon-green)', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' }}></div>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }}>Buscando matches con IA...</p>
+                            <style jsx>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+                        </div>
+                    ) : matches.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: 'var(--space-lg)', color: 'var(--text-secondary)' }}>
+                            <p>Aún no hay suficientes perfiles para hacer matches. Invita a más personas al evento.</p>
+                        </div>
+                    ) : (
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 'var(--space-md)' }}>
+                            {matches.map((match) => (
+                                <div key={match.id} style={{
+                                    background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)',
+                                    borderRadius: 'var(--radius-md)', padding: 'var(--space-md)',
+                                    transition: 'border-color 0.3s',
+                                }} onMouseOver={e => e.currentTarget.style.borderColor = 'var(--neon-green)'} onMouseOut={e => e.currentTarget.style.borderColor = 'var(--border-color)'}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            {match.photo_url ? (
+                                                <img src={match.photo_url} alt={match.full_name} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                                            ) : (
+                                                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--bg-glass)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 700, color: 'var(--neon-blue)' }}>
+                                                    {match.full_name?.charAt(0)?.toUpperCase()}
+                                                </div>
+                                            )}
+                                            <div>
+                                                <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{match.full_name}</div>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{match.title}{match.company_name ? ` · ${match.company_name}` : ''}</div>
+                                            </div>
+                                        </div>
+                                        <div style={{
+                                            background: match.match_score >= 70 ? 'rgba(0,255,136,0.15)' : match.match_score >= 50 ? 'rgba(0,210,255,0.15)' : 'rgba(255,255,255,0.05)',
+                                            color: match.match_score >= 70 ? 'var(--neon-green)' : match.match_score >= 50 ? 'var(--neon-blue)' : 'var(--text-secondary)',
+                                            padding: '2px 8px', borderRadius: 'var(--radius-pill)',
+                                            fontSize: '0.8rem', fontWeight: 700,
+                                            border: `1px solid ${match.match_score >= 70 ? 'rgba(0,255,136,0.3)' : match.match_score >= 50 ? 'rgba(0,210,255,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                                        }}>
+                                            {match.match_score}%
+                                        </div>
+                                    </div>
+                                    {match.offer_description && (
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', lineHeight: 1.5 }}>
+                                            <span style={{ color: 'var(--neon-green)', fontWeight: 600, fontSize: '0.7rem', textTransform: 'uppercase' }}>Ofrece: </span>
+                                            {match.offer_description.length > 100 ? match.offer_description.substring(0, 100) + '...' : match.offer_description}
+                                        </div>
+                                    )}
+                                    {match.search_description && (
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                                            <span style={{ color: '#ffd700', fontWeight: 600, fontSize: '0.7rem', textTransform: 'uppercase' }}>Busca: </span>
+                                            {match.search_description.length > 100 ? match.search_description.substring(0, 100) + '...' : match.search_description}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
             </div>
         </div>
     );

@@ -120,6 +120,14 @@ export default function OnboardingPage() {
                 .eq('id', userId);
 
             if (error) throw error;
+
+            // Generate AI embedding in background (non-blocking)
+            fetch('/api/embeddings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId }),
+            }).catch(err => console.error('Embedding generation error:', err));
+
             router.push('/pymatch/dashboard');
         } catch (err) {
             alert('Error al guardar: ' + err.message);
