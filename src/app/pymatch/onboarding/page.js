@@ -155,7 +155,7 @@ export default function OnboardingPage() {
         <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', display: 'flex', flexDirection: 'column' }}>
 
             {/* Top Bar */}
-            <div style={{
+            <div className="ob-topbar" style={{
                 padding: '1rem 1.5rem',
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 borderBottom: '1px solid var(--border-color)',
@@ -173,7 +173,7 @@ export default function OnboardingPage() {
             </div>
 
             {/* Progress Bar */}
-            <div style={{ padding: '0 1.5rem' }}>
+            <div className="ob-progress" style={{ padding: '0 1.5rem' }}>
                 <div style={{
                     height: '4px', background: 'var(--bg-glass)', borderRadius: '4px',
                     overflow: 'hidden', margin: '1rem 0',
@@ -202,7 +202,7 @@ export default function OnboardingPage() {
             </div>
 
             {/* Step Indicators */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', padding: '0.5rem 1.5rem 1rem', flexWrap: 'wrap' }}>
+            <div className="ob-steps" style={{ display: 'flex', justifyContent: 'center', gap: '2rem', padding: '0.5rem 1.5rem 1rem', flexWrap: 'wrap' }}>
                 {STEPS.map((step, i) => (
                     <div key={step.id} style={{
                         display: 'flex', alignItems: 'center', gap: '8px', opacity: i === currentStep ? 1 : 0.4,
@@ -218,13 +218,12 @@ export default function OnboardingPage() {
                         }}>
                             {i < currentStep ? '✓' : i + 1}
                         </div>
-                        <span style={{ fontSize: '0.85rem', fontWeight: i === currentStep ? 600 : 400 }}>{step.title}</span>
+                        <span className="ob-step-label" style={{ fontSize: '0.85rem', fontWeight: i === currentStep ? 600 : 400 }}>{step.title}</span>
                     </div>
-                ))}
-            </div>
+                ))}            </div>
 
             {/* Main Content */}
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'center', padding: '1rem 1.5rem 2rem' }}>
+            <div className="ob-main" style={{ flex: 1, display: 'flex', justifyContent: 'center', padding: '1rem 1.5rem 2rem' }}>
                 <div style={{ width: '100%', maxWidth: '580px' }}>
 
                     <div style={{ marginBottom: 'var(--space-xl)', textAlign: 'center' }}>
@@ -236,7 +235,7 @@ export default function OnboardingPage() {
                         </p>
                     </div>
 
-                    <div className="glass-card" style={{ padding: 'var(--space-xl)' }}>
+                    <div className="ob-card glass-card" style={{ padding: 'var(--space-xl)' }}>
 
                         {/* STEP 1: Basic Info */}
                         {currentStep === 0 && (
@@ -344,7 +343,7 @@ export default function OnboardingPage() {
                     </div>
 
                     {/* Navigation Buttons */}
-                    <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-xl)', justifyContent: 'space-between' }}>
+                    <div className="ob-nav" style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-xl)', justifyContent: 'space-between' }}>
                         {currentStep > 0 ? (
                             <button onClick={handlePrev} className="btn btn-outline" style={{ flex: 1 }}>
                                 Anterior
@@ -373,7 +372,7 @@ export default function OnboardingPage() {
                     backdropFilter: 'blur(5px)', zIndex: 100,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
                 }}>
-                    <div className="glass-card" style={{ maxWidth: '420px', padding: 'var(--space-xl)', textAlign: 'center' }}>
+                    <div className="ob-exit-modal glass-card" style={{ maxWidth: '420px', padding: 'var(--space-xl)', textAlign: 'center' }}>
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ffd700" strokeWidth="1.5" style={{ marginBottom: '1rem' }}><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
                         <h3 style={{ marginBottom: '0.75rem', fontSize: '1.2rem' }}>Tu perfil está al {pct}%</h3>
                         <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
@@ -413,6 +412,49 @@ export default function OnboardingPage() {
                 @keyframes tipFadeIn {
                     from { opacity: 0; transform: translateY(-4px); }
                     to { opacity: 1; transform: translateY(0); }
+                }
+
+                /* ── Mobile Optimizations ── */
+                @media (max-width: 600px) {
+                    .ob-topbar {
+                        padding: 0.75rem 1rem !important;
+                    }
+                    .ob-progress {
+                        padding: 0 1rem !important;
+                    }
+                    .ob-steps {
+                        gap: 1rem !important;
+                        padding: 0.25rem 1rem 0.75rem !important;
+                    }
+                    .ob-step-label {
+                        display: none;
+                    }
+                    .ob-main {
+                        padding: 0.75rem 1rem 1.5rem !important;
+                    }
+                    .ob-card {
+                        padding: var(--space-md) !important;
+                    }
+                    .ob-nav {
+                        margin-top: var(--space-md) !important;
+                    }
+                    .ob-exit-modal {
+                        padding: var(--space-lg) !important;
+                        margin: 0 0.5rem;
+                    }
+                    .ob-label {
+                        font-size: 0.82rem;
+                    }
+                    .ob-tip {
+                        font-size: 0.75rem;
+                        padding: 6px 10px;
+                    }
+                    .ob-motivation {
+                        padding: var(--space-md) !important;
+                    }
+                    .ob-motivation p {
+                        font-size: 0.82rem !important;
+                    }
                 }
             `}</style>
         </div>
