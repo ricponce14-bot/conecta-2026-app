@@ -286,12 +286,12 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div className="sponsors-row" style={{ marginBottom: 'var(--space-3xl)' }}>
+          <div className="sponsors-row" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'var(--space-lg)', marginBottom: 'var(--space-3xl)' }}>
             {officialSponsors.length > 0 ? officialSponsors.map((s, i) => (
               <div key={i} className={`sponsor-slot ${!s.is_filled ? 'sponsor-slot-available' : ''}`} style={{
                 flex: '1 1 200px',
                 maxWidth: '240px',
-                minHeight: '110px',
+                minHeight: '140px',
                 background: s.is_filled ? 'var(--bg-glass)' : 'rgba(255,255,255,0.02)',
                 border: s.is_filled ? '1px solid var(--border-color)' : '1px dashed var(--border-color)',
                 display: 'flex',
@@ -304,13 +304,20 @@ export default function HomePage() {
                 {s.image_url && s.is_filled ? (
                   <Image src={s.image_url} alt={s.name} width={180} height={70} style={{ objectFit: 'contain' }} />
                 ) : (
-                  <div style={{ textAlign: 'center', color: s.is_filled ? 'white' : 'var(--text-tertiary)', fontSize: '0.9rem' }}>
-                    {s.is_filled ? s.name : "Espacio Disponible"}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%' }}>
+                    <div style={{ textAlign: 'center', color: s.is_filled ? 'white' : 'var(--text-tertiary)', fontSize: '0.85rem' }}>
+                      {s.is_filled ? s.name : "Espacio Disponible"}
+                    </div>
+                    {!s.is_filled && (
+                      <a href="https://wa.me/523781002683?text=Hola,%20me%20interesa%20ser%20patrocinador%20Oficial%20de%20CONECTA%202026" target="_blank" rel="noopener noreferrer" className="btn btn-outline" style={{ fontSize: '0.75rem', padding: '6px 12px', width: '100%', whiteSpace: 'normal', textAlign: 'center', lineHeight: '1.2' }}>
+                        Quiero ser Patrocinador
+                      </a>
+                    )}
                   </div>
                 )}
               </div>
             )) : Array(4).fill(0).map((_, i) => (
-              <div key={i} className="sponsor-slot" style={{ flex: '1 1 200px', maxWidth: '240px', minHeight: '110px', background: 'rgba(255,255,255,0.02)', border: '1px dashed var(--border-color)', borderRadius: 'var(--radius-lg)' }}></div>
+              <div key={i} className="sponsor-slot" style={{ flex: '1 1 200px', maxWidth: '240px', minHeight: '140px', background: 'rgba(255,255,255,0.02)', border: '1px dashed var(--border-color)', borderRadius: 'var(--radius-lg)' }}></div>
             ))}
           </div>
 
