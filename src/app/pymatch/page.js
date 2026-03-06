@@ -116,7 +116,7 @@ export default function PyMatchPage() {
                                 zIndex: 0,
                             }} />
                             <Image
-                                src="/cel.png"
+                                src="/cel.jpg"
                                 alt="CONECTA 2026 App - PyMatch"
                                 width={420}
                                 height={550}

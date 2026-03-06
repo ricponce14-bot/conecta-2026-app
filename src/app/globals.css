@@ -853,8 +853,8 @@ button {
   }
 
   .floating-logo {
-    width: clamp(80px, 22vw, 130px) !important;
-    height: clamp(40px, 10vw, 65px) !important;
+    width: 160px !important;
+    height: 80px !important;
   }
 
   .sponsor-slot {

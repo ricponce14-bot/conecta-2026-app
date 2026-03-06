@@ -379,7 +379,7 @@ export default function HomePage() {
 
               <div className="hero-image-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', position: 'relative', zIndex: 1, marginTop: '2rem' }}>
                 <Image
-                  src="/ponentes.png"
+                  src="/ponentes.jpg"
                   alt="Ponentes Estelares: LuisMi, Farid, Jessica Fernández"
                   className="hero-person-img"
                   width={900}
@@ -480,24 +480,24 @@ export default function HomePage() {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            gap: 'clamp(1rem, 3vw, 2.5rem)',
-            padding: '1rem 0'
+            gap: '2.5rem',
+            padding: '1rem'
           }}>
             {[...conectaAlliances, ...specialGuests].map((item, i) => (
               <div key={i} style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: 'clamp(100px, 25vw, 160px)',
-                height: 'clamp(50px, 12vw, 80px)',
+                width: item.image_url === '/3.png' ? '140px' : '200px',
+                height: item.image_url === '/3.png' ? '70px' : '100px',
                 transform: 'translateY(0)',
                 transition: 'all 0.3s ease'
               }} className="floating-logo">
                 <Image
                   src={item.image_url}
                   alt={item.name}
-                  width={120}
-                  height={60}
+                  width={item.image_url === '/3.png' ? 100 : 150}
+                  height={item.image_url === '/3.png' ? 50 : 75}
                   style={{
                     objectFit: 'contain',
                     filter: 'brightness(1.1) contrast(1.1)',
