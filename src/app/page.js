@@ -361,7 +361,7 @@ export default function HomePage() {
             </div>
 
             {/* Right Side Image (Ponentes) */}
-            <div className="hero-images-container" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <div className="hero-images-container" style={{ position: 'relative', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', height: '100%', paddingTop: 'var(--space-4xl)' }}>
               {/* Background Glow - Centered behind image */}
               <div style={{
                 position: 'absolute',
@@ -377,7 +377,7 @@ export default function HomePage() {
                 pointerEvents: 'none'
               }}></div>
 
-              <div className="hero-image-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', position: 'relative', zIndex: 1, marginTop: '-12rem' }}>
+              <div className="hero-image-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', position: 'relative', zIndex: 1, marginTop: '2rem' }}>
                 <Image
                   src="/ponentes.png"
                   alt="Ponentes Estelares: LuisMi, Farid, Jessica Fernández"
