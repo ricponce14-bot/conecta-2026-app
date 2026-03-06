@@ -11,6 +11,14 @@ ADD COLUMN IF NOT EXISTS municipality TEXT,
 ADD COLUMN IF NOT EXISTS owner_id UUID REFERENCES auth.users(id),
 ADD COLUMN IF NOT EXISTS is_published BOOLEAN DEFAULT TRUE;
 
+-- UNIQUE constraint required for upserting by trade_name
+DO $$ 
+BEGIN 
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'companies_trade_name_key') THEN
+        ALTER TABLE companies ADD CONSTRAINT companies_trade_name_key UNIQUE (trade_name);
+    END IF;
+END $$;
+
 -- Ensure owner_id is unique if one user manages exactly one company
 -- ALTER TABLE companies ADD CONSTRAINT unique_owner UNIQUE (owner_id);
 
