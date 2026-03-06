@@ -480,24 +480,24 @@ export default function HomePage() {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            gap: '2.5rem',
-            padding: '1rem'
+            gap: 'clamp(1rem, 3vw, 2.5rem)',
+            padding: '1rem 0'
           }}>
             {[...conectaAlliances, ...specialGuests].map((item, i) => (
               <div key={i} style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '200px',
-                height: '100px',
+                width: 'clamp(100px, 25vw, 160px)',
+                height: 'clamp(50px, 12vw, 80px)',
                 transform: 'translateY(0)',
                 transition: 'all 0.3s ease'
               }} className="floating-logo">
                 <Image
                   src={item.image_url}
                   alt={item.name}
-                  width={150}
-                  height={75}
+                  width={120}
+                  height={60}
                   style={{
                     objectFit: 'contain',
                     filter: 'brightness(1.1) contrast(1.1)',

@@ -833,6 +833,34 @@ button {
   .hero-person-img {
     max-width: 320px;
   }
+
+  .schedule-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .speakers-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .why-section {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .section {
+    padding: var(--space-xl) 0;
+  }
+
+  .floating-logo {
+    width: clamp(80px, 22vw, 130px) !important;
+    height: clamp(40px, 10vw, 65px) !important;
+  }
+
+  .sponsor-slot {
+    min-height: 110px !important;
+    padding: 1rem !important;
+  }
 }
 
 /* ---- Countdown ---- */

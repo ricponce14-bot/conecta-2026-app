@@ -769,60 +769,60 @@ export default function DashboardPage() {
                             <p>Aún no hay suficientes perfiles para hacer matches. Invita a más personas al evento.</p>
                         </div>
                     ) : (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 'var(--space-md)' }}>
+                        <div className="matches-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 'var(--space-md)' }}>
                             {matches.filter(m => !discardedMatches.includes(m.id)).map((match) => (
                                 <div key={match.id} style={{
                                     background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)',
                                     borderRadius: 'var(--radius-md)', padding: 'var(--space-md)',
                                     transition: 'border-color 0.3s',
                                 }} onMouseOver={e => e.currentTarget.style.borderColor = 'var(--neon-green)'} onMouseOut={e => e.currentTarget.style.borderColor = 'var(--border-color)'}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem', gap: '8px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: 1 }}>
                                             {match.photo_url ? (
-                                                <img src={match.photo_url} alt={match.full_name} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                                                <img src={match.photo_url} alt={match.full_name} style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
                                             ) : (
-                                                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--bg-glass)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 700, color: 'var(--neon-blue)' }}>
+                                                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--bg-glass)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 700, color: 'var(--neon-blue)', flexShrink: 0 }}>
                                                     {match.full_name?.charAt(0)?.toUpperCase()}
                                                 </div>
                                             )}
-                                            <div>
-                                                <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{match.full_name}</div>
-                                                <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{match.title}{match.company_name ? ` · ${match.company_name}` : ''}</div>
+                                            <div style={{ minWidth: 0 }}>
+                                                <div style={{ fontWeight: 600, fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{match.full_name}</div>
+                                                <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{match.title}{match.company_name ? ` · ${match.company_name}` : ''}</div>
                                             </div>
                                         </div>
                                         <div style={{
                                             background: match.match_score >= 70 ? 'rgba(0,255,136,0.15)' : match.match_score >= 50 ? 'rgba(0,210,255,0.15)' : 'rgba(255,255,255,0.05)',
                                             color: match.match_score >= 70 ? 'var(--neon-green)' : match.match_score >= 50 ? 'var(--neon-blue)' : 'var(--text-secondary)',
                                             padding: '2px 8px', borderRadius: 'var(--radius-pill)',
-                                            fontSize: '0.8rem', fontWeight: 700,
+                                            fontSize: '0.75rem', fontWeight: 700, flexShrink: 0,
                                             border: `1px solid ${match.match_score >= 70 ? 'rgba(0,255,136,0.3)' : match.match_score >= 50 ? 'rgba(0,210,255,0.3)' : 'rgba(255,255,255,0.1)'}`,
                                         }}>
                                             {match.match_score}%
                                         </div>
                                     </div>
                                     {match.offer_description && (
-                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', lineHeight: 1.5 }}>
-                                            <span style={{ color: 'var(--neon-green)', fontWeight: 600, fontSize: '0.7rem', textTransform: 'uppercase' }}>Ofrece: </span>
-                                            {match.offer_description.length > 100 ? match.offer_description.substring(0, 100) + '...' : match.offer_description}
+                                        <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', lineHeight: 1.5 }}>
+                                            <span style={{ color: 'var(--neon-green)', fontWeight: 600, fontSize: '0.68rem', textTransform: 'uppercase' }}>Ofrece: </span>
+                                            {match.offer_description.length > 80 ? match.offer_description.substring(0, 80) + '...' : match.offer_description}
                                         </div>
                                     )}
                                     {match.search_description && (
-                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                                            <span style={{ color: '#ffd700', fontWeight: 600, fontSize: '0.7rem', textTransform: 'uppercase' }}>Busca: </span>
-                                            {match.search_description.length > 100 ? match.search_description.substring(0, 100) + '...' : match.search_description}
+                                        <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                                            <span style={{ color: '#ffd700', fontWeight: 600, fontSize: '0.68rem', textTransform: 'uppercase' }}>Busca: </span>
+                                            {match.search_description.length > 80 ? match.search_description.substring(0, 80) + '...' : match.search_description}
                                         </div>
                                     )}
-                                    <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                                    <div style={{ display: 'flex', gap: '6px', marginTop: '10px' }}>
                                         {keptMatches.includes(match.id) ? (
-                                            <button disabled className="btn btn-outline" style={{ flex: 1, padding: '8px', fontSize: '0.8rem', borderColor: 'var(--neon-green)', color: 'var(--neon-green)' }}>
+                                            <button disabled className="btn btn-outline" style={{ flex: 1, padding: '6px', fontSize: '0.75rem', borderColor: 'var(--neon-green)', color: 'var(--neon-green)' }}>
                                                 ✓ Guardado
                                             </button>
                                         ) : (
-                                            <button onClick={() => handleKeepMatch(match.id)} className="btn btn-outline" style={{ flex: 1, padding: '8px', fontSize: '0.8rem', borderColor: 'var(--neon-green)', color: 'var(--neon-green)', cursor: 'pointer' }}>
+                                            <button onClick={() => handleKeepMatch(match.id)} className="btn btn-outline" style={{ flex: 1, padding: '6px', fontSize: '0.75rem', borderColor: 'var(--neon-green)', color: 'var(--neon-green)', cursor: 'pointer' }}>
                                                 + Interesa
                                             </button>
                                         )}
-                                        <button onClick={() => handleDiscardMatch(match.id)} className="btn btn-outline" style={{ flex: 1, padding: '8px', fontSize: '0.8rem', borderColor: 'rgba(255,255,255,0.2)', color: 'var(--text-tertiary)', cursor: 'pointer' }}>
+                                        <button onClick={() => handleDiscardMatch(match.id)} className="btn btn-outline" style={{ flex: 1, padding: '6px', fontSize: '0.75rem', borderColor: 'rgba(255,255,255,0.2)', color: 'var(--text-tertiary)', cursor: 'pointer' }}>
                                             Descartar
                                         </button>
                                     </div>
@@ -830,6 +830,14 @@ export default function DashboardPage() {
                             ))}
                         </div>
                     )}
+
+                    <style jsx>{`
+                        @media (max-width: 480px) {
+                            .matches-grid {
+                                grid-template-columns: 1fr !important;
+                            }
+                        }
+                    `}</style>
                 </div>
 
             </div>
