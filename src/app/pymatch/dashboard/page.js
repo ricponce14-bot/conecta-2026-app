@@ -23,6 +23,8 @@ export default function DashboardPage() {
     const [matches, setMatches] = useState([]);
     const [matchesLoading, setMatchesLoading] = useState(false);
     const [uploadingGallery, setUploadingGallery] = useState(false);
+    const [discardedMatches, setDiscardedMatches] = useState([]);
+    const [keptMatches, setKeptMatches] = useState([]);
 
     useEffect(() => {
         async function fetchProfile() {
@@ -135,6 +137,30 @@ export default function DashboardPage() {
         };
         fetchMatches();
     }, [profile?.id, profile?.embedding, profile?.profile_completed]);
+
+    const handleKeepMatch = async (matchId) => {
+        try {
+            const { error } = await supabase
+                .from('connections')
+                .insert([{
+                    user_id: profile.id,
+                    connection_id: matchId,
+                    event_id: null,
+                    interest_level: 5 // Default high interest for AI matches
+                }]);
+
+            if (error && error.code !== '23505') throw error; // 23505 is unique violation, ignore if already saved
+
+            setKeptMatches(prev => [...prev, matchId]);
+        } catch (e) {
+            console.error('Error saving match:', e);
+            alert('Error al guardar match: ' + e.message);
+        }
+    };
+
+    const handleDiscardMatch = (matchId) => {
+        setDiscardedMatches(prev => [...prev, matchId]);
+    };
 
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
@@ -590,13 +616,13 @@ export default function DashboardPage() {
                             <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }}>Buscando matches con IA...</p>
                             <style jsx>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
                         </div>
-                    ) : matches.length === 0 ? (
+                    ) : matches.filter(m => !discardedMatches.includes(m.id)).length === 0 ? (
                         <div style={{ textAlign: 'center', padding: 'var(--space-lg)', color: 'var(--text-secondary)' }}>
                             <p>Aún no hay suficientes perfiles para hacer matches. Invita a más personas al evento.</p>
                         </div>
                     ) : (
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 'var(--space-md)' }}>
-                            {matches.map((match) => (
+                            {matches.filter(m => !discardedMatches.includes(m.id)).map((match) => (
                                 <div key={match.id} style={{
                                     background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)',
                                     borderRadius: 'var(--radius-md)', padding: 'var(--space-md)',
@@ -638,6 +664,20 @@ export default function DashboardPage() {
                                             {match.search_description.length > 100 ? match.search_description.substring(0, 100) + '...' : match.search_description}
                                         </div>
                                     )}
+                                    <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                                        {keptMatches.includes(match.id) ? (
+                                            <button disabled className="btn btn-outline" style={{ flex: 1, padding: '8px', fontSize: '0.8rem', borderColor: 'var(--neon-green)', color: 'var(--neon-green)' }}>
+                                                ✓ Guardado
+                                            </button>
+                                        ) : (
+                                            <button onClick={() => handleKeepMatch(match.id)} className="btn btn-outline" style={{ flex: 1, padding: '8px', fontSize: '0.8rem', borderColor: 'var(--neon-green)', color: 'var(--neon-green)', cursor: 'pointer' }}>
+                                                + Interesa
+                                            </button>
+                                        )}
+                                        <button onClick={() => handleDiscardMatch(match.id)} className="btn btn-outline" style={{ flex: 1, padding: '8px', fontSize: '0.8rem', borderColor: 'rgba(255,255,255,0.2)', color: 'var(--text-tertiary)', cursor: 'pointer' }}>
+                                            Descartar
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>

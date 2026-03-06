@@ -7,7 +7,33 @@ import { supabase } from '@/lib/supabase';
 const STEPS = [
     { id: 'info', title: 'Tu Información', subtitle: 'Datos básicos de tu perfil profesional' },
     { id: 'business', title: 'Tu Negocio', subtitle: 'Cuéntanos sobre tu empresa o actividad' },
-    { id: 'networking', title: 'Networking', subtitle: 'Define qué ofreces y qué buscas' },
+    { id: 'networking', title: 'Networking', subtitle: 'Define qué ofreces y qué buscas de forma estructurada' },
+];
+
+const INDUSTRIES = [
+    'Tecnología y Software',
+    'Manufactura e Industria',
+    'Alimentos y Bebidas',
+    'Salud y Bienestar',
+    'Servicios Financieros',
+    'Educación',
+    'Construcción e Inmobiliaria',
+    'Comercio y Retail',
+    'Logística y Transporte',
+    'Turismo y Hospitalidad',
+    'Energía y Medio Ambiente',
+    'Marketing y Publicidad',
+    'Consultoría y Asesoría',
+    'Otro'
+];
+
+const PROFILE_TYPES = [
+    'Empresa B2B (Ventas a empresas)',
+    'Empresa B2C (Ventas a consumidor)',
+    'Profesional Independiente / Freelance',
+    'Buscador de Empleo',
+    'Inversionista / Capital',
+    'Estudiante / Académico'
 ];
 
 const TIPS = {
@@ -31,6 +57,10 @@ export default function OnboardingPage() {
         title: '',
         company_name: '',
         whatsapp: '',
+        industry: '',
+        profileType: '',
+        offer_tags: '',
+        search_tags: '',
         offer_description: '',
         search_description: '',
     });
@@ -111,10 +141,26 @@ export default function OnboardingPage() {
     const handleComplete = async () => {
         setSaving(true);
         try {
+            // Generate structured descriptions for the AI
+            let finalOffer = formData.offer_description;
+            let finalSearch = formData.search_description;
+
+            if (formData.industry || formData.profileType || formData.offer_tags) {
+                finalOffer = `Soy un ${formData.profileType || 'profesional'} en el sector de ${formData.industry || 'varios sectores'}. Ofrezco principalmente: ${formData.offer_tags || formData.offer_description}.`;
+            }
+            if (formData.search_tags) {
+                finalSearch = `Busco conectar con: ${formData.search_tags}.`;
+            }
+
             const { error } = await supabase
                 .from('profiles')
                 .update({
-                    ...formData,
+                    full_name: formData.full_name,
+                    title: formData.title,
+                    company_name: formData.company_name,
+                    whatsapp: formData.whatsapp,
+                    offer_description: finalOffer,
+                    search_description: finalSearch,
                     profile_completed: true,
                 })
                 .eq('id', userId);
@@ -308,32 +354,59 @@ export default function OnboardingPage() {
 
                         {/* STEP 3: Networking */}
                         {currentStep === 2 && (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
+                                <div>
+                                    <label className="ob-label">Industria / Sector</label>
+                                    <select
+                                        className="filter-input" style={{ width: '100%', cursor: 'pointer' }}
+                                        value={formData.industry}
+                                        onChange={e => setFormData({ ...formData, industry: e.target.value })}
+                                        required
+                                    >
+                                        <option value="" disabled>Selecciona tu industria principal</option>
+                                        {INDUSTRIES.map(ind => <option key={ind} value={ind}>{ind}</option>)}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="ob-label">Tipo de Perfil</label>
+                                    <select
+                                        className="filter-input" style={{ width: '100%', cursor: 'pointer' }}
+                                        value={formData.profileType}
+                                        onChange={e => setFormData({ ...formData, profileType: e.target.value })}
+                                        required
+                                    >
+                                        <option value="" disabled>¿Cómo participas en el evento?</option>
+                                        {PROFILE_TYPES.map(pt => <option key={pt} value={pt}>{pt}</option>)}
+                                    </select>
+                                </div>
+
                                 <div>
                                     <label className="ob-label" style={{ color: 'var(--neon-green)' }}>
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '4px', verticalAlign: 'middle' }}><polyline points="20 6 9 17 4 12" /></svg>
-                                        Lo que ofrezco
+                                        Productos o Servicios que Ofreces
                                     </label>
                                     <textarea
-                                        className="filter-input" style={{ width: '100%', minHeight: '100px', resize: 'vertical', fontFamily: 'inherit' }}
-                                        placeholder="Ej. Servicios de consultoría legal, Desarrollo de software, Distribución de alimentos..."
-                                        value={formData.offer_description}
-                                        onChange={e => setFormData({ ...formData, offer_description: e.target.value })}
+                                        className="filter-input" style={{ width: '100%', minHeight: '60px', resize: 'vertical', fontFamily: 'inherit' }}
+                                        placeholder="Ej. Diseño web, consultoría fiscal, empaques ecológicos..."
+                                        value={formData.offer_tags}
+                                        onChange={e => setFormData({ ...formData, offer_tags: e.target.value })}
                                         onFocus={() => setActiveTip('offer_description')}
                                         onBlur={() => setActiveTip('')}
                                     />
                                     {activeTip === 'offer_description' && <div className="ob-tip">{TIPS.offer_description}</div>}
                                 </div>
+
                                 <div>
                                     <label className="ob-label" style={{ color: '#ffd700' }}>
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '4px', verticalAlign: 'middle' }}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-                                        Lo que busco
+                                        ¿Qué tipo de contactos buscas?
                                     </label>
                                     <textarea
-                                        className="filter-input" style={{ width: '100%', minHeight: '100px', resize: 'vertical', fontFamily: 'inherit' }}
-                                        placeholder="Ej. Proveedores de empaque, Socios estratégicos, Inversionistas..."
-                                        value={formData.search_description}
-                                        onChange={e => setFormData({ ...formData, search_description: e.target.value })}
+                                        className="filter-input" style={{ width: '100%', minHeight: '60px', resize: 'vertical', fontFamily: 'inherit' }}
+                                        placeholder="Ej. Inversionistas ángeles, proveedores de logística, empresas de software..."
+                                        value={formData.search_tags}
+                                        onChange={e => setFormData({ ...formData, search_tags: e.target.value })}
                                         onFocus={() => setActiveTip('search_description')}
                                         onBlur={() => setActiveTip('')}
                                     />
@@ -343,7 +416,7 @@ export default function OnboardingPage() {
                                 <div className="ob-motivation" style={{ textAlign: 'center', padding: 'var(--space-lg)', borderRadius: 'var(--radius-md)', background: 'rgba(0, 255, 136, 0.04)', border: '1px solid rgba(0, 255, 136, 0.1)' }}>
                                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" strokeWidth="1.5" style={{ marginBottom: '8px' }}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
                                     <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
-                                        Esta información alimenta el <strong style={{ color: 'var(--neon-green)' }}>algoritmo de matchmaking</strong>. Mientras más detallado, mejores matches recibirás.
+                                        Esta información generará un párrafo automático que alimentará al <strong style={{ color: 'var(--neon-green)' }}>algoritmo de IA</strong> para conectarte con los mejores prospectos.
                                     </p>
                                 </div>
                             </div>
