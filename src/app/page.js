@@ -755,6 +755,32 @@ export default function HomePage() {
             </p>
           </div>
 
+          {/* All Available Logos */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem', marginTop: '3rem', maxWidth: '900px', margin: '3rem auto 0 auto' }}>
+            {[...conectaAlliances, ...specialGuests].map((alliance, i) => (
+              <div key={i} style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.05)',
+                borderRadius: '12px',
+                padding: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '140px',
+                height: '100px',
+                transition: 'all 0.3s ease'
+              }} className="hover:border-blue-500/30 hover:-translate-y-1 alliance-logo-card">
+                <Image
+                  src={alliance.image_url}
+                  alt={alliance.name}
+                  width={100}
+                  height={80}
+                  style={{ objectFit: 'contain', filter: 'grayscale(0%) drop-shadow(0 4px 6px rgba(0,0,0,0.1))' }}
+                />
+              </div>
+            ))}
+          </div>
+
           {/* ══════════ EXPO ZONE ══════════ */}
           <div className="alliance-section" style={{ marginTop: 'var(--space-4xl)' }}>
             <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)' }}>
