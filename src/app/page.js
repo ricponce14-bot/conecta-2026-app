@@ -228,53 +228,11 @@ export default function HomePage() {
           display_order: 4,
         };
 
-        const fetchedRegional = speakersData.filter(s => s.is_regional);
-        setRegionalSpeakers([MEMO_REGIONAL, KARINA_REGIONAL, DAVID_REGIONAL, GEMMA_REGIONAL, ...fetchedRegional]);
+        setRegionalSpeakers([MEMO_REGIONAL, KARINA_REGIONAL, DAVID_REGIONAL, GEMMA_REGIONAL]);
       } else {
         // If fetch fails, still show LuisMi & Hardcoded Regional
         setHeadliners([LUISMI_FALLBACK]);
-        setRegionalSpeakers([
-          {
-            name: 'Dr. Memo',
-            role: 'Talento Regional',
-            company: 'Vicepresidente de la Red Incuba Jalisco y Director del CIIO en CUAltos',
-            topic: 'Conferencia: “El poder del fracaso en el camino hacia el éxito emprendedor” 🚀',
-            description: 'Doctor en Ciencias de la Educación, Maestro en Administración de Negocios e Ingeniero en Sistemas Computacionales. Miembro del Sistema Nacional de Investigadores y especialista en innovación y emprendimiento.',
-            image_url: '/memo.jpg',
-            accent_color: '#0ea5e9',
-            is_regional: true,
-          },
-          {
-            name: 'Karina Navarro',
-            role: 'Talento Regional',
-            company: 'Fundadora de Grupo Krasny',
-            topic: 'Conferencia: “Me dijeron que no: convertir los obstáculos en impulso para emprender”',
-            description: 'Es empresaria y promotora del emprendimiento. Es autora del libro "Me dijeron que no", donde comparte su experiencia sobre resiliencia, mentalidad emprendedora y cómo convertir los obstáculos en oportunidades.',
-            image_url: '/kary.jpg',
-            accent_color: '#ec4899',
-            is_regional: true,
-          },
-          {
-            name: 'David Aceves',
-            role: 'Talento Regional',
-            company: 'Sexólogo y Especialista en Inteligencia Sexual',
-            topic: 'Conferencia: “Inteligencia sexual: clave para relaciones más sanas y conscientes”',
-            description: 'Promueve una visión informada y consciente de la sexualidad, ayudando a las personas a fortalecer su autoestima, relaciones y toma de decisiones. 💡',
-            image_url: '/david.jpg',
-            accent_color: '#8b5cf6',
-            is_regional: true,
-          },
-          {
-            name: 'Gemma Martín',
-            role: 'Talento Regional',
-            company: 'Escritora y Conferencista',
-            topic: 'Conferencia: “Reconecta con tu historia: transforma tu pasado en tu mayor fortaleza”',
-            description: 'Enfocada en bienestar emocional. Autora del libro "Reconecta con tu historia", donde inspira a las personas a sanar y descubrir el poder de la autenticidad. ✨',
-            image_url: '/gema.jpg',
-            accent_color: '#f59e0b',
-            is_regional: true,
-          }
-        ]);
+        setRegionalSpeakers([MEMO_REGIONAL, KARINA_REGIONAL, DAVID_REGIONAL, GEMMA_REGIONAL]);
       }
 
       // Fetch Alliances & Sponsors
@@ -431,92 +389,6 @@ export default function HomePage() {
         </div>
       </section>
       {/* ══════════ OFFICIAL SPONSORS & CONECTA ALLIANCES ══════════ */}
-      <section className="section" style={{ paddingBottom: 'var(--space-2xl)' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-2xl)' }}>
-            <div className="section-label" style={{ justifyContent: 'center' }}>Aliados Principales</div>
-            <h2 className="section-title center">
-              Patrocinadores <span className="highlight">Oficiales</span>
-            </h2>
-          </div>
-
-          <div className="sponsors-row" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'var(--space-lg)', marginBottom: 'var(--space-3xl)' }}>
-            {officialSponsors.length > 0 ? officialSponsors.map((s, i) => (
-              <div key={i} className={`sponsor-slot ${!s.is_filled ? 'sponsor-slot-available' : ''}`} style={{
-                flex: '1 1 200px',
-                maxWidth: '240px',
-                minHeight: '140px',
-                background: s.is_filled ? 'var(--bg-glass)' : 'rgba(255,255,255,0.02)',
-                border: s.is_filled ? '1px solid var(--border-color)' : '1px dashed var(--border-color)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 'var(--radius-lg)',
-                padding: '1.5rem',
-                transition: 'all 0.3s ease'
-              }}>
-                {s.image_url && s.is_filled ? (
-                  <Image src={s.image_url} alt={s.name} width={180} height={70} style={{ objectFit: 'contain' }} />
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%' }}>
-                    <div style={{ textAlign: 'center', color: s.is_filled ? 'white' : 'var(--text-tertiary)', fontSize: '0.85rem' }}>
-                      {s.is_filled ? s.name : "Espacio Disponible"}
-                    </div>
-                    {!s.is_filled && (
-                      <a href="https://wa.me/523781002683?text=Hola,%20me%20interesa%20ser%20patrocinador%20Oficial%20de%20CONECTA%202026" target="_blank" rel="noopener noreferrer" className="btn btn-outline" style={{ fontSize: '0.75rem', padding: '6px 12px', width: '100%', whiteSpace: 'normal', textAlign: 'center', lineHeight: '1.2' }}>
-                        Quiero ser Patrocinador
-                      </a>
-                    )}
-                  </div>
-                )}
-              </div>
-            )) : Array(4).fill(0).map((_, i) => (
-              <div key={i} className="sponsor-slot" style={{ flex: '1 1 200px', maxWidth: '240px', minHeight: '140px', background: 'rgba(255,255,255,0.02)', border: '1px dashed var(--border-color)', borderRadius: 'var(--radius-lg)' }}></div>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)' }}>
-            <h3 className="alliance-category-title" style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>Alianzas Conecta</h3>
-          </div>
-
-          <div className="alliance-grid alliance-grid-4">
-            {conectaAlliances.length > 0 ? conectaAlliances.map((alliance, i) => (
-              <div key={i} className="alliance-slot alliance-slot-org">
-                {alliance.image_url ? (
-                  <Image src={alliance.image_url} alt={alliance.name} width={120} height={60} style={{ objectFit: 'contain' }} />
-                ) : (
-                  <>
-                    <div className="alliance-slot-initials">
-                      {alliance.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                    </div>
-                    <div className="alliance-slot-name">{alliance.name}</div>
-                  </>
-                )}
-              </div>
-            )) : Array(4).fill(0).map((_, i) => (
-              <div key={i} className="alliance-slot alliance-slot-empty">
-                <div className="alliance-slot-label">Alianza</div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)', marginTop: 'var(--space-3xl)' }}>
-            <h3 className="alliance-category-title" style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>Invitados Especiales</h3>
-          </div>
-
-          <div className="alliance-grid alliance-grid-4" style={{ justifyContent: 'center' }}>
-            {specialGuests.length > 0 ? specialGuests.map((guest, i) => (
-              <div key={i} className="alliance-slot alliance-slot-org" style={{ maxWidth: '240px' }}>
-                {guest.image_url ? (
-                  <Image src={guest.image_url} alt={guest.name} width={120} height={60} style={{ objectFit: 'contain' }} />
-                ) : (
-                  <div className="alliance-slot-name">{guest.name}</div>
-                )}
-              </div>
-            )) : null}
-          </div>
-        </div>
-      </section>
 
 
 
@@ -534,43 +406,79 @@ export default function HomePage() {
           </div>
 
           <div className="schedule-grid">
-            {/* UNIFIED TICKET CARD */}
-            <div className="glass-card day-card day-card-featured stagger-item" style={{ gridColumn: '1 / -1', maxWidth: '800px', margin: '0 auto' }}>
-              <div className="day-badge premium">1 Boleto, 2 Días</div>
-              <div className="day-header" style={{ justifyContent: 'center', marginBottom: '1.5rem' }}>
-                <div className="day-date" style={{ fontSize: '1.2rem', color: 'var(--text-primary)' }}>18 y 19 de Abril, 2026</div>
-              </div>
-              <h3 className="day-title" style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '1rem' }}>Acceso Total al Evento</h3>
-              <p className="day-description" style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 2rem auto' }}>
-                Tu pase de entrada te da acceso completo a los dos días de actividades: desde networking y aprendizaje práctico, hasta la gran clausura con líderes de opinión.
-              </p>
+            {/* UNIFIED TICKET CARD REDESIGN */}
+            <div className="glass-card stagger-item" style={{
+              gridColumn: '1 / -1',
+              maxWidth: '900px',
+              margin: '0 auto',
+              background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(6, 11, 24, 0.8) 50%, rgba(14, 165, 233, 0.08) 100%)',
+              border: '1px solid rgba(37, 99, 235, 0.3)',
+              borderRadius: '24px',
+              padding: 'var(--space-2xl)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 40px rgba(37, 99, 235, 0.1)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              {/* Decorative background elements */}
+              <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '300px', height: '300px', background: 'var(--accent-primary)', filter: 'blur(120px)', opacity: 0.15, zIndex: 0 }}></div>
+              <div style={{ position: 'absolute', bottom: '-100px', left: '-100px', width: '250px', height: '250px', background: 'var(--accent-secondary)', filter: 'blur(100px)', opacity: 0.1, zIndex: 0 }}></div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '2.5rem' }}>
-                <div>
-                  <h4 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', marginBottom: '1rem', fontWeight: '700', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.5rem' }}>Día 1: Estrategia y Conexiones</h4>
-                  <ul className="day-features">
-                    <li><span className="check">&#10003;</span> <strong>Feria de Empleo y Oportunidades:</strong> Conecta talento con vacantes clave.</li>
-                    <li><span className="check">&#10003;</span> <strong>Networking Pro:</strong> Matchmaking inteligente IA.</li>
-                    <li><span className="check">&#10003;</span> <strong>Ponente Estelar:</strong> LuisMi Negocios para una apertura impactante.</li>
-                    <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>5 Cursos Especializados:</strong> Neuromarketing, IA en Ventas, Branding, Capital Humano y Emprendimiento.</li>
-                  </ul>
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                  <span style={{
+                    background: 'var(--gradient-primary)',
+                    color: 'white',
+                    padding: '6px 16px',
+                    borderRadius: '100px',
+                    fontSize: '0.75rem',
+                    fontWeight: '800',
+                    textTransform: 'uppercase',
+                    letterSpacing: '2px',
+                    boxShadow: '0 4px 15px rgba(37, 99, 235, 0.4)'
+                  }}>1 Boleto, 2 Días de Impacto</span>
                 </div>
-                <div>
-                  <h4 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', marginBottom: '1rem', fontWeight: '700', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.5rem' }}>Día 2: Gran Cierre</h4>
-                  <ul className="day-features">
-                    <li><span className="check">&#10003;</span> <strong>Conferencias Magistrales:</strong> Líderes de opinión nacionales.</li>
-                    <li><span className="check">&#10003;</span> <strong>Ponencias Regionales:</strong> Expertos con alto impacto local.</li>
-                    <li><span className="check">&#10003;</span> <strong>Expo Empresarial:</strong> 50+ marcas líderes locales.</li>
-                    <li><span className="check">&#10003;</span> <strong>Barra Libre:</strong> Brindis de clausura por nuevos negocios.</li>
-                  </ul>
-                </div>
-              </div>
 
-              <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto' }}>
-                <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg" style={{ minWidth: '250px' }}>
-                  Adquiere tu Acceso Único
-                  <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
-                </a>
+                <div className="day-header" style={{ justifyContent: 'center', marginBottom: '2rem', textAlign: 'center' }}>
+                  <div className="day-date" style={{ fontSize: '1.4rem', color: 'var(--text-primary)', fontWeight: '700' }}>18 y 19 de Abril, 2026</div>
+                  <div style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem', marginTop: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Centro de Convenciones Olimpo</div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
+                  {/* Day 1 Column */}
+                  <div style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                      <div style={{ width: '40px', height: '40px', background: 'rgba(37, 99, 235, 0.1)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)', fontWeight: '800' }}>1</div>
+                      <h4 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', margin: 0, fontWeight: '700' }}>Estrategia y Conexiones</h4>
+                    </div>
+                    <ul className="day-features" style={{ margin: 0 }}>
+                      <li><span className="check" style={{ color: 'var(--accent-primary)' }}>&#10003;</span> <strong>Feria de Empleo:</strong> Talento con vacantes regionales.</li>
+                      <li><span className="check" style={{ color: 'var(--accent-primary)' }}>&#10003;</span> <strong>Networking Pro:</strong> Matchmaking inteligente IA.</li>
+                      <li><span className="check" style={{ color: 'var(--accent-primary)' }}>&#10003;</span> <strong>LuisMi Negocios:</strong> Apertura de impacto financiero.</li>
+                      <li><span className="check" style={{ color: 'var(--accent-primary)' }}>&#10003;</span> <strong>Workshops:</strong> Marketing, IA, Ventas y Capital Humano.</li>
+                    </ul>
+                  </div>
+
+                  {/* Day 2 Column */}
+                  <div style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                      <div style={{ width: '40px', height: '40px', background: 'rgba(14, 165, 233, 0.1)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-secondary)', fontWeight: '800' }}>2</div>
+                      <h4 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', margin: 0, fontWeight: '700' }}>Gran Cierre Magistral</h4>
+                    </div>
+                    <ul className="day-features" style={{ margin: 0 }}>
+                      <li><span className="check" style={{ color: 'var(--accent-secondary)' }}>&#10003;</span> <strong>Conferencias:</strong> Líderes de opinión nacionales.</li>
+                      <li><span className="check" style={{ color: 'var(--accent-secondary)' }}>&#10003;</span> <strong>Talento Regional:</strong> Expertos con alto impacto local.</li>
+                      <li><span className="check" style={{ color: 'var(--accent-secondary)' }}>&#10003;</span> <strong>Expo Empresarial:</strong> 50+ marcas líderes regionales.</li>
+                      <li><span className="check" style={{ color: 'var(--accent-secondary)' }}>&#10003;</span> <strong>Brindis Networking:</strong> Barra libre de clausura.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.5rem', marginTop: 'auto' }}>
+                  <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg" style={{ minWidth: '280px', height: '60px', borderRadius: '12px', boxShadow: '0 10px 25px rgba(37, 99, 235, 0.3)' }}>
+                    Adquiere tu Acceso Único
+                    <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -725,22 +633,6 @@ export default function HomePage() {
                   </div>
                 ))}
 
-                {/* Coming Soon Card */}
-                <div className="speaker-card stagger-item" style={{
-                  padding: 'var(--space-2xl) var(--space-xl)',
-                  opacity: 0.6,
-                  borderStyle: 'dashed',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  minHeight: '400px'
-                }}>
-                  <div className="speaker-photo-wrap" style={{ width: '120px', height: '120px', margin: '0 auto var(--space-xl)', background: 'var(--bg-glass)', border: '2px dashed var(--surface-border)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-                  </div>
-                  <h3 className="speaker-name" style={{ fontSize: '1.2rem' }}>Más Talento</h3>
-                  <p className="speaker-topic" style={{ color: 'var(--text-tertiary)' }}>Próximamente por anunciar</p>
-                </div>
               </>
             ) : (
               <p style={{ textAlign: 'center', color: 'var(--text-tertiary)', width: '100%' }}>Cargando talento regional...</p>
@@ -881,30 +773,67 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* All Available Logos */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem', marginTop: '3rem', maxWidth: '900px', margin: '3rem auto 0 auto' }}>
+          {/* Consolidated Logo Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+            gap: '2rem',
+            marginTop: '3.5rem',
+            maxWidth: '1000px',
+            margin: '3.5rem auto 0 auto',
+            alignItems: 'center',
+            justifyItems: 'center'
+          }}>
             {[...conectaAlliances, ...specialGuests].map((alliance, i) => (
               <div key={i} style={{
-                background: 'rgba(255,255,255,0.03)',
+                background: 'rgba(255,255,255,0.02)',
                 border: '1px solid rgba(255,255,255,0.05)',
-                borderRadius: '12px',
-                padding: '1rem',
+                borderRadius: '16px',
+                padding: '1.5rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '140px',
-                height: '100px',
-                transition: 'all 0.3s ease'
-              }} className="hover:border-blue-500/30 hover:-translate-y-1 alliance-logo-card">
+                width: '100%',
+                maxWidth: '200px',
+                height: '110px',
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+              }} className="alliance-logo-card">
                 <Image
                   src={alliance.image_url}
                   alt={alliance.name}
-                  width={100}
-                  height={80}
-                  style={{ objectFit: 'contain', filter: 'grayscale(0%) drop-shadow(0 4px 6px rgba(0,0,0,0.1))' }}
+                  width={140}
+                  height={90}
+                  style={{
+                    objectFit: 'contain',
+                    filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))'
+                  }}
+                  className="alliance-logo-img"
                 />
               </div>
             ))}
+
+            {/* Added CTA for Sponsorships within the grid */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(14, 165, 233, 0.05))',
+              border: '1px dashed rgba(37, 99, 235, 0.4)',
+              borderRadius: '16px',
+              padding: '1.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              maxWidth: '200px',
+              height: '110px',
+              textAlign: 'center',
+              gap: '8px'
+            }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-tertiary)' }}>Tu logo aquí</span>
+              <a href="https://wa.me/523781002683" target="_blank" rel="noopener noreferrer" className="btn btn-outline" style={{ fontSize: '0.65rem', padding: '4px 10px', border: '1px solid var(--accent-primary)' }}>
+                Patrocinar
+              </a>
+            </div>
           </div>
 
           {/* ══════════ EXPO ZONE ══════════ */}
