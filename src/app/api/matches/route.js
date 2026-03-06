@@ -7,7 +7,7 @@ const supabaseAdmin = createClient(
 );
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const EMBED_URL = `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${GEMINI_API_KEY}`;
+const EMBED_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${GEMINI_API_KEY}`;
 
 function cosineSimilarity(a, b) {
     let dot = 0, normA = 0, normB = 0;
