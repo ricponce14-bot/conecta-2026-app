@@ -111,7 +111,13 @@ export default function HomePage() {
   const [officialSponsors, setOfficialSponsors] = useState([]);
   const [strategicAlliances, setStrategicAlliances] = useState([]);
   const [universityAlliances, setUniversityAlliances] = useState([]);
-  const [conectaAlliances, setConectaAlliances] = useState([]);
+  const [conectaAlliances, setConectaAlliances] = useState([
+    { name: 'Promoción Económica de Tepatitlán', image_url: '/4.png' },
+    { name: 'Cámara de Comercio Tepatitlán', image_url: '/3.png' },
+    { name: 'Jóvenes Empresarios', image_url: '/2.png' },
+    { name: 'Universidad Nueva Ciencia', image_url: '/1.png' },
+    { name: 'UNID', image_url: '/5.png' }
+  ]);
   const [itinerary, setItinerary] = useState([]);
 
   useEffect(() => {
@@ -136,7 +142,7 @@ export default function HomePage() {
         setOfficialSponsors(allianceData.filter(a => a.type === 'official'));
         setStrategicAlliances(allianceData.filter(a => a.type === 'strategic'));
         setUniversityAlliances(allianceData.filter(a => a.type === 'university'));
-        setConectaAlliances(allianceData.filter(a => a.type === 'conecta'));
+        // conectaAlliances are now hardcoded
       }
     };
 
