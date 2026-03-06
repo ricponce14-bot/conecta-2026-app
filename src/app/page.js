@@ -363,25 +363,34 @@ export default function HomePage() {
 
             {/* Right Side Image (Farid) */}
             {/* Right Side Image (Ponentes) */}
-            <div className="hero-image-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="hero-image-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
               <div className="hero-image-glow" style={{ width: '100%', height: '80%', top: '10%', left: '0' }}></div>
               <Image
                 src="/ponentes.png"
-                alt="Ponentes Estelares: LuisMi, Farid, Jess"
+                alt="Ponentes Estelares: LuisMi, Farid, Jessica Fernández"
                 className="hero-person-img"
-                width={700}
-                height={500}
-                style={{ objectFit: 'contain', zIndex: 1, marginBottom: '1.5rem' }}
+                width={900}
+                height={600}
+                style={{ objectFit: 'contain', zIndex: 1, marginBottom: '1rem', width: '100%', height: 'auto', maxWidth: '800px' }}
+                priority
               />
-              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '550px', zIndex: 2, padding: '0 1rem' }}>
-                <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.5rem 1rem' }}>
-                  <span className="hero-person-name" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>LuisMi Negocios</span>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                width: '100%',
+                maxWidth: '800px',
+                zIndex: 2,
+                padding: '0 1rem',
+                marginTop: '-1rem'
+              }}>
+                <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.4rem 0.8rem', minWidth: '120px', textAlign: 'center' }}>
+                  <span className="hero-person-name" style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>LuisMi Negocios</span>
                 </div>
-                <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.5rem 1rem' }}>
-                  <span className="hero-person-name" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>Farid Dieck</span>
+                <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.4rem 0.8rem', minWidth: '120px', textAlign: 'center' }}>
+                  <span className="hero-person-name" style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>Farid Dieck</span>
                 </div>
-                <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.5rem 1rem' }}>
-                  <span className="hero-person-name" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>Jess</span>
+                <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.4rem 0.8rem', minWidth: '120px', textAlign: 'center' }}>
+                  <span className="hero-person-name" style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>Jessica Fernández</span>
                 </div>
               </div>
             </div>
