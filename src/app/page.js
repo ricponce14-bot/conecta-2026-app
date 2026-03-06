@@ -403,7 +403,7 @@ export default function HomePage() {
                 <li><span className="check">&#10003;</span> <strong>Ponencias Regionales:</strong> Estrategias de quienes mueven Sede 2026 Tepatitlán de Morelos.</li>
                 <li><span className="check">&#10003;</span> <strong>Feria de Empleo:</strong> Conecta talento con vacantes clave.</li>
                 <li><span className="check">&#10003;</span> <strong>Networking Pro:</strong> Acceso a la mayor base de negocios de la zona.</li>
-                <li><span className="check">&#10003;</span> <strong>Invitado Sorpresa:</strong> Para una apertura impactante.</li>
+                <li><span className="check">&#10003;</span> <strong>Ponente Estelar:</strong> LuisMi Negocios para una apertura impactante.</li>
               </ul>
 
               <h4 style={{ fontSize: '1rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', fontWeight: '600' }}>Cursos y Talleres Incluidos:</h4>
@@ -411,6 +411,8 @@ export default function HomePage() {
                 <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>Neuromarketing:</strong> Véndele a la mente.</li>
                 <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>IA en Ventas:</strong> Automatiza tus cierres.</li>
                 <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>Branding:</strong> Destaca en el mercado.</li>
+                <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>Capital Humano:</strong> Gestiona talento de alto rendimiento.</li>
+                <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>Emprendimiento:</strong> De la idea al negocio rentable.</li>
               </ul>
               <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', flexWrap: 'wrap' }}>
                 <Link href="/pymatch/registro" className="btn btn-outline" style={{ flex: 1 }}>
