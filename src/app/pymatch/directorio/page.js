@@ -21,7 +21,7 @@ const SECTORS = [
 ];
 
 const MUNICIPALITY_IMAGES = {
-    'Tepatitlán de Morelos': '/images/muni-tepatitlan.png',
+    'Tepatitlán de Morelos': '/tepafondo.webp',
     'Arandas': '/images/muni-arandas.png',
     'Lagos de Moreno': '/images/muni-lagos.png',
 };
@@ -158,7 +158,13 @@ export default function DirectorioPage() {
                                 </div>
                                 <div className="company-card-body">
                                     <div className="company-card-header">
-                                        <div className="company-logo-placeholder">{company.initials}</div>
+                                        {company.logo_url ? (
+                                            <div className="company-logo-img">
+                                                <Image src={company.logo_url} alt={company.name} width={40} height={40} />
+                                            </div>
+                                        ) : (
+                                            <div className="company-logo-placeholder">{company.initials}</div>
+                                        )}
                                         <div>
                                             <div className="company-name">{company.name}</div>
                                             <div className="company-sector-label">{company.sector}</div>

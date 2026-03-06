@@ -19,6 +19,9 @@ export const metadata = {
       "El principal encuentro para conectar empresas y hacer negocios. Sede 2026: Tepatitlán de Morelos. 18 y 19 de Abril.",
     type: "website",
   },
+  icons: {
+    icon: '/flav.png',
+  },
 };
 
 export default function RootLayout({ children }) {
