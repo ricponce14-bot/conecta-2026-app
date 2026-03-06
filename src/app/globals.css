@@ -85,8 +85,9 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
-  /* Prevent scrollbar layout shifts and text resizing on mobile */
   -webkit-text-size-adjust: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 h1,
@@ -860,6 +861,57 @@ button {
   .sponsor-slot {
     min-height: 110px !important;
     padding: 1rem !important;
+  }
+
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  .hero-description {
+    font-size: 0.95rem;
+    max-width: 100%;
+    padding: 0 var(--space-xs);
+  }
+
+  .hero-metrics {
+    gap: var(--space-md);
+    padding-top: var(--space-md);
+  }
+
+  .hero-metric-value {
+    font-size: 1.5rem;
+  }
+
+  .hero-metric-label {
+    font-size: 0.7rem;
+  }
+
+  .countdown-item {
+    padding: var(--space-sm) var(--space-md);
+    min-width: 60px;
+  }
+
+  .countdown-value {
+    font-size: 1.4rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .section-subtitle {
+    font-size: 0.9rem;
+    padding: 0 var(--space-xs);
+  }
+
+  .hero-person-label {
+    padding: 0.3rem 0.5rem !important;
+    min-width: auto !important;
+  }
+
+  .hero-person-name {
+    font-size: 0.6rem !important;
+    letter-spacing: 0.3px !important;
   }
 }
 
@@ -2090,8 +2142,9 @@ button {
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: clamp(1.8rem, 8vw, 2.2rem);
-    line-height: 1.1;
+    font-size: clamp(1.6rem, 7vw, 2rem);
+    line-height: 1.15;
+    padding: 0;
   }
 
   .hero-actions {
