@@ -389,7 +389,7 @@ export default function HomePage() {
           <div className="schedule-grid">
             {/* DAY 1 */}
             <div className="glass-card day-card stagger-item">
-              <div className="day-badge free">Acceso Gratuito</div>
+              <div className="day-badge free">Acceso gratis con tu registro</div>
               <div className="day-header">
                 <div className="day-number">Día 1</div>
                 <div className="day-date">18 de Abril, 2026</div>
