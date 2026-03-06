@@ -624,21 +624,57 @@ export default function HomePage() {
               </div>
             </div>
             <div className="why-visual">
-              <div className="why-visual-card glass-card">
-                <div className="why-visual-icon"></div>
-                <div className="why-visual-text">Networking tecnológico con QR</div>
+              {/* Card 1 */}
+              <div className="why-visual-card">
+                <div className="why-visual-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                    <path d="M9 14v1a2 2 0 0 1-2 2H6m12-8h-1a2 2 0 0 1-2-2V6"></path>
+                  </svg>
+                </div>
+                <div className="why-visual-title">Networking Digital</div>
+                <div className="why-visual-text">Intercambia contactos al instante usando tecnología de códigos QR.</div>
               </div>
-              <div className="why-visual-card glass-card">
-                <div className="why-visual-icon"></div>
-                <div className="why-visual-text">Matchmaking inteligente de contactos</div>
+
+              {/* Card 2 */}
+              <div className="why-visual-card">
+                <div className="why-visual-icon" style={{ color: 'var(--neon-green)', background: 'rgba(0, 255, 170, 0.1)', boxShadow: '0 4px 15px rgba(0, 255, 170, 0.1)' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <polyline points="16 11 18 13 22 9"></polyline>
+                  </svg>
+                </div>
+                <div className="why-visual-title">Matchmaking Inteligente</div>
+                <div className="why-visual-text">Encuentra con precisión a tu cliente o socio ideal.</div>
               </div>
-              <div className="why-visual-card glass-card">
-                <div className="why-visual-icon"></div>
-                <div className="why-visual-text">Formación especializada</div>
+
+              {/* Card 3 */}
+              <div className="why-visual-card">
+                <div className="why-visual-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                  </svg>
+                </div>
+                <div className="why-visual-title">Formación Especializada</div>
+                <div className="why-visual-text">Capacítate con talleres impartidos por líderes de la industria.</div>
               </div>
-              <div className="why-visual-card glass-card">
-                <div className="why-visual-icon"></div>
-                <div className="why-visual-text">Ecosistema regional integrado</div>
+
+              {/* Card 4 */}
+              <div className="why-visual-card">
+                <div className="why-visual-icon" style={{ color: 'var(--neon-green)', background: 'rgba(0, 255, 170, 0.1)', boxShadow: '0 4px 15px rgba(0, 255, 170, 0.1)' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    <path d="M2 12h20"></path>
+                  </svg>
+                </div>
+                <div className="why-visual-title">Ecosistema Regional</div>
+                <div className="why-visual-text">Todas las potencias empresariales integradas en un solo lugar.</div>
               </div>
             </div>
           </div>
