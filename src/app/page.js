@@ -527,80 +527,168 @@ export default function HomePage() {
           </div>
 
           <div className="schedule-grid">
-            {/* UNIFIED TICKET CARD REDESIGN */}
+            {/* PREMIUM UNIFIED TICKET DESIGN */}
             <div className="glass-card stagger-item" style={{
               gridColumn: '1 / -1',
-              maxWidth: '900px',
+              maxWidth: '960px',
               margin: '0 auto',
-              background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(6, 11, 24, 0.8) 50%, rgba(14, 165, 233, 0.08) 100%)',
-              border: '1px solid rgba(37, 99, 235, 0.3)',
-              borderRadius: '24px',
-              padding: 'var(--space-2xl)',
-              boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 40px rgba(37, 99, 235, 0.1)',
+              background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(6, 11, 24, 0.9) 50%, rgba(14, 165, 233, 0.1) 100%)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '32px',
+              padding: '0',
+              boxShadow: '0 40px 100px rgba(0,0,0,0.6), inset 0 0 80px rgba(37, 99, 235, 0.05)',
               position: 'relative',
-              overflow: 'hidden'
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              backdropFilter: 'blur(20px)'
             }}>
-              {/* Decorative background elements */}
-              <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '300px', height: '300px', background: 'var(--accent-primary)', filter: 'blur(120px)', opacity: 0.15, zIndex: 0 }}></div>
-              <div style={{ position: 'absolute', bottom: '-100px', left: '-100px', width: '250px', height: '250px', background: 'var(--accent-secondary)', filter: 'blur(100px)', opacity: 0.1, zIndex: 0 }}></div>
+              {/* Ticket Notches (CSS) */}
+              <div style={{ position: 'absolute', left: '-15px', top: '50%', transform: 'translateY(-50%)', width: '30px', height: '30px', background: 'var(--bg-primary)', borderRadius: '50%', zIndex: 10, boxShadow: 'inset -5px 0 10px rgba(0,0,0,0.5)' }}></div>
+              <div style={{ position: 'absolute', right: '-15px', top: '50%', transform: 'translateY(-50%)', width: '30px', height: '30px', background: 'var(--bg-primary)', borderRadius: '50%', zIndex: 10, boxShadow: 'inset 5px 0 10px rgba(0,0,0,0.5)' }}></div>
 
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
-                  <span style={{
-                    background: 'var(--gradient-primary)',
-                    color: 'white',
-                    padding: '6px 16px',
-                    borderRadius: '100px',
-                    fontSize: '0.75rem',
-                    fontWeight: '800',
-                    textTransform: 'uppercase',
-                    letterSpacing: '2px',
-                    boxShadow: '0 4px 15px rgba(37, 99, 235, 0.4)'
-                  }}>1 Boleto, 2 Días de Impacto</span>
+              {/* Top Banner */}
+              <div style={{
+                padding: '1.5rem 2rem',
+                borderBottom: '1px dashed rgba(255,255,255,0.1)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                background: 'rgba(255,255,255,0.02)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: 'var(--accent-primary)', boxShadow: '0 0 15px var(--accent-primary)' }}></div>
+                  <span style={{ fontSize: '0.75rem', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>Ticket de Acceso Único</span>
+                </div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', letterSpacing: '1px' }}>ID: CON-2026-REGIONAL-PLATINUM</div>
+              </div>
+
+              <div style={{ padding: 'var(--space-2xl) var(--space-2xl) var(--space-xl) var(--space-2xl)' }}>
+                <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(37, 99, 235, 0.1)', padding: '6px 16px', borderRadius: '100px', border: '1px solid rgba(37, 99, 235, 0.2)', marginBottom: '1.5rem' }}>
+                    <span style={{ fontSize: '0.7rem', fontWeight: '800', color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>1 Boleto, 2 Días de Impacto</span>
+                  </div>
+                  <h3 style={{ fontSize: '2.5rem', color: 'var(--text-primary)', fontWeight: '800', margin: 0, letterSpacing: '-1px' }}>18 y 19 de Abril, 2026</h3>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '0.75rem', color: 'var(--text-tertiary)' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <span style={{ fontSize: '0.9rem', letterSpacing: '0.5px' }}>Centro de Convenciones Olimpo • Tepatitlán de Morelos</span>
+                  </div>
                 </div>
 
-                <div className="day-header" style={{ justifyContent: 'center', marginBottom: '2rem', textAlign: 'center' }}>
-                  <div className="day-date" style={{ fontSize: '1.4rem', color: 'var(--text-primary)', fontWeight: '700' }}>18 y 19 de Abril, 2026</div>
-                  <div style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem', marginTop: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Centro de Convenciones Olimpo</div>
-                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '0', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', background: 'rgba(255,255,255,0.01)', overflow: 'hidden', position: 'relative' }}>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
+                  {/* Vertical Divider (Desktop Only) */}
+                  <div style={{ position: 'absolute', left: '50%', top: '10%', bottom: '10%', width: '1px', borderLeft: '1px dashed rgba(255,255,255,0.1)', zIndex: 1 }} className="desktop-only"></div>
+
                   {/* Day 1 Column */}
-                  <div style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                      <div style={{ width: '40px', height: '40px', background: 'rgba(37, 99, 235, 0.1)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)', fontWeight: '800' }}>1</div>
-                      <h4 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', margin: 0, fontWeight: '700' }}>Estrategia y Conexiones</h4>
+                  <div style={{ padding: '2.5rem', position: 'relative', zIndex: 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+                      <div style={{ width: '48px', height: '48px', background: 'var(--gradient-primary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: '900', fontSize: '1.25rem', boxShadow: '0 8px 20px rgba(37, 99, 235, 0.3)' }}>1</div>
+                      <div>
+                        <h4 style={{ fontSize: '1.25rem', color: 'white', margin: 0, fontWeight: '800' }}>Estrategia y Conexiones</h4>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--accent-primary)', fontWeight: '700', textTransform: 'uppercase' }}>Sábado 18 Abril</span>
+                      </div>
                     </div>
-                    <ul className="day-features" style={{ margin: 0 }}>
-                      <li><span className="check" style={{ color: 'var(--accent-primary)' }}>&#10003;</span> <strong>Feria de Empleo:</strong> Talento con vacantes regionales.</li>
-                      <li><span className="check" style={{ color: 'var(--accent-primary)' }}>&#10003;</span> <strong>Networking Pro:</strong> Matchmaking inteligente IA.</li>
-                      <li><span className="check" style={{ color: 'var(--accent-primary)' }}>&#10003;</span> <strong>LuisMi Negocios:</strong> Apertura de impacto financiero.</li>
-                      <li><span className="check" style={{ color: 'var(--accent-primary)' }}>&#10003;</span> <strong>Workshops:</strong> Marketing, IA, Ventas y Capital Humano.</li>
-                    </ul>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                      <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ color: 'var(--accent-primary)', marginTop: '2px' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></div>
+                        <div>
+                          <div style={{ color: 'white', fontWeight: '700', fontSize: '0.95rem' }}>Feria de Empleo</div>
+                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Talento con vacantes regionales.</div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ color: 'var(--accent-primary)', marginTop: '2px' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+                        <div>
+                          <div style={{ color: 'white', fontWeight: '700', fontSize: '0.95rem' }}>Networking Pro</div>
+                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Matchmaking inteligente IA.</div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ color: 'var(--accent-primary)', marginTop: '2px' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                        <div>
+                          <div style={{ color: 'white', fontWeight: '700', fontSize: '0.95rem' }}>LuisMi Negocios</div>
+                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Apertura de impacto financiero.</div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ color: 'var(--accent-primary)', marginTop: '2px' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
+                        <div>
+                          <div style={{ color: 'white', fontWeight: '700', fontSize: '0.95rem' }}>Workshops</div>
+                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Marketing, IA, Ventas y Capital Humano.</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Day 2 Column */}
-                  <div style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                      <div style={{ width: '40px', height: '40px', background: 'rgba(14, 165, 233, 0.1)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-secondary)', fontWeight: '800' }}>2</div>
-                      <h4 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', margin: 0, fontWeight: '700' }}>Gran Cierre Magistral</h4>
+                  <div style={{ padding: '2.5rem', position: 'relative', zIndex: 2, background: 'rgba(14, 165, 233, 0.02)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+                      <div style={{ width: '48px', height: '48px', background: 'linear-gradient(135deg, #0ea5e3 0%, #0284c7 100%)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: '900', fontSize: '1.25rem', boxShadow: '0 8px 20px rgba(14, 165, 233, 0.3)' }}>2</div>
+                      <div>
+                        <h4 style={{ fontSize: '1.25rem', color: 'white', margin: 0, fontWeight: '800' }}>Gran Cierre Magistral</h4>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--accent-secondary)', fontWeight: '700', textTransform: 'uppercase' }}>Domingo 19 Abril</span>
+                      </div>
                     </div>
-                    <ul className="day-features" style={{ margin: 0 }}>
-                      <li><span className="check" style={{ color: 'var(--accent-secondary)' }}>&#10003;</span> <strong>Conferencias:</strong> Líderes de opinión nacionales.</li>
-                      <li><span className="check" style={{ color: 'var(--accent-secondary)' }}>&#10003;</span> <strong>Talento Regional:</strong> Expertos con alto impacto local.</li>
-                      <li><span className="check" style={{ color: 'var(--accent-secondary)' }}>&#10003;</span> <strong>Expo Empresarial:</strong> 50+ marcas líderes regionales.</li>
-                      <li><span className="check" style={{ color: 'var(--accent-secondary)' }}>&#10003;</span> <strong>Brindis Networking:</strong> Barra libre de clausura.</li>
-                    </ul>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                      <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ color: 'var(--accent-secondary)', marginTop: '2px' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></div>
+                        <div>
+                          <div style={{ color: 'white', fontWeight: '700', fontSize: '0.95rem' }}>Conferencias</div>
+                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Líderes de opinión nacionales.</div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ color: 'var(--accent-secondary)', marginTop: '2px' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+                        <div>
+                          <div style={{ color: 'white', fontWeight: '700', fontSize: '0.95rem' }}>Talento Regional</div>
+                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Expertos con alto impacto local.</div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ color: 'var(--accent-secondary)', marginTop: '2px' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
+                        <div>
+                          <div style={{ color: 'white', fontWeight: '700', fontSize: '0.95rem' }}>Expo Empresarial</div>
+                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>50+ marcas líderes regionales.</div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ color: 'var(--accent-secondary)', marginTop: '2px' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></div>
+                        <div>
+                          <div style={{ color: 'white', fontWeight: '700', fontSize: '0.95rem' }}>Brindis Networking</div>
+                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Barra libre de clausura.</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.5rem', marginTop: 'auto' }}>
-                  <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg" style={{ minWidth: '280px', height: '60px', borderRadius: '12px', boxShadow: '0 10px 25px rgba(37, 99, 235, 0.3)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', marginTop: '3rem' }}>
+                  <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg" style={{ minWidth: '320px', height: '64px', borderRadius: '16px', boxShadow: '0 15px 35px rgba(37, 99, 235, 0.4)', fontSize: '1.1rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
                     Adquiere tu Acceso Único
-                    <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                   </a>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ display: 'flex', marginLeft: '8px' }}>
+                      <div style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #0a0f1d', background: '#2563eb', overflow: 'hidden' }}>
+                        <Image src="/images/speaker-farid.png" alt="Farid" width={32} height={32} />
+                      </div>
+                      <div style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #0a0f1d', marginLeft: '-8px', background: '#0ea5e9', overflow: 'hidden' }}>
+                        <Image src="/images/speaker-jessica.png" alt="Jessica" width={32} height={32} />
+                      </div>
+                      <div style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #0a0f1d', marginLeft: '-8px', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', color: 'white', fontWeight: 'bold' }}>JD</div>
+                      <div style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #0a0f1d', marginLeft: '-8px', background: '#1d4ed8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', color: 'white', fontWeight: 'bold' }}>MA</div>
+                      <div style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #0a0f1d', marginLeft: '-8px', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem', color: 'var(--text-secondary)', fontWeight: 'bold' }}>+500</div>
+                    </div>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Empresarios ya tienen su boleto</span>
+                  </div>
                 </div>
               </div>
+
+              {/* Bottom Decorative Pattern */}
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary))', opacity: 0.5 }}></div>
             </div>
           </div>
         </div>
