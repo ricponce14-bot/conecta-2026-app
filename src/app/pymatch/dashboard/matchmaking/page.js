@@ -29,13 +29,17 @@ export default function MatchmakingPage() {
                 }
 
                 setCurrentUserId(user.id);
-                const { data, error } = await supabase.rpc('get_recommended_matches', {
-                    p_user_id: user.id,
-                    p_limit: 10
-                });
 
-                if (error) throw error;
-                setMatches(data || []);
+                const res = await fetch(`/api/matches?userId=${user.id}&limit=20`);
+                if (!res.ok) throw new Error('Failed to fetch matches');
+
+                const data = await res.json();
+
+                if (data.matches) {
+                    setMatches(data.matches);
+                } else {
+                    setMatches([]);
+                }
             } catch (err) {
                 console.error("Matchmaking error:", err);
             } finally {
@@ -110,7 +114,7 @@ export default function MatchmakingPage() {
                 </p>
             </div>
 
-            {matches.filter(m => !discardedMatches.includes(m.match_id)).length === 0 ? (
+            {matches.filter(m => !discardedMatches.includes(m.id)).length === 0 ? (
                 <div className="glass-card" style={{ padding: 'var(--space-3xl)', textAlign: 'center' }}>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
                         No encontramos coincidencias exactas por ahora. Prueba ajustando tus descripciones en el perfil.
@@ -118,8 +122,8 @@ export default function MatchmakingPage() {
                 </div>
             ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--space-lg)' }}>
-                    {matches.filter(m => !discardedMatches.includes(m.match_id)).map((match, i) => (
-                        <div key={i} className="glass-card" style={{
+                    {matches.filter(m => !discardedMatches.includes(m.id)).map((match, i) => (
+                        <div key={match.id} className="glass-card" style={{
                             padding: 'var(--space-lg)',
                             display: 'flex',
                             gap: 'var(--space-xl)',
@@ -132,56 +136,52 @@ export default function MatchmakingPage() {
                             {/* Avatar / Logo */}
                             <div style={{
                                 width: 80, height: 80,
-                                borderRadius: match.match_type === 'profile' ? '50%' : 'var(--radius-md)',
-                                background: match.match_type === 'profile' ? 'rgba(37, 99, 235, 0.1)' : 'rgba(16, 185, 129, 0.1)',
-                                border: `1px solid ${match.match_type === 'profile' ? 'rgba(37, 99, 235, 0.2)' : 'rgba(16, 185, 129, 0.2)'}`,
+                                borderRadius: '50%',
+                                background: 'rgba(37, 99, 235, 0.1)',
+                                border: '1px solid rgba(37, 99, 235, 0.2)',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 flexShrink: 0,
                                 overflow: 'hidden'
                             }}>
-                                {match.match_photo ? (
-                                    <img src={match.match_photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                {match.photo_url ? (
+                                    <img src={match.photo_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 ) : (
                                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                        {match.match_type === 'profile' ? (
-                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
-                                        ) : (
-                                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                                        )}
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
                                     </svg>
                                 )}
                             </div>
 
                             <div style={{ flex: 1 }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-                                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>{match.match_name}</h3>
+                                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>{match.full_name}</h3>
                                     <span style={{
                                         fontSize: '0.65rem', padding: '2px 8px', borderRadius: '10px',
-                                        background: match.match_type === 'profile' ? 'rgba(37, 99, 235, 0.2)' : 'rgba(16, 185, 129, 0.2)',
-                                        color: match.match_type === 'profile' ? 'var(--neon-blue)' : 'var(--accent-success)',
+                                        background: 'rgba(37, 99, 235, 0.2)',
+                                        color: 'var(--neon-blue)',
                                         textTransform: 'uppercase', fontWeight: 800
                                     }}>
-                                        {match.match_type === 'profile' ? 'Asistente' : 'Empresa'}
+                                        Asistente
                                     </span>
                                 </div>
                                 <p style={{ color: 'var(--text-secondary)', marginBottom: '12px' }}>
-                                    {match.match_title} {match.match_company ? `@ ${match.match_company}` : ''}
+                                    {match.title} {match.company_name ? `@ ${match.company_name}` : ''}
                                 </p>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-light)', fontSize: '0.85rem' }}>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3" /></svg>
-                                    {match.match_reason}
+                                    Cálculo de Afinidad IA
                                 </div>
                                 <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
-                                    {keptMatches.includes(match.match_id) ? (
+                                    {keptMatches.includes(match.id) ? (
                                         <button disabled className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.85rem', borderColor: 'var(--neon-green)', color: 'var(--neon-green)' }}>
                                             ✓ Guardado en Intereses
                                         </button>
                                     ) : (
-                                        <button onClick={() => handleKeepMatch(match.match_id)} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.85rem', borderColor: 'var(--neon-green)', color: 'var(--neon-green)', cursor: 'pointer' }}>
+                                        <button onClick={() => handleKeepMatch(match.id)} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.85rem', borderColor: 'var(--neon-green)', color: 'var(--neon-green)', cursor: 'pointer' }}>
                                             + Guardar Interés
                                         </button>
                                     )}
-                                    <button onClick={() => handleDiscardMatch(match.match_id)} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.85rem', borderColor: 'rgba(255,255,255,0.2)', color: 'var(--text-tertiary)', cursor: 'pointer' }}>
+                                    <button onClick={() => handleDiscardMatch(match.id)} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.85rem', borderColor: 'rgba(255,255,255,0.2)', color: 'var(--text-tertiary)', cursor: 'pointer' }}>
                                         Descartar
                                     </button>
                                 </div>
@@ -189,7 +189,7 @@ export default function MatchmakingPage() {
 
                             <div style={{ textAlign: 'right' }}>
                                 <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--neon-blue)', marginBottom: '4px' }}>
-                                    {Math.round(match.match_score * 100)}%
+                                    {match.match_score}%
                                 </div>
                                 <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Match</div>
                             </div>
