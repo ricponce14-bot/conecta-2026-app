@@ -181,11 +181,11 @@ export default function HomePage() {
         setHeadliners(stars);
 
         const MEMO_REGIONAL = {
-          name: 'Dr. Memo',
+          name: 'Dr. Guillermo del Toro',
           role: 'Talento Regional',
           company: 'Vicepresidente de la Red Incuba Jalisco y Director del CIIO en CUAltos',
           topic: 'Conferencia: “El poder del fracaso en el camino hacia el éxito emprendedor” 🚀',
-          description: 'Doctor en Ciencias de la Educación, Maestro en Administración de Negocios e Ingeniero en Sistemas Computacionales. Miembro del Sistema Nacional de Investigadores y especialista en innovación y emprendimiento en la educación, con más de 30 publicaciones académicas. Ha realizado estancias en University of Arizona, Harvard University y el Massachusetts Institute of Technology.',
+          description: 'Doctor en Ciencias de la Educación, Maestro en Administración de Negocios e Ingeniero en Sistemas Computacionales. Miembro del Sistema Nacional de Investigadores y especialista en innovación y emprendimiento con más de 30 publicaciones académicas. Ha realizado estancias en University of Arizona, Harvard University y el MIT.',
           image_url: '/memo.jpg',
           accent_color: '#0ea5e9',
           is_regional: true,
