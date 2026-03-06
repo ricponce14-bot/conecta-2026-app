@@ -189,21 +189,45 @@ export default function HomePage() {
           display_order: 1,
         };
 
-        const fetchedRegional = speakersData.filter(s => s.is_regional);
-        setRegionalSpeakers([MEMO_REGIONAL, ...fetchedRegional]);
-      } else {
-        // If fetch fails, still show LuisMi & Memo
-        setHeadliners([LUISMI_FALLBACK]);
-        setRegionalSpeakers([{
-          name: 'Dr. Memo',
+        const KARINA_REGIONAL = {
+          name: 'Karina Navarro',
           role: 'Talento Regional',
-          company: 'Vicepresidente de la Red Incuba Jalisco y Director del CIIO en CUAltos',
-          topic: 'Conferencia: “El poder del fracaso en el camino hacia el éxito emprendedor” 🚀',
-          description: 'Doctor en Ciencias de la Educación, Maestro en Administración de Negocios e Ingeniero en Sistemas Computacionales. Miembro del Sistema Nacional de Investigadores y especialista en innovación y emprendimiento.',
-          image_url: '/memo.jpg',
-          accent_color: '#0ea5e9',
+          company: 'Fundadora de Grupo Krasny',
+          topic: 'Conferencia: “Me dijeron que no: convertir los obstáculos en impulso para emprender”',
+          description: 'Es empresaria y promotora del emprendimiento. Es autora del libro "Me dijeron que no", donde comparte su experiencia sobre resiliencia, mentalidad emprendedora y cómo convertir los obstáculos en oportunidades. A través de su historia inspira a emprendedores a persistir, reinventarse y construir proyectos con propósito. 🚀',
+          image_url: '/kary.jpg',
+          accent_color: '#ec4899',
           is_regional: true,
-        }]);
+          display_order: 2,
+        };
+
+        const fetchedRegional = speakersData.filter(s => s.is_regional);
+        setRegionalSpeakers([MEMO_REGIONAL, KARINA_REGIONAL, ...fetchedRegional]);
+      } else {
+        // If fetch fails, still show LuisMi & Hardcoded Regional
+        setHeadliners([LUISMI_FALLBACK]);
+        setRegionalSpeakers([
+          {
+            name: 'Dr. Memo',
+            role: 'Talento Regional',
+            company: 'Vicepresidente de la Red Incuba Jalisco y Director del CIIO en CUAltos',
+            topic: 'Conferencia: “El poder del fracaso en el camino hacia el éxito emprendedor” 🚀',
+            description: 'Doctor en Ciencias de la Educación, Maestro en Administración de Negocios e Ingeniero en Sistemas Computacionales. Miembro del Sistema Nacional de Investigadores y especialista en innovación y emprendimiento.',
+            image_url: '/memo.jpg',
+            accent_color: '#0ea5e9',
+            is_regional: true,
+          },
+          {
+            name: 'Karina Navarro',
+            role: 'Talento Regional',
+            company: 'Fundadora de Grupo Krasny',
+            topic: 'Conferencia: “Me dijeron que no: convertir los obstáculos en impulso para emprender”',
+            description: 'Es empresaria y promotora del emprendimiento. Es autora del libro "Me dijeron que no", donde comparte su experiencia sobre resiliencia, mentalidad emprendedora y cómo convertir los obstáculos en oportunidades.',
+            image_url: '/kary.jpg',
+            accent_color: '#ec4899',
+            is_regional: true,
+          }
+        ]);
       }
 
       // Fetch Alliances & Sponsors
