@@ -389,9 +389,121 @@ export default function HomePage() {
         </div>
       </section>
       {/* ══════════ OFFICIAL SPONSORS & CONECTA ALLIANCES ══════════ */}
+      <section className="section" style={{ paddingBottom: 'var(--space-2xl)', background: 'rgba(6, 11, 24, 0.4)' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', marginBottom: 'var(--space-2xl)' }}>
+            <div className="section-label" style={{ justifyContent: 'center' }}>Aliados Principales</div>
+            <h2 className="section-title center">
+              Patrocinadores <span className="highlight">Oficiales</span>
+            </h2>
+          </div>
 
+          <div className="sponsors-row" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'var(--space-lg)', marginBottom: 'var(--space-3xl)' }}>
+            {officialSponsors.length > 0 ? officialSponsors.map((s, i) => (
+              <div key={i} className={`sponsor-slot ${!s.is_filled ? 'sponsor-slot-available' : ''}`} style={{
+                flex: '1 1 200px',
+                maxWidth: '240px',
+                minHeight: '140px',
+                background: s.is_filled ? 'var(--bg-glass)' : 'rgba(255,255,255,0.02)',
+                border: s.is_filled ? '1px solid var(--border-color)' : '1px dashed var(--border-color)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 'var(--radius-lg)',
+                padding: '1.5rem',
+                transition: 'all 0.3s ease'
+              }}>
+                {s.image_url && s.is_filled ? (
+                  <Image src={s.image_url} alt={s.name} width={180} height={70} style={{ objectFit: 'contain' }} />
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%' }}>
+                    <div style={{ textAlign: 'center', color: s.is_filled ? 'white' : 'var(--text-tertiary)', fontSize: '0.85rem' }}>
+                      {s.is_filled ? s.name : "Espacio Disponible"}
+                    </div>
+                    {!s.is_filled && (
+                      <a href="https://wa.me/523781002683?text=Hola,%20me%20interesa%20ser%20patrocinador%20Oficial%20de%20CONECTA%202026" target="_blank" rel="noopener noreferrer" className="btn btn-outline" style={{ fontSize: '0.75rem', padding: '6px 12px', width: '100%', whiteSpace: 'normal', textAlign: 'center', lineHeight: '1.2' }}>
+                        Quiero ser Patrocinador
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            )) : Array(4).fill(0).map((_, i) => (
+              <div key={i} className="sponsor-slot" style={{
+                flex: '1 1 200px',
+                maxWidth: '240px',
+                minHeight: '140px',
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px dashed rgba(255,255,255,0.1)',
+                borderRadius: 'var(--radius-lg)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ color: 'var(--text-tertiary)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Espacio disponible</div>
+                  <a href="https://wa.me/523781002683" target="_blank" rel="noopener noreferrer" className="btn btn-outline" style={{ fontSize: '0.65rem', padding: '4px 8px' }}>Contactar</a>
+                </div>
+              </div>
+            ))}
+          </div>
 
+          <div style={{ textAlign: 'center', marginBottom: 'var(--space-2xl)' }}>
+            <h3 className="alliance-category-title" style={{ fontSize: '1.3rem', color: 'var(--text-primary)', fontWeight: '700' }}>Aliados Estratégicos</h3>
+          </div>
 
+          <div className="alliance-grid" style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '1.5rem',
+            marginBottom: 'var(--space-3xl)'
+          }}>
+            {conectaAlliances.map((alliance, i) => (
+              <div key={i} style={{
+                background: 'var(--bg-glass)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '12px',
+                padding: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '180px',
+                height: '90px'
+              }}>
+                <Image src={alliance.image_url} alt={alliance.name} width={100} height={50} style={{ objectFit: 'contain' }} />
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)' }}>
+            <h3 className="alliance-category-title" style={{ fontSize: '1.1rem', color: 'var(--text-secondary)' }}>Invitados Especiales</h3>
+          </div>
+
+          <div className="alliance-grid" style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '1.5rem'
+          }}>
+            {specialGuests.map((guest, i) => (
+              <div key={i} style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.05)',
+                borderRadius: '12px',
+                padding: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '150px',
+                height: '70px'
+              }}>
+                <Image src={guest.image_url} alt={guest.name} width={80} height={40} style={{ objectFit: 'contain' }} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
       {/* ══════════ SCHEDULE: DAY 1 / DAY 2 ══════════ */}
       <section className="section" id="schedule">
         <div className="container">
