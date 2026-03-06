@@ -87,7 +87,40 @@ export default function DashboardPage() {
 
     // Fetch AI matches when profile is loaded
     useEffect(() => {
-        if (!profile?.id || !profile?.embedding) return;
+        if (!profile?.id) return;
+
+        // Auto-generate embedding if profile is complete but missing embedding
+        if (profile.profile_completed && !profile.embedding && !matchesLoading) {
+            setMatchesLoading(true);
+            const autoGenerate = async () => {
+                try {
+                    const { data: { session } } = await supabase.auth.getSession();
+                    const res = await fetch('/api/embeddings', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': session ? `Bearer ${session.access_token}` : ''
+                        },
+                        body: JSON.stringify({ userId: profile.id }),
+                    });
+                    if (res.ok) {
+                        const { data } = await supabase.from('profiles').select('embedding').eq('id', profile.id).single();
+                        if (data?.embedding) {
+                            setProfile(prev => ({ ...prev, embedding: data.embedding }));
+                        }
+                    }
+                } catch (e) {
+                    console.error('Auto-embedding failed:', e);
+                } finally {
+                    setMatchesLoading(false);
+                }
+            };
+            autoGenerate();
+            return; // Don't try to fetch matches until embedding is generated
+        }
+
+        if (!profile.embedding) return;
+
         const fetchMatches = async () => {
             setMatchesLoading(true);
             try {
@@ -101,7 +134,7 @@ export default function DashboardPage() {
             }
         };
         fetchMatches();
-    }, [profile?.id, profile?.embedding]);
+    }, [profile?.id, profile?.embedding, profile?.profile_completed]);
 
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
@@ -546,41 +579,10 @@ export default function DashboardPage() {
                     </div>
 
                     {!profile?.embedding ? (
-                        <div style={{ textAlign: 'center', padding: 'var(--space-xl)', color: 'var(--text-secondary)' }}>
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1.5" style={{ marginBottom: '1rem' }}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
-                            <p style={{ marginBottom: '0.5rem' }}>Activa el matchmaking inteligente</p>
-                            <p style={{ fontSize: '0.82rem', color: 'var(--text-tertiary)', marginBottom: '1rem' }}>Nuestra IA analizará tu perfil para encontrar los contactos más relevantes para ti.</p>
-                            <button
-                                className="btn btn-primary"
-                                disabled={matchesLoading}
-                                onClick={async () => {
-                                    setMatchesLoading(true);
-                                    try {
-                                        const { data: { session } } = await supabase.auth.getSession();
-                                        const res = await fetch('/api/embeddings', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                                'Authorization': session ? `Bearer ${session.access_token}` : ''
-                                            },
-                                            body: JSON.stringify({ userId: profile.id }),
-                                        });
-                                        if (res.ok) {
-                                            const { data } = await supabase.from('profiles').select('embedding').eq('id', profile.id).single();
-                                            if (data?.embedding) setProfile(prev => ({ ...prev, embedding: data.embedding }));
-                                        } else {
-                                            const err = await res.json();
-                                            alert(err.error || 'Error al generar embedding');
-                                        }
-                                    } catch (e) {
-                                        alert('Error de conexión');
-                                    } finally {
-                                        setMatchesLoading(false);
-                                    }
-                                }}
-                            >
-                                {matchesLoading ? 'Analizando perfil...' : 'Activar Matchmaking IA'}
-                            </button>
+                        <div style={{ textAlign: 'center', padding: 'var(--space-lg)' }}>
+                            <div style={{ width: '32px', height: '32px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--neon-green)', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' }}></div>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }}>Analizando tu perfil con IA...</p>
+                            <style jsx>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
                         </div>
                     ) : matchesLoading ? (
                         <div style={{ textAlign: 'center', padding: 'var(--space-lg)' }}>
