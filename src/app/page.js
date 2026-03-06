@@ -201,8 +201,32 @@ export default function HomePage() {
           display_order: 2,
         };
 
+        const DAVID_REGIONAL = {
+          name: 'David Aceves',
+          role: 'Talento Regional',
+          company: 'Sexólogo y Especialista en Inteligencia Sexual',
+          topic: 'Conferencia: “Inteligencia sexual: clave para relaciones más sanas y conscientes”',
+          description: 'Enfocado en educación, bienestar y desarrollo personal desde una perspectiva integral de la sexualidad. Promueve una visión informada y consciente, ayudando a las personas a fortalecer su autoestima, relaciones y toma de decisiones. 💡',
+          image_url: '/david.jpg',
+          accent_color: '#8b5cf6',
+          is_regional: true,
+          display_order: 3,
+        };
+
+        const GEMMA_REGIONAL = {
+          name: 'Gemma Martín',
+          role: 'Talento Regional',
+          company: 'Escritora y Conferencista',
+          topic: 'Conferencia: “Reconecta con tu historia: transforma tu pasado en tu mayor fortaleza”',
+          description: 'Enfocada en desarrollo personal y bienestar emocional. Autora del libro "Reconecta con tu historia", donde invita a las personas a comprender su pasado para transformar su presente y construir un futuro con mayor conciencia. ✨',
+          image_url: '/gema.jpg',
+          accent_color: '#f59e0b',
+          is_regional: true,
+          display_order: 4,
+        };
+
         const fetchedRegional = speakersData.filter(s => s.is_regional);
-        setRegionalSpeakers([MEMO_REGIONAL, KARINA_REGIONAL, ...fetchedRegional]);
+        setRegionalSpeakers([MEMO_REGIONAL, KARINA_REGIONAL, DAVID_REGIONAL, GEMMA_REGIONAL, ...fetchedRegional]);
       } else {
         // If fetch fails, still show LuisMi & Hardcoded Regional
         setHeadliners([LUISMI_FALLBACK]);
@@ -225,6 +249,26 @@ export default function HomePage() {
             description: 'Es empresaria y promotora del emprendimiento. Es autora del libro "Me dijeron que no", donde comparte su experiencia sobre resiliencia, mentalidad emprendedora y cómo convertir los obstáculos en oportunidades.',
             image_url: '/kary.jpg',
             accent_color: '#ec4899',
+            is_regional: true,
+          },
+          {
+            name: 'David Aceves',
+            role: 'Talento Regional',
+            company: 'Sexólogo y Especialista en Inteligencia Sexual',
+            topic: 'Conferencia: “Inteligencia sexual: clave para relaciones más sanas y conscientes”',
+            description: 'Promueve una visión informada y consciente de la sexualidad, ayudando a las personas a fortalecer su autoestima, relaciones y toma de decisiones. 💡',
+            image_url: '/david.jpg',
+            accent_color: '#8b5cf6',
+            is_regional: true,
+          },
+          {
+            name: 'Gemma Martín',
+            role: 'Talento Regional',
+            company: 'Escritora y Conferencista',
+            topic: 'Conferencia: “Reconecta con tu historia: transforma tu pasado en tu mayor fortaleza”',
+            description: 'Enfocada en bienestar emocional. Autora del libro "Reconecta con tu historia", donde inspira a las personas a sanar y descubrir el poder de la autenticidad. ✨',
+            image_url: '/gema.jpg',
+            accent_color: '#f59e0b',
             is_regional: true,
           }
         ]);
@@ -627,46 +671,77 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="speakers-grid" style={{ maxWidth: '1200px' }}>
-            {regionalSpeakers.length > 0 ? regionalSpeakers.map((speaker, i) => (
-              <div
-                key={i}
-                className="speaker-card stagger-item"
-                style={{ padding: 'var(--space-xl)' }}
-              >
-                <div className="speaker-photo-wrap" style={{ width: '120px', height: '120px' }}>
-                  {speaker.image_url ? (
-                    <Image src={speaker.image_url} alt={speaker.name} width={120} height={120} style={{ borderRadius: '50%', objectFit: 'cover' }} />
-                  ) : (
-                    <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: 'var(--bg-glass)', border: '2px dashed var(--surface-border-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <div className="speakers-grid" style={{ maxWidth: '1200px', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
+            {regionalSpeakers.length > 0 ? (
+              <>
+                {regionalSpeakers.map((speaker, i) => (
+                  <div
+                    key={i}
+                    className="speaker-card stagger-item"
+                    style={{
+                      padding: 'var(--space-2xl) var(--space-xl)',
+                      '--speaker-accent': speaker.accent_color || 'var(--accent-primary)',
+                      '--speaker-gradient': `linear-gradient(90deg, ${speaker.accent_color || 'var(--accent-primary)'}, ${speaker.accent_color || 'var(--accent-primary)'})`,
+                      '--speaker-shadow': `0 20px 60px ${speaker.accent_color || 'var(--accent-primary)'}25`,
+                      '--speaker-glow': `conic-gradient(from 0deg, transparent, ${speaker.accent_color || 'var(--accent-primary)'}40, transparent, ${speaker.accent_color || 'var(--accent-primary)'}40, transparent)`,
+                      '--speaker-role-color': speaker.accent_color || 'var(--accent-primary)',
+                    }}
+                  >
+                    <div className="speaker-photo-wrap" style={{ width: '180px', height: '180px', margin: '0 auto var(--space-xl)' }}>
+                      {speaker.image_url ? (
+                        <Image src={speaker.image_url} alt={speaker.name} width={180} height={180} style={{ borderRadius: '50%', objectFit: 'cover', border: '4px solid var(--surface-border)' }} />
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: 'var(--bg-glass)', border: '2px dashed var(--surface-border-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="speaker-info">
-                  <div className="speaker-role" style={{ padding: '4px 0', fontSize: '0.65rem' }}>{speaker.role}</div>
-                  <h3 className="speaker-name" style={{ marginTop: '0.5rem', fontSize: '1.2rem' }}>{speaker.name}</h3>
-                  <p className="speaker-topic" style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.4rem', fontSize: '0.85rem' }}>{speaker.topic}</p>
-                </div>
-              </div>
-            )) : Array(4).fill(0).map((_, i) => (
-              <div
-                key={i}
-                className="speaker-card stagger-item"
-                style={{ padding: 'var(--space-xl)', opacity: 0.5 }}
-              >
-                <div className="speaker-photo-wrap" style={{ width: '120px', height: '120px' }}>
-                  <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: 'var(--bg-glass)', border: '2px dashed var(--surface-border-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <div className="speaker-info">
+                      <div className="speaker-role" style={{
+                        color: 'var(--speaker-role-color)',
+                        fontWeight: '700',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        fontSize: '0.7rem',
+                        marginBottom: '0.5rem'
+                      }}>{speaker.role}</div>
+                      <h3 className="speaker-name" style={{ marginBottom: '0.75rem', fontSize: '1.5rem' }}>{speaker.name}</h3>
+                      <p className="speaker-company" style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem', marginBottom: '1rem' }}>{speaker.company}</p>
+                      <p className="speaker-topic" style={{
+                        background: 'rgba(255,255,255,0.03)',
+                        padding: '0.75rem',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255,255,255,0.05)',
+                        fontWeight: 600,
+                        color: 'var(--text-primary)',
+                        marginBottom: '1rem',
+                        fontSize: '0.9rem'
+                      }}>{speaker.topic}</p>
+                      <p className="speaker-description" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{speaker.description}</p>
+                    </div>
                   </div>
+                ))}
+
+                {/* Coming Soon Card */}
+                <div className="speaker-card stagger-item" style={{
+                  padding: 'var(--space-2xl) var(--space-xl)',
+                  opacity: 0.6,
+                  borderStyle: 'dashed',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  minHeight: '400px'
+                }}>
+                  <div className="speaker-photo-wrap" style={{ width: '120px', height: '120px', margin: '0 auto var(--space-xl)', background: 'var(--bg-glass)', border: '2px dashed var(--surface-border)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                  </div>
+                  <h3 className="speaker-name" style={{ fontSize: '1.2rem' }}>Más Talento</h3>
+                  <p className="speaker-topic" style={{ color: 'var(--text-tertiary)' }}>Próximamente por anunciar</p>
                 </div>
-                <div className="speaker-info">
-                  <div className="speaker-role" style={{ padding: '4px 0', fontSize: '0.65rem' }}>Cargando...</div>
-                  <h3 className="speaker-name" style={{ marginTop: '0.5rem', fontSize: '1.2rem' }}>Talento Regional</h3>
-                  <p className="speaker-topic" style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.4rem', fontSize: '0.85rem' }}>Próximamente</p>
-                </div>
-              </div>
-            ))}
+              </>
+            ) : (
+              <p style={{ textAlign: 'center', color: 'var(--text-tertiary)', width: '100%' }}>Cargando talento regional...</p>
+            )}
           </div>
         </div>
       </section>
