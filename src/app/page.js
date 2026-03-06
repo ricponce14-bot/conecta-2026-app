@@ -130,6 +130,17 @@ export default function HomePage() {
         // Ensure LuisMi is always shown
         const hasLuisMi = stars.some(s => s.name && s.name.toLowerCase().includes('altamirano'));
         if (!hasLuisMi) stars = [LUISMI_FALLBACK, ...stars];
+
+        // Enforce custom order: Farid -> Luis -> Jess
+        const getOrder = (name) => {
+          const lowerName = (name || '').toLowerCase();
+          if (lowerName.includes('farid')) return 1;
+          if (lowerName.includes('luismi') || lowerName.includes('altamirano')) return 2;
+          if (lowerName.includes('jess')) return 3;
+          return 99;
+        };
+        stars.sort((a, b) => getOrder(a.name) - getOrder(b.name));
+
         setHeadliners(stars);
         setRegionalSpeakers(speakersData.filter(s => s.is_regional));
       } else {
