@@ -33,6 +33,14 @@ async function generateEmbedding(text) {
 export async function POST(request) {
     try {
         const { userId } = await request.json();
+        const authHeader = request.headers.get('Authorization');
+
+        // Create a user-specific client for RLS bypass
+        const supabaseUserClient = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+            { global: { headers: { Authorization: authHeader || '' } } }
+        );
 
         if (!userId) {
             return NextResponse.json({ error: 'userId is required' }, { status: 400 });
@@ -42,8 +50,8 @@ export async function POST(request) {
             return NextResponse.json({ error: 'GEMINI_API_KEY not configured' }, { status: 500 });
         }
 
-        // Fetch profile
-        const { data: profile, error: profileError } = await supabaseAdmin
+        // Fetch profile using the user's client so RLS allows it
+        const { data: profile, error: profileError } = await supabaseUserClient
             .from('profiles')
             .select('full_name, title, company_name, offer_description, search_description')
             .eq('id', userId)
@@ -69,8 +77,8 @@ export async function POST(request) {
         const embeddingText = textParts.join('. ');
         const embedding = await generateEmbedding(embeddingText);
 
-        // Save embedding to profile
-        const { error: updateError } = await supabaseAdmin
+        // Save embedding to profile using the user client
+        const { error: updateError } = await supabaseUserClient
             .from('profiles')
             .update({ embedding: JSON.stringify(embedding) })
             .eq('id', userId);

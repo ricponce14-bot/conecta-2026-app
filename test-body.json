@@ -1,0 +1,11 @@
+{
+    "model": "models/gemini-embedding-001",
+    "outputDimensionality": 768,
+    "content": {
+        "parts": [
+            {
+                "text": "Hello world"
+            }
+        ]
+    }
+}

@@ -125,9 +125,13 @@ export default function DashboardPage() {
             setEditing(false);
 
             // Regenerate AI embedding with updated data
+            const { data: { session } } = await supabase.auth.getSession();
             fetch('/api/embeddings', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': session ? `Bearer ${session.access_token}` : ''
+                },
                 body: JSON.stringify({ userId: profile.id }),
             }).then(async (res) => {
                 if (res.ok) {
@@ -552,9 +556,13 @@ export default function DashboardPage() {
                                 onClick={async () => {
                                     setMatchesLoading(true);
                                     try {
+                                        const { data: { session } } = await supabase.auth.getSession();
                                         const res = await fetch('/api/embeddings', {
                                             method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': session ? `Bearer ${session.access_token}` : ''
+                                            },
                                             body: JSON.stringify({ userId: profile.id }),
                                         });
                                         if (res.ok) {

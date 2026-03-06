@@ -32,7 +32,7 @@ const TEST_PROFILES = [
         whatsapp: '3312345001',
         offer_description: 'Diseño gráfico, branding corporativo, identidad visual, diseño de packaging y material publicitario. Más de 10 años de experiencia con pymes y startups.',
         search_description: 'Busco empresas que necesiten renovar su imagen corporativa, emprendedores con proyectos nuevos, alianzas con imprentas y agencias de marketing.',
-        role: 'exhibitor',
+        role: 'company_rep',
         profile_completed: true,
     },
     {
@@ -42,7 +42,7 @@ const TEST_PROFILES = [
         whatsapp: '3312345002',
         offer_description: 'Diseño web, diseño de apps móviles, interfaces de usuario, experiencia de usuario, prototipado en Figma y desarrollo frontend.',
         search_description: 'Busco startups y empresas que necesiten mejorar sus plataformas digitales, socios de desarrollo backend, inversionistas.',
-        role: 'exhibitor',
+        role: 'company_rep',
         profile_completed: true,
     },
     {
@@ -52,7 +52,7 @@ const TEST_PROFILES = [
         whatsapp: '3312345003',
         offer_description: 'Diseño industrial, diseño de productos, modelado 3D, prototipado rápido, consultoría en manufactura y empaque.',
         search_description: 'Busco fabricantes locales, empresas de manufactura, proveedores de materia prima, distribuidores.',
-        role: 'exhibitor',
+        role: 'company_rep',
         profile_completed: true,
     },
     {
@@ -72,7 +72,7 @@ const TEST_PROFILES = [
         whatsapp: '3312345005',
         offer_description: 'Diseño de interiores comerciales y residenciales, renders 3D, remodelación de oficinas, espacios para eventos y showrooms.',
         search_description: 'Busco proveedores de mobiliario, constructoras, desarrolladoras inmobiliarias, arquitectos.',
-        role: 'exhibitor',
+        role: 'company_rep',
         profile_completed: true,
     },
 ];
