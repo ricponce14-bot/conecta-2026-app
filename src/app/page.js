@@ -93,13 +93,13 @@ const FEATURES = [
 const EXPO_STANDS = [
   {
     name: 'Stand Básico',
-    price: '$3,900',
+    price: '$4,900',
     features: ['Espacio 2×2m', 'Stand modular rotulado completo', 'Mesa, 2 sillas, eléctrico', 'QR empresarial'],
     popular: false
   },
   {
     name: 'Stand Regional Plus',
-    price: '$4,900',
+    price: '$5,900',
     features: ['Espacio 3×2m', 'Stand modular rotulado completo', 'Mobiliario completo', 'Directorio destacado', 'Matchmaking prioritario'],
     popular: true
   }

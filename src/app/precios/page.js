@@ -60,12 +60,17 @@ export default function PreciosPage() {
                     const isStand = item.item_slug.includes('stand');
                     const isPremium = item.item_slug.includes('premium') || item.item_slug.includes('plus');
 
+                    // Enforce new static prices requested by the user
+                    let priceNum = item.price_mxn;
+                    if (isStand && isPremium) priceNum = 5900;
+                    else if (isStand && !isPremium) priceNum = 4900;
+
                     return {
                         id: item.id,
                         tier: isPremium ? 'Premium' : (isStand ? 'Empresarial' : 'Individual'),
                         name: item.item_name,
-                        price: item.price_mxn.toLocaleString('es-MX'),
-                        rawPrice: item.price_mxn,
+                        price: priceNum.toLocaleString('es-MX'),
+                        rawPrice: priceNum,
                         period: isStand ? 'Espacio de exhibición' : 'Por persona',
                         description: isStand
                             ? 'Tu espacio para mostrar tu negocio a toda la región.'
