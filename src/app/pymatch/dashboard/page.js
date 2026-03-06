@@ -6,6 +6,15 @@ import { QRCodeSVG } from 'qrcode.react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 
+const MUNICIPALITIES = [
+    'Tepatitlán de Morelos', 'Arandas', 'Lagos de Moreno',
+    'San Juan de los Lagos', 'Jalostotitlán', 'San Miguel el Alto',
+    'Yahualica de González Gallo', 'Encarnación de Díaz', 'San Julián',
+    'Valle de Guadalupe', 'Cañadas de Obregón', 'Mexticacán',
+    'San Diego de Alejandría', 'Unión de San Antonio', 'Villa Hidalgo',
+    'Ojuelos de Jalisco', 'Acatic', 'Teocaltiche', 'Cuquío',
+];
+
 export default function DashboardPage() {
     const router = useRouter();
     const [profile, setProfile] = useState(null);
@@ -69,7 +78,27 @@ export default function DashboardPage() {
                 }
 
                 setProfile(data);
-                setEditData(data);
+
+                // Fetch Company Data if any
+                const { data: companyData } = await supabase
+                    .from('companies')
+                    .select('*')
+                    .eq('owner_id', user.id)
+                    .single();
+
+                const combinedData = {
+                    ...data,
+                    list_in_directory: !!companyData,
+                    business_address: companyData?.address || '',
+                    business_phone: companyData?.phone || '',
+                    business_email: companyData?.email || '',
+                    business_website: companyData?.website || '',
+                    business_hours: companyData?.hours || '',
+                    business_municipality: companyData?.municipality || ''
+                };
+
+                setEditData(combinedData);
+                setProfile(combinedData);
 
                 // Redirect to onboarding if profile is not completed
                 if (!data.profile_completed) {
@@ -199,6 +228,33 @@ export default function DashboardPage() {
                     if (data?.embedding) setProfile(prev => ({ ...prev, embedding: data.embedding }));
                 }
             }).catch(err => console.error('Embedding update error:', err));
+
+            // Update/Upsert Company record if opted in
+            if (editData.list_in_directory) {
+                await supabase
+                    .from('companies')
+                    .upsert({
+                        owner_id: profile.id,
+                        trade_name: editData.company_name,
+                        sector: profile.industry || 'General',
+                        offer_description: editData.offer_description,
+                        search_description: editData.search_description,
+                        address: editData.business_address,
+                        phone: editData.business_phone,
+                        email: editData.business_email,
+                        website: editData.business_website,
+                        hours: editData.business_hours,
+                        municipality: editData.business_municipality,
+                        is_verified: profile.is_verified || false
+                    }, { onConflict: 'owner_id' });
+            } else {
+                // If they opt-out, we could delete it, but maybe just leave it as un-published?
+                // The current Directory page filters by search_description etc.
+                // For now, let's assume existence in the table means published.
+                // If they opt out, we can delete it.
+                await supabase.from('companies').delete().eq('owner_id', profile.id);
+            }
+
         } catch (err) {
             alert("Error al actualizar: " + err.message);
         } finally {
@@ -465,6 +521,98 @@ export default function DashboardPage() {
                                         onChange={e => setEditData({ ...editData, search_description: e.target.value })}
                                     />
                                 </div>
+
+                                {/* Business Directory Section in Dashboard Edit */}
+                                <div style={{
+                                    gridColumn: '1 / -1',
+                                    borderTop: '1px solid rgba(37, 99, 235, 0.2)',
+                                    paddingTop: 'var(--space-md)',
+                                    marginTop: 'var(--space-sm)'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
+                                        <input
+                                            type="checkbox"
+                                            id="list_in_directory_dash"
+                                            style={{ width: '18px', height: '18px' }}
+                                            checked={editData.list_in_directory || false}
+                                            onChange={e => setEditData({ ...editData, list_in_directory: e.target.checked })}
+                                        />
+                                        <label htmlFor="list_in_directory_dash" style={{ fontWeight: 600, color: 'var(--neon-blue)', cursor: 'pointer' }}>
+                                            Publicar mi empresa en el directorio oficial
+                                        </label>
+                                    </div>
+
+                                    {editData.list_in_directory && (
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                                            <div style={{ gridColumn: '1 / -1' }}>
+                                                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Dirección Física</label>
+                                                <input
+                                                    type="text"
+                                                    className="filter-input"
+                                                    style={{ width: '100%' }}
+                                                    placeholder="Calle, número, colonia..."
+                                                    value={editData.business_address || ''}
+                                                    onChange={e => setEditData({ ...editData, business_address: e.target.value })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Municipio</label>
+                                                <select
+                                                    className="filter-input"
+                                                    style={{ width: '100%' }}
+                                                    value={editData.business_municipality || ''}
+                                                    onChange={e => setEditData({ ...editData, business_municipality: e.target.value })}
+                                                >
+                                                    <option value="">Selecciona</option>
+                                                    {MUNICIPALITIES.map(m => <option key={m} value={m}>{m}</option>)}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Teléfonos de Contacto</label>
+                                                <input
+                                                    type="text"
+                                                    className="filter-input"
+                                                    style={{ width: '100%' }}
+                                                    placeholder="Ej. +52 378..."
+                                                    value={editData.business_phone || ''}
+                                                    onChange={e => setEditData({ ...editData, business_phone: e.target.value })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Email Corporativo</label>
+                                                <input
+                                                    type="email"
+                                                    className="filter-input"
+                                                    style={{ width: '100%' }}
+                                                    value={editData.business_email || ''}
+                                                    onChange={e => setEditData({ ...editData, business_email: e.target.value })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Sitio Web</label>
+                                                <input
+                                                    type="url"
+                                                    className="filter-input"
+                                                    style={{ width: '100%' }}
+                                                    value={editData.business_website || ''}
+                                                    onChange={e => setEditData({ ...editData, business_website: e.target.value })}
+                                                />
+                                            </div>
+                                            <div style={{ gridColumn: '1 / -1' }}>
+                                                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Horario de Atención</label>
+                                                <input
+                                                    type="text"
+                                                    className="filter-input"
+                                                    style={{ width: '100%' }}
+                                                    placeholder="Ej. Lun-Vie 9:00 - 18:00"
+                                                    value={editData.business_hours || ''}
+                                                    onChange={e => setEditData({ ...editData, business_hours: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
                                 <div style={{ gridColumn: '1 / -1', marginTop: 'var(--space-md)' }}>
                                     <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={updating}>
                                         {updating ? 'Guardando...' : 'Actualizar Perfil'}

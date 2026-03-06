@@ -46,7 +46,7 @@ export default function DirectorioPage() {
 
                 const { data, error } = await supabase
                     .from('companies')
-                    .select('id, trade_name, municipality, sector, offer_description, search_description, is_verified, logo_url')
+                    .select('id, trade_name, municipality, sector, offer_description, search_description, is_verified, logo_url, address, phone, email, website, hours')
                     .order('trade_name');
 
                 if (error) throw error;
@@ -63,7 +63,12 @@ export default function DirectorioPage() {
                         offer: c.offer_description || 'Sin descripción.',
                         search: c.search_description || 'Sin descripción.',
                         verified: c.is_verified || false,
-                        logo_url: c.logo_url
+                        logo_url: c.logo_url,
+                        address: c.address,
+                        phone: c.phone,
+                        email: c.email,
+                        website: c.website,
+                        hours: c.hours
                     };
                 });
 
@@ -186,9 +191,49 @@ export default function DirectorioPage() {
                                                 }}>
                                                     Lo que buscamos
                                                 </h4>
-                                                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.65' }}>
+                                                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.65', marginBottom: 'var(--space-md)' }}>
                                                     {company.search}
                                                 </p>
+                                            </div>
+
+                                            {/* Extended Contact Info */}
+                                            <div style={{
+                                                borderTop: '1px solid rgba(255,255,255,0.05)',
+                                                paddingTop: 'var(--space-md)',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '10px'
+                                            }}>
+                                                {company.address && (
+                                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--neon-blue)" strokeWidth="2" style={{ marginTop: '2px', flexShrink: 0 }}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                        <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>{company.address}</span>
+                                                    </div>
+                                                )}
+                                                {company.phone && (
+                                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--neon-blue)" strokeWidth="2" style={{ flexShrink: 0 }}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                                        <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>{company.phone}</span>
+                                                    </div>
+                                                )}
+                                                {company.email && (
+                                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--neon-blue)" strokeWidth="2" style={{ flexShrink: 0 }}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                                        <a href={`mailto:${company.email}`} style={{ fontSize: '0.8rem', color: 'var(--neon-blue)', textDecoration: 'none' }}>{company.email}</a>
+                                                    </div>
+                                                )}
+                                                {company.website && (
+                                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--neon-blue)" strokeWidth="2" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                                        <a href={company.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8rem', color: 'var(--neon-blue)', textDecoration: 'none' }}>Ver Sitio Web</a>
+                                                    </div>
+                                                )}
+                                                {company.hours && (
+                                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-warn)" strokeWidth="2" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                                        <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>{company.hours}</span>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     ) : (

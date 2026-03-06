@@ -33,7 +33,17 @@ const PROFILE_TYPES = [
     'Profesional Independiente / Freelance',
     'Buscador de Empleo',
     'Inversionista / Capital',
-    'Estudiante / Académico'
+    'Estudiante / Académico',
+    'San Ignacio Cerro Gordo',
+];
+
+const MUNICIPALITIES = [
+    'Tepatitlán de Morelos', 'Arandas', 'Lagos de Moreno',
+    'San Juan de los Lagos', 'Jalostotitlán', 'San Miguel el Alto',
+    'Yahualica de González Gallo', 'Encarnación de Díaz', 'San Julián',
+    'Valle de Guadalupe', 'Cañadas de Obregón', 'Mexticacán',
+    'San Diego de Alejandría', 'Unión de San Antonio', 'Villa Hidalgo',
+    'Ojuelos de Jalisco', 'Acatic', 'Teocaltiche', 'Cuquío',
 ];
 
 const TIPS = {
@@ -63,6 +73,13 @@ export default function OnboardingPage() {
         search_tags: '',
         offer_description: '',
         search_description: '',
+        list_in_directory: false,
+        business_address: '',
+        business_phone: '',
+        business_email: '',
+        business_website: '',
+        business_hours: '',
+        municipality: '',
     });
 
     // Load existing profile data
@@ -141,6 +158,9 @@ export default function OnboardingPage() {
     const handleComplete = async () => {
         setSaving(true);
         try {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session?.user) throw new Error("No hay sesión activa");
+
             // Generate structured descriptions for the AI
             let finalOffer = formData.offer_description;
             let finalSearch = formData.search_description;
@@ -166,6 +186,31 @@ export default function OnboardingPage() {
                 .eq('id', userId);
 
             if (error) throw error;
+
+            // If user opted into the directory, create/update company record
+            if (formData.list_in_directory) {
+                const { error: companyError } = await supabase
+                    .from('companies')
+                    .upsert({
+                        owner_id: userId,
+                        trade_name: formData.company_name,
+                        sector: formData.industry,
+                        offer_description: finalOffer,
+                        search_description: finalSearch,
+                        address: formData.business_address,
+                        phone: formData.business_phone,
+                        email: formData.business_email,
+                        website: formData.business_website,
+                        hours: formData.business_hours,
+                        municipality: formData.municipality,
+                        is_verified: false
+                    }, { onConflict: 'owner_id' });
+
+                if (companyError) {
+                    console.error("Error saving to directory:", companyError);
+                    // We don't block the whole onboarding if directory fails, but notify
+                }
+            }
 
             // Generate AI embedding in background (non-blocking)
             fetch('/api/embeddings', {
@@ -348,6 +393,133 @@ export default function OnboardingPage() {
                                     <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
                                         Los perfiles con empresa e información de negocio reciben en promedio <strong style={{ color: 'var(--neon-blue)' }}>3x más conexiones</strong> durante el evento.
                                     </p>
+                                </div>
+
+                                {/* Directory Listing Section */}
+                                <div style={{
+                                    borderTop: '1px solid rgba(255,255,255,0.05)',
+                                    paddingTop: 'var(--space-xl)',
+                                    marginTop: 'var(--space-md)'
+                                }}>
+                                    <h4 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>Directorio Empresarial</h4>
+
+                                    <div style={{
+                                        display: 'flex',
+                                        gap: '12px',
+                                        background: 'rgba(37, 99, 235, 0.05)',
+                                        padding: '1rem',
+                                        borderRadius: '12px',
+                                        border: '1px solid rgba(37, 99, 235, 0.1)',
+                                        marginBottom: 'var(--space-md)'
+                                    }}>
+                                        <div style={{ paddingTop: '2px' }}>
+                                            <input
+                                                type="checkbox"
+                                                id="list_in_directory"
+                                                style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                                                checked={formData.list_in_directory}
+                                                onChange={e => setFormData({ ...formData, list_in_directory: e.target.checked })}
+                                            />
+                                        </div>
+                                        <label htmlFor="list_in_directory" style={{ cursor: 'pointer' }}>
+                                            <div style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--neon-blue)' }}>Publicar mi empresa en el directorio oficial</div>
+                                            <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', margin: '4px 0 0 0' }}>
+                                                Al habilitar esta opción, los demás asistentes podrán encontrar tu negocio, ver tus productos y contactarte directamente.
+                                            </p>
+                                        </label>
+                                    </div>
+
+                                    {formData.list_in_directory && (
+                                        <div style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: 'var(--space-md)',
+                                            animation: 'tipFadeIn 0.4s ease'
+                                        }}>
+                                            <div>
+                                                <label className="ob-label">Giro / Municipio *</label>
+                                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                                    <select
+                                                        className="filter-input"
+                                                        value={formData.municipality}
+                                                        onChange={e => setFormData({ ...formData, municipality: e.target.value })}
+                                                    >
+                                                        <option value="">Selecciona Municipio</option>
+                                                        {MUNICIPALITIES.map(m => <option key={m} value={m}>{m}</option>)}
+                                                    </select>
+                                                    <input
+                                                        type="text"
+                                                        className="filter-input"
+                                                        placeholder="Giro (Ej. Dulces)"
+                                                        value={formData.industry}
+                                                        disabled
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label className="ob-label">Dirección Completa</label>
+                                                <input
+                                                    type="text"
+                                                    className="filter-input"
+                                                    style={{ width: '100%' }}
+                                                    placeholder="Calle, número, colonia, CP..."
+                                                    value={formData.business_address}
+                                                    onChange={e => setFormData({ ...formData, business_address: e.target.value })}
+                                                />
+                                            </div>
+
+                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                                <div>
+                                                    <label className="ob-label">Teléfono</label>
+                                                    <input
+                                                        type="tel"
+                                                        className="filter-input"
+                                                        style={{ width: '100%' }}
+                                                        placeholder="33 1234 5678"
+                                                        value={formData.business_phone}
+                                                        onChange={e => setFormData({ ...formData, business_phone: e.target.value })}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="ob-label">Horario</label>
+                                                    <input
+                                                        type="text"
+                                                        className="filter-input"
+                                                        style={{ width: '100%' }}
+                                                        placeholder="Lun-Vie 9-18"
+                                                        value={formData.business_hours}
+                                                        onChange={e => setFormData({ ...formData, business_hours: e.target.value })}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                                <div>
+                                                    <label className="ob-label">Email Corporativo</label>
+                                                    <input
+                                                        type="email"
+                                                        className="filter-input"
+                                                        style={{ width: '100%' }}
+                                                        placeholder="ventas@empresa.com"
+                                                        value={formData.business_email}
+                                                        onChange={e => setFormData({ ...formData, business_email: e.target.value })}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="ob-label">Sitio Web</label>
+                                                    <input
+                                                        type="url"
+                                                        className="filter-input"
+                                                        style={{ width: '100%' }}
+                                                        placeholder="https://empresa.com"
+                                                        value={formData.business_website}
+                                                        onChange={e => setFormData({ ...formData, business_website: e.target.value })}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
