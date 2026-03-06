@@ -38,6 +38,21 @@ export async function middleware(request) {
         return NextResponse.redirect(url)
     }
 
+    // Proteger rutas de admin: verificar rol del usuario
+    if (request.nextUrl.pathname.startsWith('/pymatch/admin') && user) {
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single()
+
+        if (!profile || profile.role !== 'admin') {
+            const url = request.nextUrl.clone()
+            url.pathname = '/pymatch/dashboard'
+            return NextResponse.redirect(url)
+        }
+    }
+
     // Si ya está logueado y va a login/registro, mándalo al dashboard
     // Pero permite /registro si tiene el parámetro de éxito para mostrar el mensaje de confirmación
     const isSuccess = request.nextUrl.searchParams.get('success') === 'true'

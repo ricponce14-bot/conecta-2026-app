@@ -361,7 +361,7 @@ export default function HomePage() {
             </div>
 
             {/* Right Side Image (Ponentes) */}
-            <div className="hero-images-container" style={{ position: 'relative', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', height: '100%', paddingTop: 'var(--space-4xl)' }}>
+            <div className="hero-images-container" style={{ position: 'relative', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', height: '100%', paddingTop: 'var(--space-xl)' }}>
               {/* Background Glow - Centered behind image */}
               <div style={{
                 position: 'absolute',
@@ -572,13 +572,13 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '0', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', background: 'rgba(255,255,255,0.01)', overflow: 'hidden', position: 'relative' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', background: 'rgba(255,255,255,0.01)', overflow: 'hidden', position: 'relative' }}>
 
                   {/* Vertical Divider (Desktop Only) */}
                   <div style={{ position: 'absolute', left: '50%', top: '10%', bottom: '10%', width: '1px', borderLeft: '1px dashed rgba(255,255,255,0.1)', zIndex: 1 }} className="desktop-only"></div>
 
                   {/* Day 1 Column */}
-                  <div style={{ padding: '2.5rem', position: 'relative', zIndex: 2 }}>
+                  <div style={{ padding: 'clamp(1.5rem, 5vw, 2.5rem)', position: 'relative', zIndex: 2 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
                       <div style={{ width: '48px', height: '48px', background: 'var(--gradient-primary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: '900', fontSize: '1.25rem', boxShadow: '0 8px 20px rgba(37, 99, 235, 0.3)' }}>1</div>
                       <div>
@@ -620,7 +620,7 @@ export default function HomePage() {
                   </div>
 
                   {/* Day 2 Column */}
-                  <div style={{ padding: '2.5rem', position: 'relative', zIndex: 2, background: 'rgba(14, 165, 233, 0.02)' }}>
+                  <div style={{ padding: 'clamp(1.5rem, 5vw, 2.5rem)', position: 'relative', zIndex: 2, background: 'rgba(14, 165, 233, 0.02)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
                       <div style={{ width: '48px', height: '48px', background: 'linear-gradient(135deg, #0ea5e3 0%, #0284c7 100%)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: '900', fontSize: '1.25rem', boxShadow: '0 8px 20px rgba(14, 165, 233, 0.3)' }}>2</div>
                       <div>

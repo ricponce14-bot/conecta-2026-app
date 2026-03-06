@@ -126,7 +126,13 @@ button {
 }
 
 .section {
-  padding: var(--space-4xl) 0;
+  padding: var(--space-3xl) 0;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--space-2xl) 0;
+  }
 }
 
 .section-label {
@@ -178,6 +184,21 @@ button {
   overflow-y: auto;
   /* Add padding bottom equal to nav bar height on mobile to prevent occlusion */
   padding-bottom: var(--space-2xl);
+}
+
+/* Top App Bar for Mobile */
+.top-nav-mobile {
+  display: none;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10, 17, 40, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--surface-border);
+  z-index: 1000;
+  padding: var(--space-md) var(--space-lg);
 }
 
 /* Bottom App Bar for Mobile */
@@ -253,6 +274,11 @@ button {
     /* Make room for bottom nav */
   }
 
+  .top-nav-mobile {
+    display: block;
+    /* Show top nav on mobile */
+  }
+
   .bottom-nav-mobile {
     display: block;
     /* Show bottom nav on mobile */
@@ -296,8 +322,9 @@ button {
 }
 
 .section-title {
-  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
   margin-bottom: var(--space-md);
+  line-height: 1.1;
 }
 
 .section-title.center {
@@ -597,10 +624,19 @@ button {
 
 .hero-metrics {
   display: flex;
-  gap: var(--space-2xl);
+  gap: var(--space-lg) var(--space-2xl);
+  flex-wrap: wrap;
   animation: fadeInUp 0.6s ease 0.4s both;
   padding-top: var(--space-xl);
   border-top: 1px solid var(--surface-border);
+}
+
+@media (max-width: 600px) {
+  .hero-metrics {
+    justify-content: center;
+    text-align: center;
+    gap: var(--space-lg);
+  }
 }
 
 .hero-metric-value {
@@ -777,6 +813,17 @@ button {
 @media (max-width: 768px) {
   .hero-title {
     font-size: clamp(2rem, 8vw, 2.5rem);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 var(--space-sm);
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    margin-bottom: var(--space-sm);
   }
 
   .hero-image-wrapper {
@@ -1959,7 +2006,9 @@ button {
   }
 
   .sponsors-row {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
   }
 
   .alliance-grid-4 {
@@ -1967,7 +2016,9 @@ button {
   }
 
   .alliance-grid-5 {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
   }
 
   .pricing-grid {
@@ -2011,8 +2062,8 @@ button {
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: 1.9rem;
-    line-height: 1.15;
+    font-size: clamp(1.8rem, 8vw, 2.2rem);
+    line-height: 1.1;
   }
 
   .hero-actions {
@@ -2072,7 +2123,14 @@ button {
 
   .hero-images-container {
     padding-top: var(--space-md) !important;
-    min-height: 300px;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-image-wrapper {
+    margin-top: 0 !important;
   }
 
   .ticket-notch {

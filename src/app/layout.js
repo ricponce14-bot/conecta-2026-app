@@ -20,7 +20,7 @@ export const metadata = {
     type: "website",
   },
   icons: {
-    icon: '/flav.png',
+    icon: '/conectacorto.png',
   },
 };
 

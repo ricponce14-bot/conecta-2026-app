@@ -4,21 +4,11 @@ import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
+import { MUNICIPALITIES as BASE_MUNICIPALITIES, SECTORS as BASE_SECTORS } from '@/lib/constants';
 
-const MUNICIPALITIES = [
-    'Todos', 'Tepatitlán de Morelos', 'Arandas', 'Lagos de Moreno',
-    'San Juan de los Lagos', 'Jalostotitlán', 'San Miguel el Alto',
-    'Yahualica de González Gallo', 'Encarnación de Díaz', 'San Julián',
-    'Valle de Guadalupe', 'Cañadas de Obregón', 'Mexticacán',
-    'San Diego de Alejandría', 'Unión de San Antonio', 'Villa Hidalgo',
-    'Ojuelos de Jalisco', 'Acatic', 'Teocaltiche', 'Cuquío',
-    'San Ignacio Cerro Gordo',
-];
+const MUNICIPALITIES = ['Todos', ...BASE_MUNICIPALITIES];
 
-const SECTORS = [
-    'Todos', 'Agroindustria', 'Tecnología', 'Manufactura', 'Distribución',
-    'Servicios', 'Comercio', 'Salud', 'Educación', 'Construcción',
-];
+const SECTORS = ['Todos', ...BASE_SECTORS];
 
 const MUNICIPALITY_IMAGES = {
     'Tepatitlán de Morelos': '/tepafondo.webp',

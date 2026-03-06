@@ -75,7 +75,7 @@ export default function RegisterPage() {
         };
 
         checkUser();
-    }, [isSuccess]);
+    }, []); // Only run once on mount
 
     if (isSuccess) {
         return (
@@ -157,8 +157,8 @@ export default function RegisterPage() {
                                 />
                             </div>
 
-                            {/* Correo y WhatsApp (2 columnas) */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
+                            {/* Correo y WhatsApp (responsive) */}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-md)' }}>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>
                                         Correo Electrónico

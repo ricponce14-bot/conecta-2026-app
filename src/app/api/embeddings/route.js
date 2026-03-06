@@ -1,10 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
+import { supabaseAdmin } from '@/lib/supabase-server';
 import { NextResponse } from 'next/server';
-
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+import { createClient } from '@supabase/supabase-js';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const EMBED_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${GEMINI_API_KEY}`;
@@ -29,6 +25,23 @@ async function generateEmbedding(text) {
     return data.embedding.values;
 }
 
+// Simple in-memory rate limiter: max 5 requests per minute per userId
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX = 5;
+
+function checkRateLimit(userId) {
+    const now = Date.now();
+    const entry = rateLimitMap.get(userId);
+    if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW) {
+        rateLimitMap.set(userId, { windowStart: now, count: 1 });
+        return true;
+    }
+    if (entry.count >= RATE_LIMIT_MAX) return false;
+    entry.count++;
+    return true;
+}
+
 // POST: Generate and save embedding for a user profile
 export async function POST(request) {
     try {
@@ -44,6 +57,10 @@ export async function POST(request) {
 
         if (!userId) {
             return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+        }
+
+        if (!checkRateLimit(userId)) {
+            return NextResponse.json({ error: 'Too many requests. Try again later.' }, { status: 429 });
         }
 
         if (!GEMINI_API_KEY) {

@@ -219,7 +219,7 @@ export default function MisContactosPage() {
                     <style jsx>{`
                         .leads-grid {
                             display: grid;
-                            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+                            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
                             gap: var(--space-lg);
                         }
                         

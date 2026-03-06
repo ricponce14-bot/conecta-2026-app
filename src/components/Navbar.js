@@ -28,7 +28,7 @@ export default function Navbar() {
                     .select('role')
                     .eq('id', user.id)
                     .single();
-                setIsAdmin(profile?.role === 'admin' || user.email === 'ricponce14@gmail.com');
+                setIsAdmin(profile?.role === 'admin');
             }
         };
 

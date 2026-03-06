@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { MUNICIPALITIES, INDUSTRIES, PROFILE_TYPES } from '@/lib/constants';
 
 const STEPS = [
     { id: 'info', title: 'Tu Información', subtitle: 'Datos básicos de tu perfil profesional' },
@@ -10,41 +11,8 @@ const STEPS = [
     { id: 'networking', title: 'Networking', subtitle: 'Define qué ofreces y qué buscas de forma estructurada' },
 ];
 
-const INDUSTRIES = [
-    'Tecnología y Software',
-    'Manufactura e Industria',
-    'Alimentos y Bebidas',
-    'Salud y Bienestar',
-    'Servicios Financieros',
-    'Educación',
-    'Construcción e Inmobiliaria',
-    'Comercio y Retail',
-    'Logística y Transporte',
-    'Turismo y Hospitalidad',
-    'Energía y Medio Ambiente',
-    'Marketing y Publicidad',
-    'Consultoría y Asesoría',
-    'Otro'
-];
 
-const PROFILE_TYPES = [
-    'Empresa B2B (Ventas a empresas)',
-    'Empresa B2C (Ventas a consumidor)',
-    'Profesional Independiente / Freelance',
-    'Buscador de Empleo',
-    'Inversionista / Capital',
-    'Estudiante / Académico',
-    'San Ignacio Cerro Gordo',
-];
 
-const MUNICIPALITIES = [
-    'Tepatitlán de Morelos', 'Arandas', 'Lagos de Moreno',
-    'San Juan de los Lagos', 'Jalostotitlán', 'San Miguel el Alto',
-    'Yahualica de González Gallo', 'Encarnación de Díaz', 'San Julián',
-    'Valle de Guadalupe', 'Cañadas de Obregón', 'Mexticacán',
-    'San Diego de Alejandría', 'Unión de San Antonio', 'Villa Hidalgo',
-    'Ojuelos de Jalisco', 'Acatic', 'Teocaltiche', 'Cuquío',
-];
 
 const TIPS = {
     title: 'Un cargo claro ayuda a que otros asistentes identifiquen rápidamente cómo pueden colaborar contigo.',
@@ -447,13 +415,14 @@ export default function OnboardingPage() {
                                                         <option value="">Selecciona Municipio</option>
                                                         {MUNICIPALITIES.map(m => <option key={m} value={m}>{m}</option>)}
                                                     </select>
-                                                    <input
-                                                        type="text"
+                                                    <select
                                                         className="filter-input"
-                                                        placeholder="Giro (Ej. Dulces)"
                                                         value={formData.industry}
-                                                        disabled
-                                                    />
+                                                        onChange={e => setFormData({ ...formData, industry: e.target.value })}
+                                                    >
+                                                        <option value="">Selecciona Giro</option>
+                                                        {INDUSTRIES.map(ind => <option key={ind} value={ind}>{ind}</option>)}
+                                                    </select>
                                                 </div>
                                             </div>
 

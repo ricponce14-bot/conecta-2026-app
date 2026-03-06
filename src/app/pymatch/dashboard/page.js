@@ -543,7 +543,7 @@ export default function DashboardPage() {
                                     </div>
 
                                     {editData.list_in_directory && (
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
                                             <div style={{ gridColumn: '1 / -1' }}>
                                                 <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Dirección Física</label>
                                                 <input

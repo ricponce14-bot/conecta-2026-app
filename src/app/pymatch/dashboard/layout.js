@@ -91,6 +91,18 @@ export default function DashboardLayout({ children }) {
     return (
         <div className="dashboard-layout">
 
+            {/* Mobile Top Navigation */}
+            <header className="top-nav-mobile">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <Link href="/pymatch/dashboard" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                        <Image src="/conectacorto.png" alt="Logo" width={90} height={25} style={{ objectFit: 'contain' }} />
+                    </Link>
+                    <button onClick={handleLogout} className="btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#fca5a5', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </header>
+
             {/* Desktop Sidebar */}
             <aside className="dashboard-sidebar">
                 <div style={{ marginBottom: 'var(--space-2xl)' }}>
