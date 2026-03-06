@@ -154,6 +154,9 @@ export default function HomePage() {
     { name: 'CIIO', image_url: '/7.png' }
   ]);
   const [itinerary, setItinerary] = useState([]);
+  const [officialSponsors, setOfficialSponsors] = useState([]);
+  const [strategicAlliances, setStrategicAlliances] = useState([]);
+  const [universityAlliances, setUniversityAlliances] = useState([]);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -572,7 +575,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section >
+      </section>
 
       {/* ══════════ VENUE BANNER ══════════ */}
       <section className="section" style={{ padding: 0, position: 'relative' }}>
@@ -939,10 +942,10 @@ export default function HomePage() {
 
           {/* Alianzas Estratégicas y Universitarias Removed */}
         </div>
-      </section >
+      </section>
 
       {/* ══════════ CTA ══════════ */}
-      < section className="section cta-section" >
+      <section className="section cta-section">
         <div className="container">
           <h2 className="section-title center">
             ¿Listo para <span className="highlight">conectar</span>?
@@ -964,7 +967,7 @@ export default function HomePage() {
             </a>
           </div>
         </div>
-      </section >
+      </section>
 
       {/* ══════════ MODAL ITINERARIO ══════════ */}
       {isModalOpen && (
@@ -1135,8 +1138,8 @@ export default function HomePage() {
                     onChange={(e) => setLeadInfo({ ...leadInfo, interest: e.target.value })}
                     style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', color: 'white' }}
                   >
-                    <option value="Stand Básico" style={{ background: '#111', color: 'white' }}>Stand Básico ($2,900)</option>
-                    <option value="Stand Regional Plus" style={{ background: '#111', color: 'white' }}>Stand Regional Plus ($4,500)</option>
+                    <option value="Stand Básico" style={{ background: '#111', color: 'white' }}>Stand Básico ($4,900)</option>
+                    <option value="Stand Regional Plus" style={{ background: '#111', color: 'white' }}>Stand Regional Plus ($5,900)</option>
                     <option value="Información General" style={{ background: '#111', color: 'white' }}>Información sobre patrocinios</option>
                   </select>
                 </div>
