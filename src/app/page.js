@@ -814,44 +814,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Alianzas Estratégicas y Universitarias */}
-          <div className="schedule-grid" style={{ marginTop: 'var(--space-2xl)' }}>
-            <div className="alliance-section">
-              <h3 className="alliance-category-title">Alianzas Estratégicas</h3>
-              <div className="alliance-grid alliance-grid-3">
-                {strategicAlliances.length > 0 ? strategicAlliances.map((alliance, i) => (
-                  <div key={i} className="alliance-slot alliance-slot-org">
-                    <div className="alliance-slot-initials">
-                      {alliance.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                    </div>
-                    <div className="alliance-slot-name">{alliance.name}</div>
-                  </div>
-                )) : (
-                  <div className="alliance-slot alliance-slot-empty">
-                    <div className="alliance-slot-label">Próximamente</div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="alliance-section">
-              <h3 className="alliance-category-title">Alianzas Universitarias</h3>
-              <div className="alliance-grid alliance-grid-3">
-                {universityAlliances.length > 0 ? universityAlliances.map((alliance, i) => (
-                  <div key={i} className="alliance-slot alliance-slot-uni">
-                    <div className="alliance-slot-initials">
-                      {alliance.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                    </div>
-                    <div className="alliance-slot-name">{alliance.name}</div>
-                  </div>
-                )) : (
-                  <div className="alliance-slot alliance-slot-empty">
-                    <div className="alliance-slot-label">Próximamente</div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          {/* Alianzas Estratégicas y Universitarias Removed */}
         </div>
       </section >
 
