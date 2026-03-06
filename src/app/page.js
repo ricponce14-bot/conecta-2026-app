@@ -385,70 +385,43 @@ export default function HomePage() {
           </div>
 
           <div className="schedule-grid">
-            {/* DAY 1 */}
-            <div className="glass-card day-card stagger-item">
-              <div className="day-badge premium">Boleto Requerido</div>
-              <div className="day-header">
-                <div className="day-number">Día 1</div>
-                <div className="day-date">18 de Abril, 2026</div>
+            {/* UNIFIED TICKET CARD */}
+            <div className="glass-card day-card day-card-featured stagger-item" style={{ gridColumn: '1 / -1', maxWidth: '800px', margin: '0 auto' }}>
+              <div className="day-badge premium">1 Boleto, 2 Días</div>
+              <div className="day-header" style={{ justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <div className="day-date" style={{ fontSize: '1.2rem', color: 'var(--text-primary)' }}>18 y 19 de Abril, 2026</div>
               </div>
-              <h3 className="day-title">Actividades del Día Uno</h3>
-              <p className="day-description">
-                Contactos estratégicos y aprendizaje práctico. Disfruta la expo comercial, el networking de oportunidades y la <strong>Feria de Empleo y Oportunidades Estudiantiles</strong>.
+              <h3 className="day-title" style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '1rem' }}>Acceso Total al Evento</h3>
+              <p className="day-description" style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 2rem auto' }}>
+                Tu pase de entrada te da acceso completo a los dos días de actividades: desde networking y aprendizaje práctico, hasta la gran clausura con líderes de opinión.
               </p>
-              <ul className="day-features" style={{ marginBottom: '1rem' }}>
-                <li><span className="check">&#10003;</span> <strong>Expo Empresarial:</strong> 50+ marcas líderes locales.</li>
-                <li><span className="check">&#10003;</span> <strong>Ponencias Regionales:</strong> Estrategias de quienes mueven Sede 2026 Tepatitlán de Morelos.</li>
-                <li><span className="check">&#10003;</span> <strong>Feria de Empleo:</strong> Conecta talento con vacantes clave.</li>
-                <li><span className="check">&#10003;</span> <strong>Networking Pro:</strong> Acceso a la mayor base de negocios de la zona.</li>
-                <li><span className="check">&#10003;</span> <strong>Ponente Estelar:</strong> LuisMi Negocios para una apertura impactante.</li>
-              </ul>
 
-              <h4 style={{ fontSize: '1rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', fontWeight: '600' }}>Cursos y Talleres Incluidos:</h4>
-              <ul className="day-features">
-                <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>Neuromarketing:</strong> Véndele a la mente.</li>
-                <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>IA en Ventas:</strong> Automatiza tus cierres.</li>
-                <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>Branding:</strong> Destaca en el mercado.</li>
-                <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>Capital Humano:</strong> Gestiona talento de alto rendimiento.</li>
-                <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>Emprendimiento:</strong> De la idea al negocio rentable.</li>
-              </ul>
-              <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', flexWrap: 'wrap' }}>
-                <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ flex: 1 }}>
-                  Comprar Boleto
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '2.5rem' }}>
+                <div>
+                  <h4 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', marginBottom: '1rem', fontWeight: '700', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.5rem' }}>Día 1: Estrategia y Conexiones</h4>
+                  <ul className="day-features">
+                    <li><span className="check">&#10003;</span> <strong>Feria de Empleo y Oportunidades:</strong> Conecta talento con vacantes clave.</li>
+                    <li><span className="check">&#10003;</span> <strong>Networking Pro:</strong> Matchmaking inteligente IA.</li>
+                    <li><span className="check">&#10003;</span> <strong>Ponente Estelar:</strong> LuisMi Negocios para una apertura impactante.</li>
+                    <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>5 Cursos Especializados:</strong> Neuromarketing, IA en Ventas, Branding, Capital Humano y Emprendimiento.</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', marginBottom: '1rem', fontWeight: '700', borderBottom: '1px solid var(--surface-border)', paddingBottom: '0.5rem' }}>Día 2: Gran Cierre</h4>
+                  <ul className="day-features">
+                    <li><span className="check">&#10003;</span> <strong>Conferencias Magistrales:</strong> Líderes de opinión nacionales.</li>
+                    <li><span className="check">&#10003;</span> <strong>Ponencias Regionales:</strong> Expertos con alto impacto local.</li>
+                    <li><span className="check">&#10003;</span> <strong>Expo Empresarial:</strong> 50+ marcas líderes locales.</li>
+                    <li><span className="check">&#10003;</span> <strong>Barra Libre:</strong> Brindis de clausura por nuevos negocios.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto' }}>
+                <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg" style={{ minWidth: '250px' }}>
+                  Adquiere tu Acceso Único
                   <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
                 </a>
-                <button onClick={() => openModal(1)} className="btn btn-secondary" style={{ flex: 1 }}>
-                  Ver Actividades
-                </button>
-              </div>
-            </div>
-
-            {/* DAY 2 */}
-            <div className="glass-card day-card day-card-featured stagger-item">
-              <div className="day-badge premium">Boleto Requerido</div>
-              <div className="day-header">
-                <div className="day-number">Día 2</div>
-                <div className="day-date">19 de Abril, 2026</div>
-              </div>
-              <h3 className="day-title">Actividades del Día 2: Gran Cierre</h3>
-              <p className="day-description">
-                Inspiración en voz de los líderes de opinión más influyentes de México. Llévate herramientas innovadoras para tu vida y negocios.
-              </p>
-              <ul className="day-features">
-                <li><span className="check">&#10003;</span> <strong>Conferencias Magistrales:</strong> Líderes de opinión nacionales.</li>
-                <li><span className="check">&#10003;</span> <strong>Ponencias Regionales:</strong> Expertos con alto impacto local.</li>
-                <li><span className="check">&#10003;</span> <strong>Expo Empresarial:</strong> Última oportunidad de cierres comerciales.</li>
-                <li><span className="check">&#10003;</span> <strong>Networking Final:</strong> Consolida tu nueva red de contactos.</li>
-                <li><span className="check">&#10003;</span> <strong>Barra Libre:</strong> Brindis de clausura por nuevos negocios.</li>
-              </ul>
-              <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', flexWrap: 'wrap' }}>
-                <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ flex: 1 }}>
-                  Comprar Boleto
-                  <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
-                </a>
-                <button onClick={() => openModal(2)} className="btn btn-secondary" style={{ flex: 1 }}>
-                  Ver Actividades
-                </button>
               </div>
             </div>
           </div>
