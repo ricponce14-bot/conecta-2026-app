@@ -2173,4 +2173,8 @@ button {
   .notch-bottom {
     bottom: -15px !important;
   }
+
+  .matches-grid {
+    grid-template-columns: 1fr !important;
+  }
 }

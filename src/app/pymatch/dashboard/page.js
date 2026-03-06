@@ -830,14 +830,6 @@ export default function DashboardPage() {
                             ))}
                         </div>
                     )}
-
-                    <style jsx>{`
-                        @media (max-width: 480px) {
-                            .matches-grid {
-                                grid-template-columns: 1fr !important;
-                            }
-                        }
-                    `}</style>
                 </div>
 
             </div>
