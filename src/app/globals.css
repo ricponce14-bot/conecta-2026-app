@@ -2046,4 +2046,31 @@ button {
   .why-visual {
     grid-template-columns: 1fr;
   }
+
+  .alliance-grid {
+    gap: 1.5rem !important;
+  }
+
+  .floating-logo {
+    width: 140px !important;
+    height: 70px !important;
+  }
+
+  .hero-images-container {
+    padding-top: var(--space-md) !important;
+    min-height: 300px;
+  }
+
+  .ticket-notch {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .notch-top {
+    top: -15px !important;
+  }
+
+  .notch-bottom {
+    bottom: -15px !important;
+  }
 }

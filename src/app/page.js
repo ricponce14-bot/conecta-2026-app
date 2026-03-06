@@ -160,6 +160,54 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchContent = async () => {
+      const MEMO_REGIONAL = {
+        name: 'Dr. Guillermo del Toro',
+        role: 'Talento Regional',
+        company: 'Vicepresidente de la Red Incuba Jalisco y Director del CIIO en CUAltos',
+        topic: 'Conferencia: “El poder del fracaso en el camino hacia el éxito emprendedor”',
+        description: 'Doctor en Ciencias de la Educación, Maestro en Administración de Negocios e Ingeniero en Sistemas Computacionales. Miembro del Sistema Nacional de Investigadores y especialista en innovación y emprendimiento con más de 30 publicaciones académicas. Ha realizado estancias en University of Arizona, Harvard University y el MIT.',
+        image_url: '/memo.jpg',
+        accent_color: '#0ea5e9',
+        is_regional: true,
+        display_order: 1,
+      };
+
+      const KARINA_REGIONAL = {
+        name: 'Karina Navarro',
+        role: 'Talento Regional',
+        company: 'Fundadora de Grupo Krasny',
+        topic: 'Conferencia: “Me dijeron que no: convertir los obstáculos en impulso para emprender”',
+        description: 'Es empresaria y promotora del emprendimiento. Es autora del libro "Me dijeron que no", donde comparte su experiencia sobre resiliencia, mentalidad emprendedora y cómo convertir los obstáculos en oportunidades. A través de su historia inspira a emprendedores a persistir, reinventarse y construir proyectos con propósito.',
+        image_url: '/kary.jpg',
+        accent_color: '#ec4899',
+        is_regional: true,
+        display_order: 2,
+      };
+
+      const DAVID_REGIONAL = {
+        name: 'David Aceves',
+        role: 'Talento Regional',
+        company: 'Sexólogo y Especialista en Inteligencia Sexual',
+        topic: 'Conferencia: “Inteligencia sexual: clave para relaciones más sanas y conscientes”',
+        description: 'Enfocado en educación, bienestar y desarrollo personal desde una perspectiva integral de la sexualidad. Promueve una visión informada y consciente, ayudando a las personas a fortalecer su autoestima, relaciones y toma de decisiones.',
+        image_url: '/david.jpg',
+        accent_color: '#8b5cf6',
+        is_regional: true,
+        display_order: 3,
+      };
+
+      const GEMMA_REGIONAL = {
+        name: 'Gemma Martín',
+        role: 'Talento Regional',
+        company: 'Escritora y Conferencista',
+        topic: 'Conferencia: “Reconecta con tu historia: transforma tu pasado en tu mayor fortaleza”',
+        description: 'Enfocada en desarrollo personal y bienestar emocional. Autora del libro "Reconecta con tu historia", donde invita a las personas a comprender su pasado para transformar su presente y construir un futuro con mayor conciencia.',
+        image_url: '/gema.jpg',
+        accent_color: '#f59e0b',
+        is_regional: true,
+        display_order: 4,
+      };
+
       // Fetch Speakers
       const { data: speakersData } = await supabase.from('speakers').select('*').order('display_order');
       if (speakersData) {
@@ -179,60 +227,11 @@ export default function HomePage() {
         stars.sort((a, b) => getOrder(a.name) - getOrder(b.name));
 
         setHeadliners(stars);
-
-        const MEMO_REGIONAL = {
-          name: 'Dr. Guillermo del Toro',
-          role: 'Talento Regional',
-          company: 'Vicepresidente de la Red Incuba Jalisco y Director del CIIO en CUAltos',
-          topic: 'Conferencia: “El poder del fracaso en el camino hacia el éxito emprendedor”',
-          description: 'Doctor en Ciencias de la Educación, Maestro en Administración de Negocios e Ingeniero en Sistemas Computacionales. Miembro del Sistema Nacional de Investigadores y especialista en innovación y emprendimiento con más de 30 publicaciones académicas. Ha realizado estancias en University of Arizona, Harvard University y el MIT.',
-          image_url: '/memo.jpg',
-          accent_color: '#0ea5e9',
-          is_regional: true,
-          display_order: 1,
-        };
-
-        const KARINA_REGIONAL = {
-          name: 'Karina Navarro',
-          role: 'Talento Regional',
-          company: 'Fundadora de Grupo Krasny',
-          topic: 'Conferencia: “Me dijeron que no: convertir los obstáculos en impulso para emprender”',
-          description: 'Es empresaria y promotora del emprendimiento. Es autora del libro "Me dijeron que no", donde comparte su experiencia sobre resiliencia, mentalidad emprendedora y cómo convertir los obstáculos en oportunidades. A través de su historia inspira a emprendedores a persistir, reinventarse y construir proyectos con propósito.',
-          image_url: '/kary.jpg',
-          accent_color: '#ec4899',
-          is_regional: true,
-          display_order: 2,
-        };
-
-        const DAVID_REGIONAL = {
-          name: 'David Aceves',
-          role: 'Talento Regional',
-          company: 'Sexólogo y Especialista en Inteligencia Sexual',
-          topic: 'Conferencia: “Inteligencia sexual: clave para relaciones más sanas y conscientes”',
-          description: 'Enfocado en educación, bienestar y desarrollo personal desde una perspectiva integral de la sexualidad. Promueve una visión informada y consciente, ayudando a las personas a fortalecer su autoestima, relaciones y toma de decisiones.',
-          image_url: '/david.jpg',
-          accent_color: '#8b5cf6',
-          is_regional: true,
-          display_order: 3,
-        };
-
-        const GEMMA_REGIONAL = {
-          name: 'Gemma Martín',
-          role: 'Talento Regional',
-          company: 'Escritora y Conferencista',
-          topic: 'Conferencia: “Reconecta con tu historia: transforma tu pasado en tu mayor fortaleza”',
-          description: 'Enfocada en desarrollo personal y bienestar emocional. Autora del libro "Reconecta con tu historia", donde invita a las personas a comprender su pasado para transformar su presente y construir un futuro con mayor conciencia.',
-          image_url: '/gema.jpg',
-          accent_color: '#f59e0b',
-          is_regional: true,
-          display_order: 4,
-        };
-
-        setRegionalSpeakers([MEMO_REGIONAL, KARINA_REGIONAL, DAVID_REGIONAL, GEMMA_REGIONAL]);
+        setRegionalSpeakers([MEMO_REGIONAL, GEMMA_REGIONAL, KARINA_REGIONAL, DAVID_REGIONAL]);
       } else {
         // If fetch fails, still show LuisMi & Hardcoded Regional
         setHeadliners([LUISMI_FALLBACK]);
-        setRegionalSpeakers([MEMO_REGIONAL, KARINA_REGIONAL, DAVID_REGIONAL, GEMMA_REGIONAL]);
+        setRegionalSpeakers([MEMO_REGIONAL, GEMMA_REGIONAL, KARINA_REGIONAL, DAVID_REGIONAL]);
       }
 
       // Fetch Alliances & Sponsors
@@ -362,16 +361,17 @@ export default function HomePage() {
             </div>
 
             {/* Right Side Image (Ponentes) */}
-            <div className="hero-images-container" style={{ position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', height: '100%' }}>
-              {/* Background Glow - Now actually BEHIND */}
+            <div className="hero-images-container" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', paddingTop: 'var(--space-xl)' }}>
+              {/* Background Glow - Centered behind image */}
               <div style={{
                 position: 'absolute',
-                top: '20%',
-                left: '20%',
-                width: '60%',
-                height: '60%',
-                background: 'rgba(37, 99, 235, 0.4)',
-                filter: 'blur(100px)',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '70%',
+                height: '70%',
+                background: 'rgba(37, 99, 235, 0.35)',
+                filter: 'blur(120px)',
                 borderRadius: '50%',
                 zIndex: 0,
                 pointerEvents: 'none'
@@ -396,7 +396,7 @@ export default function HomePage() {
                   padding: '0 1rem',
                   marginTop: '0.5rem'
                 }}>
-                  <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.4rem 0.8rem', minWidth: '120px', textAlign: 'center' }}>
+                  <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.4rem 0.8rem', minWidth: '130px', textAlign: 'center' }}>
                     <span className="hero-person-name" style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>LUISMI NEGOCIOS</span>
                   </div>
                   <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.4rem 0.8rem', minWidth: '120px', textAlign: 'center' }}>
@@ -472,50 +472,39 @@ export default function HomePage() {
           </div>
 
           <div style={{ textAlign: 'center', marginBottom: 'var(--space-2xl)' }}>
-            <h3 className="alliance-category-title" style={{ fontSize: '1.3rem', color: 'var(--text-primary)', fontWeight: '700' }}>Aliados Estratégicos</h3>
+            <h3 className="alliance-category-title" style={{ fontSize: '1.4rem', color: 'var(--text-primary)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px' }}>Alianzas y Colaboradores</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Organizaciones que impulsan el crecimiento regional</p>
           </div>
 
           <div className="alliance-grid" style={{
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            gap: '2rem',
-            marginBottom: 'var(--space-3xl)'
+            gap: '2.5rem',
+            padding: '1rem'
           }}>
-            {conectaAlliances.map((alliance, i) => (
+            {[...conectaAlliances, ...specialGuests].map((item, i) => (
               <div key={i} style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '220px',
+                width: '200px',
                 height: '100px',
-                transition: 'transform 0.3s ease'
-              }}>
-                <Image src={alliance.image_url} alt={alliance.name} width={160} height={80} style={{ objectFit: 'contain', filter: 'brightness(1.1)' }} />
-              </div>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)' }}>
-            <h3 className="alliance-category-title" style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase' }}>Invitados Especiales</h3>
-          </div>
-
-          <div className="alliance-grid" style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '2rem'
-          }}>
-            {specialGuests.map((guest, i) => (
-              <div key={i} style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '220px',
-                height: '100px',
-                transition: 'transform 0.3s ease'
-              }}>
-                <Image src={guest.image_url} alt={guest.name} width={160} height={80} style={{ objectFit: 'contain', filter: 'brightness(1.1)' }} />
+                transform: 'translateY(0)',
+                transition: 'all 0.3s ease'
+              }} className="floating-logo">
+                <Image
+                  src={item.image_url}
+                  alt={item.name}
+                  width={150}
+                  height={75}
+                  style={{
+                    objectFit: 'contain',
+                    filter: 'brightness(1.1) contrast(1.1)',
+                    maxWidth: '100%',
+                    height: 'auto'
+                  }}
+                />
               </div>
             ))}
           </div>
@@ -1008,8 +997,8 @@ export default function HomePage() {
               { name: 'Trujillo', image_url: '/trujillo.png' }
             ].map((item, i) => (
               <div key={i} style={{
-                background: 'rgba(255,255,255,0.02)',
-                border: '1px solid rgba(255,255,255,0.05)',
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.08)',
                 borderRadius: '16px',
                 padding: '1.5rem',
                 display: 'flex',
@@ -1019,18 +1008,22 @@ export default function HomePage() {
                 maxWidth: '200px',
                 height: '110px',
                 transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                cursor: 'pointer'
               }} className="alliance-logo-card">
                 <Image
                   src={item.image_url}
                   alt={item.name}
-                  width={140}
-                  height={90}
+                  width={150}
+                  height={100}
                   style={{
                     objectFit: 'contain',
-                    filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))'
+                    filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3)) brightness(1.1)',
+                    maxWidth: '100%',
+                    height: 'auto'
                   }}
                   className="alliance-logo-img"
+                  priority={item.name === 'Trujillo'}
                 />
               </div>
             ))}
