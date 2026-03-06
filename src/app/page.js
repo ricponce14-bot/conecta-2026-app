@@ -108,15 +108,16 @@ export default function HomePage() {
 
   const [headliners, setHeadliners] = useState([]);
   const [regionalSpeakers, setRegionalSpeakers] = useState([]);
-  const [officialSponsors, setOfficialSponsors] = useState([]);
-  const [strategicAlliances, setStrategicAlliances] = useState([]);
-  const [universityAlliances, setUniversityAlliances] = useState([]);
   const [conectaAlliances, setConectaAlliances] = useState([
     { name: 'Promoción Económica de Tepatitlán', image_url: '/4.png' },
     { name: 'Cámara de Comercio Tepatitlán', image_url: '/3.png' },
     { name: 'Jóvenes Empresarios', image_url: '/2.png' },
     { name: 'Universidad Nueva Ciencia', image_url: '/1.png' },
     { name: 'UNID', image_url: '/5.png' }
+  ]);
+  const [specialGuests, setSpecialGuests] = useState([
+    { name: 'REDI', image_url: '/6.png' },
+    { name: 'CIIO', image_url: '/7.png' }
   ]);
   const [itinerary, setItinerary] = useState([]);
 
@@ -350,6 +351,22 @@ export default function HomePage() {
                 <div className="alliance-slot-label">Alianza</div>
               </div>
             ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)', marginTop: 'var(--space-3xl)' }}>
+            <h3 className="alliance-category-title" style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>Invitados Especiales</h3>
+          </div>
+
+          <div className="alliance-grid alliance-grid-4" style={{ justifyContent: 'center' }}>
+            {specialGuests.length > 0 ? specialGuests.map((guest, i) => (
+              <div key={i} className="alliance-slot alliance-slot-org" style={{ maxWidth: '240px' }}>
+                {guest.image_url ? (
+                  <Image src={guest.image_url} alt={guest.name} width={120} height={60} style={{ objectFit: 'contain' }} />
+                ) : (
+                  <div className="alliance-slot-name">{guest.name}</div>
+                )}
+              </div>
+            )) : null}
           </div>
         </div>
       </section>
