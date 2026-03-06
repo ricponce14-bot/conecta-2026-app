@@ -275,18 +275,27 @@ export default function HomePage() {
             </div>
 
             {/* Right Side Image (Farid) */}
-            <div className="hero-image-wrapper">
-              <div className="hero-image-glow"></div>
+            {/* Right Side Image (Ponentes) */}
+            <div className="hero-image-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div className="hero-image-glow" style={{ width: '100%', height: '80%', top: '10%', left: '0' }}></div>
               <Image
-                src="/farid.png"
-                alt="Farid Dieck en CONECTA"
+                src="/ponentes.png"
+                alt="Ponentes Estelares: LuisMi, Farid, Jess"
                 className="hero-person-img"
-                width={500}
-                height={600}
-                style={{ objectFit: 'contain' }}
+                width={700}
+                height={500}
+                style={{ objectFit: 'contain', zIndex: 1, marginBottom: '1.5rem' }}
               />
-              <div className="hero-person-label">
-                <span className="hero-person-name">Farid Dieck</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '550px', zIndex: 2, padding: '0 1rem' }}>
+                <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.5rem 1rem' }}>
+                  <span className="hero-person-name" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>LuisMi Negocios</span>
+                </div>
+                <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.5rem 1rem' }}>
+                  <span className="hero-person-name" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>Farid Dieck</span>
+                </div>
+                <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.5rem 1rem' }}>
+                  <span className="hero-person-name" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>Jess</span>
+                </div>
               </div>
             </div>
           </div>
