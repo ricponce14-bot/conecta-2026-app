@@ -479,49 +479,43 @@ export default function HomePage() {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            gap: '1.5rem',
+            gap: '2rem',
             marginBottom: 'var(--space-3xl)'
           }}>
             {conectaAlliances.map((alliance, i) => (
               <div key={i} style={{
-                background: 'var(--bg-glass)',
-                border: '1px solid var(--border-color)',
-                borderRadius: '12px',
-                padding: '1rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '180px',
-                height: '90px'
+                width: '220px',
+                height: '100px',
+                transition: 'transform 0.3s ease'
               }}>
-                <Image src={alliance.image_url} alt={alliance.name} width={100} height={50} style={{ objectFit: 'contain' }} />
+                <Image src={alliance.image_url} alt={alliance.name} width={160} height={80} style={{ objectFit: 'contain', filter: 'brightness(1.1)' }} />
               </div>
             ))}
           </div>
 
           <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)' }}>
-            <h3 className="alliance-category-title" style={{ fontSize: '1.1rem', color: 'var(--text-secondary)' }}>Invitados Especiales</h3>
+            <h3 className="alliance-category-title" style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase' }}>Invitados Especiales</h3>
           </div>
 
           <div className="alliance-grid" style={{
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            gap: '1.5rem'
+            gap: '2rem'
           }}>
             {specialGuests.map((guest, i) => (
               <div key={i} style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.05)',
-                borderRadius: '12px',
-                padding: '0.75rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '150px',
-                height: '70px'
+                width: '220px',
+                height: '100px',
+                transition: 'transform 0.3s ease'
               }}>
-                <Image src={guest.image_url} alt={guest.name} width={80} height={40} style={{ objectFit: 'contain' }} />
+                <Image src={guest.image_url} alt={guest.name} width={160} height={80} style={{ objectFit: 'contain', filter: 'brightness(1.1)' }} />
               </div>
             ))}
           </div>
