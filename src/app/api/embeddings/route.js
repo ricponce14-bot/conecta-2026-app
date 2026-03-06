@@ -15,6 +15,7 @@ async function generateEmbedding(text) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             model: 'models/gemini-embedding-001',
+            outputDimensionality: 768,
             content: { parts: [{ text }] },
         }),
     });
