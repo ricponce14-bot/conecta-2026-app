@@ -379,7 +379,7 @@ export default function HomePage() {
 
               <div className="hero-image-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', position: 'relative', zIndex: 1, marginTop: '2rem' }}>
                 <Image
-                  src="/ponentes.jpg"
+                  src="/ponentes.png"
                   alt="Ponentes Estelares: LuisMi, Farid, Jessica Fernández"
                   className="hero-person-img"
                   width={900}
