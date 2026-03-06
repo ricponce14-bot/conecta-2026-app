@@ -176,10 +176,34 @@ export default function HomePage() {
         stars.sort((a, b) => getOrder(a.name) - getOrder(b.name));
 
         setHeadliners(stars);
-        setRegionalSpeakers(speakersData.filter(s => s.is_regional));
+
+        const MEMO_REGIONAL = {
+          name: 'Dr. Memo',
+          role: 'Talento Regional',
+          company: 'Vicepresidente de la Red Incuba Jalisco y Director del CIIO en CUAltos',
+          topic: 'Conferencia: “El poder del fracaso en el camino hacia el éxito emprendedor” 🚀',
+          description: 'Doctor en Ciencias de la Educación, Maestro en Administración de Negocios e Ingeniero en Sistemas Computacionales. Miembro del Sistema Nacional de Investigadores y especialista en innovación y emprendimiento en la educación, con más de 30 publicaciones académicas. Ha realizado estancias en University of Arizona, Harvard University y el Massachusetts Institute of Technology.',
+          image_url: '/memo.jpg',
+          accent_color: '#0ea5e9',
+          is_regional: true,
+          display_order: 1,
+        };
+
+        const fetchedRegional = speakersData.filter(s => s.is_regional);
+        setRegionalSpeakers([MEMO_REGIONAL, ...fetchedRegional]);
       } else {
-        // If fetch fails, still show LuisMi
+        // If fetch fails, still show LuisMi & Memo
         setHeadliners([LUISMI_FALLBACK]);
+        setRegionalSpeakers([{
+          name: 'Dr. Memo',
+          role: 'Talento Regional',
+          company: 'Vicepresidente de la Red Incuba Jalisco y Director del CIIO en CUAltos',
+          topic: 'Conferencia: “El poder del fracaso en el camino hacia el éxito emprendedor” 🚀',
+          description: 'Doctor en Ciencias de la Educación, Maestro en Administración de Negocios e Ingeniero en Sistemas Computacionales. Miembro del Sistema Nacional de Investigadores y especialista en innovación y emprendimiento.',
+          image_url: '/memo.jpg',
+          accent_color: '#0ea5e9',
+          is_regional: true,
+        }]);
       }
 
       // Fetch Alliances & Sponsors
