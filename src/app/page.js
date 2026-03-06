@@ -1001,7 +1001,12 @@ export default function HomePage() {
             alignItems: 'center',
             justifyItems: 'center'
           }}>
-            {[...conectaAlliances, ...specialGuests].map((alliance, i) => (
+            {[
+              ...officialSponsors.filter(s => s.is_filled),
+              ...conectaAlliances,
+              ...specialGuests,
+              { name: 'Trujillo', image_url: '/trujillo.png' }
+            ].map((item, i) => (
               <div key={i} style={{
                 background: 'rgba(255,255,255,0.02)',
                 border: '1px solid rgba(255,255,255,0.05)',
@@ -1017,8 +1022,8 @@ export default function HomePage() {
                 boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
               }} className="alliance-logo-card">
                 <Image
-                  src={alliance.image_url}
-                  alt={alliance.name}
+                  src={item.image_url}
+                  alt={item.name}
                   width={140}
                   height={90}
                   style={{
