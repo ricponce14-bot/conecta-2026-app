@@ -232,13 +232,11 @@ export default function HomePage() {
               </p>
 
               <div className="hero-actions">
-                <Link href="/pymatch/registro" className="btn btn-primary btn-lg">
-                  Registrarme Ahora
-                  <svg className="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </Link>
-                <Link href="/#schedule" className="btn btn-outline btn-lg">
+                <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg">
+                  Comprar Boleto
+                  <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
+                </a>
+                <Link href="#schedule" className="btn btn-outline btn-lg">
                   Ver Programa
                 </Link>
               </div>
@@ -389,7 +387,7 @@ export default function HomePage() {
           <div className="schedule-grid">
             {/* DAY 1 */}
             <div className="glass-card day-card stagger-item">
-              <div className="day-badge free">Acceso gratis con tu registro</div>
+              <div className="day-badge premium">Boleto Requerido</div>
               <div className="day-header">
                 <div className="day-number">Día 1</div>
                 <div className="day-date">18 de Abril, 2026</div>
@@ -415,9 +413,10 @@ export default function HomePage() {
                 <li><span className="check" style={{ color: 'var(--neon-green)' }}>&#10003;</span> <strong>Emprendimiento:</strong> De la idea al negocio rentable.</li>
               </ul>
               <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', flexWrap: 'wrap' }}>
-                <Link href="/pymatch/registro" className="btn btn-outline" style={{ flex: 1 }}>
-                  Regístrate Gratis
-                </Link>
+                <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ flex: 1 }}>
+                  Comprar Boleto
+                  <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
+                </a>
                 <button onClick={() => openModal(1)} className="btn btn-secondary" style={{ flex: 1 }}>
                   Ver Actividades
                 </button>
@@ -444,7 +443,7 @@ export default function HomePage() {
               </ul>
               <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', flexWrap: 'wrap' }}>
                 <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ flex: 1 }}>
-                  Comprar boleto Día 2
+                  Comprar Boleto
                   <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
                 </a>
                 <button onClick={() => openModal(2)} className="btn btn-secondary" style={{ flex: 1 }}>
@@ -778,10 +777,10 @@ export default function HomePage() {
             más importante de la región. Sede 2026: Tepatitlán de Morelos.
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 'var(--space-md)', flexWrap: 'wrap' }}>
-            <Link href="/pymatch/registro" className="btn btn-primary btn-lg">
-              Registrarme ahora
+            <a href="https://www.masentrada.app/events/conecta-2026?referred_by=31b3f378-7a92-4b16-87ad-92fa7b1397ac" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg">
+              Comprar Boleto
               <svg className="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
-            </Link>
+            </a>
             <Link href="/pymatch" className="btn btn-secondary btn-lg">
               Ir a la App PyMatch
             </Link>
