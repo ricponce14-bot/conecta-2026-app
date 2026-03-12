@@ -129,15 +129,15 @@ export default function HomePage() {
   // Dynamic Data States
   // LuisMi Negocios fallback — always show even if not yet in Supabase
   const LUISMI_FALLBACK = {
-    name: 'Luis Miguel Altamirano',
+    name: 'Invitado Estelar Sorpresa',
     role: 'Conferencista Estelar',
-    company: 'LuisMi Negocios',
-    topic: 'Enfoque: Finanzas para negocios y emprendimientos.',
-    description: 'Luis Miguel Altamirano es un especialista en finanzas personales y negocios, conocido como LuisMi Negocios en redes sociales, donde educa a millones de personas sobre cómo manejar dinero, ahorrar e invertir. Comparte estrategias accesibles para emprendedores y dueños de negocio. Autor del libro "Rico el que lo lea", una guía práctica de educación financiera.',
-    image_url: '/luismi.jpg',
+    company: 'Próximamente',
+    topic: 'Enfoque: Sorpresa',
+    description: 'Un invitado muy especial que revelaremos pronto. Prepárate para una charla que transformará tu visión de los negocios.',
+    image_url: '/luismi.jpg', // Keeping the image for now but name is surprise
     accent_color: '#ffd700',
     is_regional: false,
-    display_order: 0,
+    display_order: 2,
   };
 
   const [headliners, setHeadliners] = useState([]);
@@ -379,32 +379,16 @@ export default function HomePage() {
 
               <div className="hero-image-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', position: 'relative', zIndex: 1 }}>
                 <Image
-                  src="/ponentes.png"
-                  alt="Ponentes Estelares: LuisMi, Farid, Jessica Fernández"
+                  src="/farid.png"
+                  alt="Farid Dieck en CONECTA"
                   className="hero-person-img"
                   width={900}
                   height={650}
                   style={{ objectFit: 'contain', width: '100%', height: 'auto', maxWidth: '850px', display: 'block' }}
                   priority
                 />
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-around',
-                  width: '100%',
-                  maxWidth: '800px',
-                  zIndex: 2,
-                  padding: '0 1rem',
-                  marginTop: '0.5rem'
-                }}>
-                  <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.4rem 0.8rem', minWidth: '130px', textAlign: 'center' }}>
-                    <span className="hero-person-name" style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>LUISMI NEGOCIOS</span>
-                  </div>
-                  <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.4rem 0.8rem', minWidth: '120px', textAlign: 'center' }}>
-                    <span className="hero-person-name" style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>FARID DIECK</span>
-                  </div>
-                  <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.4rem 0.8rem', minWidth: '120px', textAlign: 'center' }}>
-                    <span className="hero-person-name" style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>JESSICA FERNÁNDEZ</span>
-                  </div>
+                <div className="hero-person-label" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', padding: '0.4rem 0.8rem', minWidth: '120px', textAlign: 'center' }}>
+                  <span className="hero-person-name" style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>FARID DIECK</span>
                 </div>
               </div>
             </div>
