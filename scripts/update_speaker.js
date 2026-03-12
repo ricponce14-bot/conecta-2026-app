@@ -6,13 +6,14 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function updateSpeaker() {
-    console.log('Updating speaker record...');
+    console.log('Updating speaker record (removing image)...');
     const { data, error } = await supabase
         .from('speakers')
         .update({
             name: 'Invitado Estelar Sorpresa',
             topic: 'Próximamente',
             description: 'Un invitado muy especial que revelaremos pronto. Prepárate para una charla que transformará tu visión de los negocios.',
+            image_url: null,
             display_order: 2
         })
         .ilike('name', '%Altamirano%');
@@ -20,7 +21,7 @@ async function updateSpeaker() {
     if (error) {
         console.error('Error updating speaker:', error);
     } else {
-        console.log('Speaker updated successfully:', data);
+        console.log('Speaker updated successfully (image removed).');
     }
 }
 

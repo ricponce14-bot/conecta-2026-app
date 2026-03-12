@@ -134,7 +134,7 @@ export default function HomePage() {
     company: 'Próximamente',
     topic: 'Enfoque: Sorpresa',
     description: 'Un invitado muy especial que revelaremos pronto. Prepárate para una charla que transformará tu visión de los negocios.',
-    image_url: '/luismi.jpg', // Keeping the image for now but name is surprise
+    image_url: null, // Removed image
     accent_color: '#ffd700',
     is_regional: false,
     display_order: 2,
@@ -742,7 +742,13 @@ export default function HomePage() {
                 } : {}}
               >
                 <div className="speaker-photo-wrap">
-                  <Image src={speaker.image_url || '/images/speaker-jessica.png'} alt={speaker.name} className="speaker-photo" width={400} height={400} />
+                  {speaker.image_url ? (
+                    <Image src={speaker.image_url} alt={speaker.name} className="speaker-photo" width={400} height={400} />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', background: 'var(--bg-glass)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                  )}
                   <div className="speaker-photo-glow" />
                 </div>
                 <div className="speaker-info">
